@@ -152,10 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 912adcc591ee1e64a8304570b931a122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
-  verticalPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
-  lateralPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
-  diagonalPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
+  currPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
+  vertPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
+  latPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
+  diagPlanePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
 --- !u!4 &356840619
 Transform:
   m_ObjectHideFlags: 0

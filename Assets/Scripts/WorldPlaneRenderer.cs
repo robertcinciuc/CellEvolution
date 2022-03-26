@@ -3,37 +3,57 @@ using UnityEngine;
 public class WorldPlaneRenderer : MonoBehaviour
 {
 
-    public GameObject currentPlanePrefab;
-    public GameObject verticalPlanePrefab;
-    public GameObject lateralPlanePrefab;
-    public GameObject diagonalPlanePrefab;
-    private bool isVerticalPlaneInstantiated = false;
-    private bool isLateralPlaneInstantiated = false;
-    private bool isDiagonalPlaneInstantiated = false;
+    public GameObject planePrefab;
+    private GameObject currPlane;
+    private GameObject vertPlane;
+    private GameObject latPlane;
+    private GameObject diagPlane;
     private GameObject player;
+    private Vector3 currPlaneSize;
 
-
-    // Start is called before the first frame update
     void Start() {
-        Instantiate(currentPlanePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        currPlaneSize = planePrefab.GetComponent<Renderer>().bounds.size;
+
+        latPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, 0), Quaternion.identity);
+        vertPlane = Instantiate(planePrefab, new Vector3(0, 0, currPlaneSize.z), Quaternion.identity);
+        diagPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, currPlaneSize.z), Quaternion.identity);
+        
         player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
     void Update() {
 
     }
 
     private void FixedUpdate() {
-        Vector3 currentPlaneSize = currentPlanePrefab.GetComponent<Renderer>().bounds.size;
 
-        if (player.transform.position.x == currentPlanePrefab.transform.position.x + currentPlaneSize.x / 2 * 0.8) {
-            Instantiate(lateralPlanePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        renderLatPlane();
+
+    }
+
+    private void renderLatPlane() {
+        if (player.transform.position.x > currPlane.transform.position.x) {
+
+            if(player.transform.position.x < currPlaneSize.x/2) {
+                destroyAndInstantiateLatPlane(1);
+            } else {
+                //TODO: Swap current plane with lateral plane (positive direction)
+            }
+        } else {
+            if (player.transform.position.x > -currPlaneSize.x / 2) {
+                destroyAndInstantiateLatPlane(-1);
+            } else {
+                //TODO: Swap current plane with lateral plane (negative direction)
+            }
         }
-        
-        if (player.transform.position.x > 3 && !isLateralPlaneInstantiated) {
-            isLateralPlaneInstantiated = true;
-            Instantiate(lateralPlanePrefab, new Vector3(currentPlaneSize.x, 0, 0), Quaternion.identity);
+    }
+
+    //Sign : 1 = positive sign; -1 = negative sign
+    private void destroyAndInstantiateLatPlane(int sign) {
+        if (latPlane.transform.position.x != currPlane.transform.position.x + sign * currPlaneSize.x / 2) {
+            Destroy(latPlane);
+            latPlane = Instantiate(planePrefab, new Vector3(sign*currPlaneSize.x, 0, 0), Quaternion.identity);
         }
     }
 }

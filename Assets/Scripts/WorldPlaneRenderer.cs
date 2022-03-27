@@ -1,23 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldPlaneRenderer : MonoBehaviour
 {
 
     public GameObject planePrefab;
+    public Vector3 planeSize;
+
     private GameObject currPlane;
     private GameObject zPlane;
     private GameObject xPlane;
     private GameObject xzPlane;
     private GameObject player;
-    private Vector3 currPlaneSize;
 
     void Start() {
         currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        currPlaneSize = planePrefab.GetComponent<Renderer>().bounds.size;
+        planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
 
-        xPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, 0), Quaternion.identity);
-        zPlane = Instantiate(planePrefab, new Vector3(0, 0, currPlaneSize.z), Quaternion.identity);
-        xzPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, currPlaneSize.z), Quaternion.identity);
+        xPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, 0), Quaternion.identity);
+        zPlane = Instantiate(planePrefab, new Vector3(0, 0, planeSize.z), Quaternion.identity);
+        xzPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, planeSize.z), Quaternion.identity);
         
         player = GameObject.Find("Player");
     }
@@ -38,12 +40,12 @@ public class WorldPlaneRenderer : MonoBehaviour
             sign = -1;
         }
 
-        if(player.transform.position.x < currPlane.transform.position.x + currPlaneSize.x / 2 && 
-           player.transform.position.x > currPlane.transform.position.x - currPlaneSize.x / 2) {
+        if(player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 && 
+           player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
-            if (xPlane.transform.position.x != currPlane.transform.position.x + sign * currPlaneSize.x) {
+            if (xPlane.transform.position.x != currPlane.transform.position.x + sign * planeSize.x) {
                 Destroy(xPlane);
-                xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * currPlaneSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
+                xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * planeSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
             }
         } else {
 
@@ -62,12 +64,12 @@ public class WorldPlaneRenderer : MonoBehaviour
             sign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + currPlaneSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - currPlaneSize.z / 2) {
+        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2) {
             
-            if (xPlane.transform.position.z != currPlane.transform.position.z + sign * currPlaneSize.z) {
+            if (xPlane.transform.position.z != currPlane.transform.position.z + sign * planeSize.z) {
                 Destroy(zPlane);
-                zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * currPlaneSize.z), Quaternion.identity);
+                zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * planeSize.z), Quaternion.identity);
             }
         } else {
 
@@ -91,15 +93,15 @@ public class WorldPlaneRenderer : MonoBehaviour
             xSign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + currPlaneSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - currPlaneSize.z / 2 &&
-            player.transform.position.x < currPlane.transform.position.x + currPlaneSize.x / 2 &&
-            player.transform.position.x > currPlane.transform.position.x - currPlaneSize.x / 2) {
+        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2 &&
+            player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 &&
+            player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
-            if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * currPlaneSize.z) ||
-                xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * currPlaneSize.x)) {
+            if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * planeSize.z) ||
+                xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * planeSize.x)) {
                 Destroy(xzPlane);
-                xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * currPlaneSize.x, 0, currPlane.transform.position.z + zSign * currPlaneSize.z), Quaternion.identity);
+                xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * planeSize.x, 0, currPlane.transform.position.z + zSign * planeSize.z), Quaternion.identity);
             }
         } else {
             GameObject tempPlane = currPlane;
@@ -110,6 +112,15 @@ public class WorldPlaneRenderer : MonoBehaviour
             zPlane = tempPlane;
         }
 
+    }
+    public Dictionary<LocalPlanes, Vector3> getAllPlaneCoordinates() {
+        Dictionary<LocalPlanes, Vector3> coordinates = new Dictionary<LocalPlanes, Vector3>();
+        coordinates.Add(LocalPlanes.CURRENT, currPlane.transform.position);
+        coordinates.Add(LocalPlanes.X_PLANE, xPlane.transform.position);
+        coordinates.Add(LocalPlanes.Z_PLANE, zPlane.transform.position);
+        coordinates.Add(LocalPlanes.XZ_PLANE, xzPlane.transform.position);
+
+        return coordinates;
     }
 
 }

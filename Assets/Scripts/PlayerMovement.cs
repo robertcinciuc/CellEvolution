@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         float angle = AngleBetweenTwoPoints(posOnScreen, mouseOnScreen);
         Quaternion rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
 
-        rigidBody.rotation = Quaternion.Slerp(rigidBody.transform.rotation, rotation, 5 * Time.deltaTime);
+        rigidBody.rotation = Quaternion.Slerp(rigidBody.transform.rotation, rotation, 7 * Time.deltaTime);
     }
 
     private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {

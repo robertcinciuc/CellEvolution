@@ -4,11 +4,11 @@ public class PlayerMovement : MonoBehaviour
 {   
 
     private float playerSpeed = 5.0f;
-    private Rigidbody rb;
+    private Rigidbody rigidBody;
 
 
     void Start(){
-        rb = GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     void Update(){
@@ -16,28 +16,32 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate(){
-        translatePlayer();
+        translatePlayerToMouse();
         rotatePlayer();
     }
 
-    private void translatePlayer() {
+    private void translatePlayerToMouse() {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-
         Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
-        rb.MovePosition(this.transform.position + movement * Time.deltaTime * playerSpeed);
+
+        Vector3 moveVector = this.transform.TransformDirection(movement) * playerSpeed;
+        rigidBody.velocity = new Vector3(moveVector.x, rigidBody.velocity.y, moveVector.z);
+
+        //rb.MovePosition(this.transform.position + movement * Time.deltaTime * 10);
+
     }
 
     private void rotatePlayer() {
         Vector2 posOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
         float angle = AngleBetweenTwoPoints(posOnScreen, mouseOnScreen);
-        Quaternion rotation = Quaternion.Euler(new Vector3(0f, -angle, 0f));
+        Quaternion rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
 
-        rb.rotation = Quaternion.Slerp(rb.transform.rotation, rotation, 5 * Time.deltaTime);
+        rigidBody.rotation = Quaternion.Slerp(rigidBody.transform.rotation, rotation, 5 * Time.deltaTime);
     }
 
     private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(b.x - a.x, b.y - a.y) * Mathf.Rad2Deg;
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager2 : MonoBehaviour {
-    Camera mainCamera;
-    Camera upgradeMenuCamera;
+    public Camera mainCamera;
+    public Camera upgradeMenuCamera;
 
     void Start() {
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();

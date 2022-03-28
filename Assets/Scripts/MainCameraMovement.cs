@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
+public class MainCameraMovement : MonoBehaviour
 {
     private GameObject player;
     private Vector3 cameraPosition;

@@ -7,22 +7,34 @@ using UnityEngine;
 public class LoadUpgradeMenu : MonoBehaviour
 {
     private Button upgradeButton;
-    private CameraManager2 cameraManager;
+    private int count = 0;
 
     void Start(){
-        upgradeButton = GameObject.Find("UpgradeButton").GetComponent<Button>();
         //cameraManager = gameObject.GetComponent<CameraManager2>();
-        cameraManager = GameObject.Find("CameraManager").GetComponent<CameraManager2>();
+
+        upgradeButton = GameObject.Find("UpgradeButton").GetComponent<Button>();
+        upgradeButton.onClick.AddListener(switchCamera);
+
+        MainCameraState.setActive();
+        UpgradeMenuCameraState.setInactive();
+
     }
 
     void Update(){
-        if (upgradeButton != null) {
-            upgradeButton.onClick.AddListener(goToUpgradeScene);
-        }
+
     }
 
-    private void goToUpgradeScene() {
-        PlayerState.setInactive();
-        cameraManager.enableUpgradeCamera();
+    private void switchCamera() {
+        count++;
+
+        if (PlayerState.isActive) {
+            PlayerState.setInactive();
+            UpgradeMenuCameraState.setActive();
+            MainCameraState.setInactive();
+        } else {
+            PlayerState.setActive();
+            MainCameraState.setActive();
+            UpgradeMenuCameraState.setInactive();
+        }
     }
 }

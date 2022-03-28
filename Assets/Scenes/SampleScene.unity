@@ -255,7 +255,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: dcd045fa9251ebe43b14aae2d4cd2208, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -623,6 +623,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 721346280}
+  - component: {fileID: 721346279}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: Untagged
@@ -630,6 +631,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &721346279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721346278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dda1fb341ff23743a534c3fef680436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &721346280
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,6 +1210,7 @@ GameObject:
   - component: {fileID: 1887967010}
   - component: {fileID: 1887967012}
   - component: {fileID: 1887967014}
+  - component: {fileID: 1887967015}
   - component: {fileID: 1887967011}
   - component: {fileID: 1887967013}
   m_Layer: 0
@@ -1288,6 +1302,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1648e780dfb4b774e8fc903fcf76e9f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1887967015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887967008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6b3f5fdba27dd46922d55ff7a45087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1984966087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1984966088}
   m_Layer: 0
-  m_Name: UpgradePlayer
+  m_Name: UpgradeMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

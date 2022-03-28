@@ -1,25 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldPlaneRenderer : MonoBehaviour
 {
 
     public GameObject planePrefab;
+
     private GameObject currPlane;
     private GameObject zPlane;
     private GameObject xPlane;
     private GameObject xzPlane;
     private GameObject player;
-    private Vector3 currPlaneSize;
+    private Vector3 planeSize;
+    private FoodSpawner foodSpawner;
+    private bool startFoodCurrPlane = false;
 
     void Start() {
-        currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        currPlaneSize = planePrefab.GetComponent<Renderer>().bounds.size;
-
-        xPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, 0), Quaternion.identity);
-        zPlane = Instantiate(planePrefab, new Vector3(0, 0, currPlaneSize.z), Quaternion.identity);
-        xzPlane = Instantiate(planePrefab, new Vector3(currPlaneSize.x, 0, currPlaneSize.z), Quaternion.identity);
-        
+        foodSpawner = this.gameObject.GetComponent<FoodSpawner>();
+        planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
         player = GameObject.Find("Player");
+
+
+        currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        xPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, 0), Quaternion.identity);
+        zPlane = Instantiate(planePrefab, new Vector3(0, 0, planeSize.z), Quaternion.identity);
+        xzPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, planeSize.z), Quaternion.identity);
+
     }
 
     void Update() {
@@ -27,6 +33,10 @@ public class WorldPlaneRenderer : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        if (!startFoodCurrPlane) {
+            foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
+        }
+
         renderXPlane();
         renderZPlane();
         renderXZPlane();
@@ -38,12 +48,13 @@ public class WorldPlaneRenderer : MonoBehaviour
             sign = -1;
         }
 
-        if(player.transform.position.x < currPlane.transform.position.x + currPlaneSize.x / 2 && 
-           player.transform.position.x > currPlane.transform.position.x - currPlaneSize.x / 2) {
+        if(player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 && 
+           player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
-            if (xPlane.transform.position.x != currPlane.transform.position.x + sign * currPlaneSize.x) {
+            if (xPlane.transform.position.x != currPlane.transform.position.x + sign * planeSize.x) {
                 Destroy(xPlane);
-                xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * currPlaneSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
+                foodSpawner.discardFoodOnPlane(LocalPlanes.X_PLANE);
+                xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * planeSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
             }
         } else {
 
@@ -53,21 +64,29 @@ public class WorldPlaneRenderer : MonoBehaviour
             tempPlane = zPlane;
             zPlane = xzPlane;
             xzPlane = tempPlane;
+
+            //Switch food on planes
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
         }
+
+        //Spawn food
+        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
     }
-    
+
     private void renderZPlane() {
         int sign = 1;
         if (player.transform.position.z < currPlane.transform.position.z) {
             sign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + currPlaneSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - currPlaneSize.z / 2) {
+        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2) {
             
-            if (xPlane.transform.position.z != currPlane.transform.position.z + sign * currPlaneSize.z) {
+            if (zPlane.transform.position.z != currPlane.transform.position.z + sign * planeSize.z) {
                 Destroy(zPlane);
-                zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * currPlaneSize.z), Quaternion.identity);
+                foodSpawner.discardFoodOnPlane(LocalPlanes.Z_PLANE);
+                zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * planeSize.z), Quaternion.identity);
             }
         } else {
 
@@ -77,7 +96,14 @@ public class WorldPlaneRenderer : MonoBehaviour
             tempPlane = xPlane;
             xPlane = xzPlane;
             xzPlane = tempPlane;
+
+            //Switch food on planes
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
         }
+
+        //Spawn food
+        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
     }
     
     private void renderXZPlane() {
@@ -91,15 +117,16 @@ public class WorldPlaneRenderer : MonoBehaviour
             xSign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + currPlaneSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - currPlaneSize.z / 2 &&
-            player.transform.position.x < currPlane.transform.position.x + currPlaneSize.x / 2 &&
-            player.transform.position.x > currPlane.transform.position.x - currPlaneSize.x / 2) {
+        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2 &&
+            player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 &&
+            player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
-            if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * currPlaneSize.z) ||
-                xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * currPlaneSize.x)) {
+            if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * planeSize.z) ||
+                xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * planeSize.x)) {
                 Destroy(xzPlane);
-                xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * currPlaneSize.x, 0, currPlane.transform.position.z + zSign * currPlaneSize.z), Quaternion.identity);
+                foodSpawner.discardFoodOnPlane(LocalPlanes.XZ_PLANE);
+                xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * planeSize.x, 0, currPlane.transform.position.z + zSign * planeSize.z), Quaternion.identity);
             }
         } else {
             GameObject tempPlane = currPlane;
@@ -108,8 +135,14 @@ public class WorldPlaneRenderer : MonoBehaviour
             tempPlane = xPlane;
             xPlane = zPlane;
             zPlane = tempPlane;
+
+            //Switch food on planes
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
+            foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
         }
 
-    }
 
+        //Spawn food
+        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
+    }
 }

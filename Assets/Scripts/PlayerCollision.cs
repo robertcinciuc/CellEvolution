@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
+    private Collider thisCollider;
+
     void Start(){
-        
+        thisCollider = GetComponent<Collider>();
     }
 
     void Update(){
-        
     }
 
     private void OnCollisionEnter(Collision collision) {
-        //print("coliision with " + collision.gameObject);
+        //print("collision with " + collision.gameObject);
+        Collider firstCollider = collision.GetContact(0).thisCollider;
 
-        if(collision.gameObject.name == Items.FOOD.ToString()) {
+        if ( firstCollider.name == "Mouth" && collision.gameObject.name == Items.FOOD.ToString()) {
             Destroy(collision.gameObject);
         }
     }

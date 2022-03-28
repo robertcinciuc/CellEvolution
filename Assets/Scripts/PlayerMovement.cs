@@ -3,9 +3,9 @@
 public class PlayerMovement : MonoBehaviour
 {   
 
-    private float playerSpeed = 5.0f;
-    private Rigidbody rigidBody;
+    public float playerSpeed = 5.0f;
 
+    private Rigidbody rigidBody;
 
     void Start(){
         rigidBody = GetComponent<Rigidbody>();

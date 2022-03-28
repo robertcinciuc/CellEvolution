@@ -3,5 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum LocalPlanes{
-    CURRENT, X_PLANE, Z_PLANE, XZ_PLANE
+    CURRENT_PLANE, X_PLANE, Z_PLANE, XZ_PLANE
+}
+
+public enum Items {
+    FOOD
 }

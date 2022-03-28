@@ -16,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate(){
+        if (!PlayerState.isActive) {
+            return;
+        }
+
         translatePlayerToMouse();
         rotatePlayer();
     }

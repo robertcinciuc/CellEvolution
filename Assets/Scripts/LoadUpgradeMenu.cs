@@ -31,10 +31,12 @@ public class LoadUpgradeMenu : MonoBehaviour
             PlayerState.setInactive();
             UpgradeMenuCameraState.setActive();
             MainCameraState.setInactive();
+            UpgradeMenuLogic.movePlayerToUpgradeMenu();
         } else {
             PlayerState.setActive();
             MainCameraState.setActive();
             UpgradeMenuCameraState.setInactive();
+            UpgradeMenuLogic.movePlayerToWorld();
         }
     }
 }

@@ -28,6 +28,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         player.transform.position = upgradeMenuPlane.transform.position + new Vector3(0, 1, 0);
         player.transform.rotation = new Quaternion(1, 0, 0, 0);
         playerMouth = Instantiate((GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 2), Quaternion.identity);
+        playerMouth = Instantiate((GameObject)Resources.Load("Prefabs/Flagel", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f));
     }
 
     public static void movePlayerToWorld() {

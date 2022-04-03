@@ -9,3 +9,7 @@ public enum LocalPlanes{
 public enum Items {
     FOOD
 }
+
+public enum Enemies {
+    OG_ENEMY
+}

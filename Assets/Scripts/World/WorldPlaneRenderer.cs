@@ -14,6 +14,8 @@ public class WorldPlaneRenderer : MonoBehaviour
     private Vector3 planeSize;
     private FoodSpawner foodSpawner;
     private bool startFoodCurrPlane = false;
+    private bool startEnemyCurrPlane = false;
+
 
     void Start() {
         foodSpawner = this.gameObject.GetComponent<FoodSpawner>();
@@ -37,6 +39,10 @@ public class WorldPlaneRenderer : MonoBehaviour
             foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
         }
 
+        if (!startEnemyCurrPlane) { 
+            EnemySpawner.spawnEnemiesOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
+        }
+
         renderXPlane();
         renderZPlane();
         renderXZPlane();
@@ -54,6 +60,7 @@ public class WorldPlaneRenderer : MonoBehaviour
             if (xPlane.transform.position.x != currPlane.transform.position.x + sign * planeSize.x) {
                 Destroy(xPlane);
                 foodSpawner.discardFoodOnPlane(LocalPlanes.X_PLANE);
+                EnemySpawner.discardEnemiesOnPlane(LocalPlanes.X_PLANE);
                 xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * planeSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
             }
         } else {
@@ -68,10 +75,17 @@ public class WorldPlaneRenderer : MonoBehaviour
             //Switch food on planes
             foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
             foodSpawner.switchFoodOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
+            
+            //Switch enemies on planes
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
         }
 
         //Spawn food
         foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
+
+        //Spawn enemies
+        EnemySpawner.spawnEnemiesOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
     }
 
     private void renderZPlane() {
@@ -86,6 +100,7 @@ public class WorldPlaneRenderer : MonoBehaviour
             if (zPlane.transform.position.z != currPlane.transform.position.z + sign * planeSize.z) {
                 Destroy(zPlane);
                 foodSpawner.discardFoodOnPlane(LocalPlanes.Z_PLANE);
+                EnemySpawner.discardEnemiesOnPlane(LocalPlanes.Z_PLANE);
                 zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * planeSize.z), Quaternion.identity);
             }
         } else {
@@ -100,10 +115,17 @@ public class WorldPlaneRenderer : MonoBehaviour
             //Switch food on planes
             foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
             foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
+            
+            //Switch enemies on planes
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
         }
 
         //Spawn food
         foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
+        
+        //Spawn enemies
+        EnemySpawner.spawnEnemiesOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
     }
     
     private void renderXZPlane() {
@@ -126,6 +148,7 @@ public class WorldPlaneRenderer : MonoBehaviour
                 xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * planeSize.x)) {
                 Destroy(xzPlane);
                 foodSpawner.discardFoodOnPlane(LocalPlanes.XZ_PLANE);
+                EnemySpawner.discardEnemiesOnPlane(LocalPlanes.XZ_PLANE);
                 xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * planeSize.x, 0, currPlane.transform.position.z + zSign * planeSize.z), Quaternion.identity);
             }
         } else {
@@ -139,10 +162,17 @@ public class WorldPlaneRenderer : MonoBehaviour
             //Switch food on planes
             foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
             foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
+
+            //Switch food on planes
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
+            EnemySpawner.switchEnemiesOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
         }
 
 
         //Spawn food
         foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
+    
+        //Spawn enemies
+        EnemySpawner.spawnEnemiesOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
     }
 }

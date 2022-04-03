@@ -8,12 +8,11 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static  GameObject upgradeMenuPlane;
     private static Vector3 ogPlayerPos;
     private static Quaternion ogPlayerRot;
+    private static GameObject playerMouth;
 
     void Start(){
         player = GameObject.Find("Player");
-        //Transform[] transforms = player.GetComponentsInChildren<Transform>();
         upgradeMenuPlane = this.gameObject.transform.parent.gameObject.transform.Find("UpgradeMenuPlane").gameObject;
-
     }
 
     void Update(){
@@ -28,6 +27,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         ogPlayerRot = player.transform.rotation;
         player.transform.position = upgradeMenuPlane.transform.position + new Vector3(0, 1, 0);
         player.transform.rotation = new Quaternion(1, 0, 0, 0);
+        playerMouth = Instantiate((GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 2), Quaternion.identity);
     }
 
     public static void movePlayerToWorld() {
@@ -35,5 +35,6 @@ public class UpgradeMenuLogic : MonoBehaviour
         player.transform.rotation = ogPlayerRot;
         ogPlayerPos = Vector3.zero;
         ogPlayerRot = Quaternion.identity;
+        Destroy(playerMouth);
     }
 }

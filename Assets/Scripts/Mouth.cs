@@ -5,7 +5,6 @@ using UnityEngine;
 public class Mouth : BodyPart
 {
     void Start(){
-        transform.localPosition = new Vector3(0, 0, 1);
     }
 
     void Update(){

@@ -14,10 +14,9 @@ public class PlayerCollision : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        //print("collision with " + collision.gameObject);
         Collider firstCollider = collision.GetContact(0).thisCollider;
 
-        if ( firstCollider.name == "Mouth" && collision.gameObject.name == Items.FOOD.ToString()) {
+        if ( firstCollider.name.Contains("Mouth") && collision.gameObject.name == Items.FOOD.ToString()) {
             Destroy(collision.gameObject);
         }
     }

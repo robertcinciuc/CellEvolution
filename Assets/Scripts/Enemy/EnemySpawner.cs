@@ -29,17 +29,15 @@ public class EnemySpawner : MonoBehaviour {
         }
 
         for (int i = 0; i < nbEnemiesPerPlane; i++) {
-            float xPos = Random.Range(0, planeSize.x / 2);
-            float zPos = Random.Range(0, planeSize.z / 2);
             List<int> signs = new List<int>() { -1, 1 };
             int xSign = Random.Range(0, 2);
             int zSign = Random.Range(0, 2);
 
-            float finalXPos = planeCoord.x + signs[xSign] * xPos;
-            float finalYPos = 0.2f;
-            float finalZPos = planeCoord.z + signs[zSign] * zPos;
+            float xPos = planeCoord.x + signs[xSign] * Random.Range(0, planeSize.x / 2);
+            float yPos = 0.2f;
+            float zPos = planeCoord.z + signs[zSign] * Random.Range(0, planeSize.z / 2);
 
-            GameObject enemy = instantiateEnemy(finalXPos, finalYPos, finalZPos);
+            GameObject enemy = instantiateEnemy(xPos, yPos, zPos);
 
             enemy.name = Enemies.OG_ENEMY.ToString();
             planeEnemies[plane].Add(enemy);
@@ -78,6 +76,8 @@ public class EnemySpawner : MonoBehaviour {
     private static GameObject instantiateEnemy(float xPos, float yPos, float zPos) {
 
         GameObject enemy = new GameObject();
+        enemy.transform.position = new Vector3(xPos, yPos, zPos);
+
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
         GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 0.5f), Quaternion.identity);
         GameObject enemyFlagel = Instantiate(enemyFlagelPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
@@ -85,6 +85,8 @@ public class EnemySpawner : MonoBehaviour {
         enemyBody.transform.SetParent(enemy.transform);
         enemyMouth.transform.SetParent(enemy.transform);
         enemyFlagel.transform.SetParent(enemy.transform);
+
+        enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
 
         return enemy;
     }

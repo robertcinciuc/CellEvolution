@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour {
     private static GameObject enemyMouthPrefab;
     private static GameObject enemyFlagelPrefab;
     private static Dictionary<LocalPlanes, bool> planeEnemyStatus;
-    private static Dictionary<LocalPlanes, List<GameObject>> planeEnemies;
+    public static Dictionary<LocalPlanes, List<GameObject>> planeEnemies;
 
     void Start() {
         enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));

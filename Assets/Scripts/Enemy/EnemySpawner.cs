@@ -87,6 +87,7 @@ public class EnemySpawner : MonoBehaviour {
         enemyFlagel.transform.SetParent(enemy.transform);
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
+        enemy.AddComponent<Rigidbody>();
 
         return enemy;
     }

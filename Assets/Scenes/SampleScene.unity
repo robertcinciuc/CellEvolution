@@ -800,7 +800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68c5729b6207294ebc23446ca47eb64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraYOffset: 300
+  cameraYOffset: 40
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0

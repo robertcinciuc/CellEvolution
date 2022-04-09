@@ -35,73 +35,82 @@ public class EnemyBoundChecker : MonoBehaviour
         planes[LocalPlanes.Z_PLANE] = WorldPlaneRenderer.zPlane.transform.position;
         planes[LocalPlanes.XZ_PLANE] = WorldPlaneRenderer.xzPlane.transform.position;
 
-        LocalPlanes botLeftPlane = LocalPlanes.XZ_PLANE;
-        Vector3 botLeftCorner = getGlobalPlaneBottomLeftCoord(ref botLeftPlane);
+        //Get middle point of total plane
+        Vector3 totalPlaneSize = new Vector3(planeSize.x * 2, 0, planeSize.z * 2);
+        Vector3 totalPlaneMidPoint = new Vector3(
+            Mathf.Min(planes[LocalPlanes.CURRENT_PLANE].x, planes[LocalPlanes.X_PLANE].x) + planeSize.x / 2,
+            0,
+            Mathf.Min(planes[LocalPlanes.CURRENT_PLANE].z, planes[LocalPlanes.Z_PLANE].z) + planeSize.z / 2);
 
-        //bool parentXBiggerPlaneX = false;
-        //bool parentXSmallerPlaneX = false;
-        //bool parentZBiggerPlaneZ = false;
-        //bool parentZSmallerPlaneZ = false;
-
-        //bool localPlaneXBiggerCornerPlaneX = true;
-        //bool localPlaneZBiggerCornerPlaneZ = true;
-
-        //if (parent.transform.position.x > localPlaneCoord.x + planeSize.x / 2) {
-        //    parentXBiggerPlaneX = true;
-        //}
-        //if (parent.transform.position.x < localPlaneCoord.x - planeSize.x / 2) {
-        //    parentXSmallerPlaneX = true;
-        //}
-        //if (parent.transform.position.z > localPlaneCoord.z + planeSize.z / 2) {
-        //    parentZBiggerPlaneZ = true;
-        //}
-        //if (parent.transform.position.z < localPlaneCoord.z - planeSize.z / 2) {
-        //    parentZSmallerPlaneZ = true;
-        //}
-
-        //if(parent.transform.position.z < localPlaneCoord.z) {
-        //    parentZBiggerPlaneZ = false;
-        //}
-        //if (planes[localPlane].x < botLeftCorner.x) {
-        //    localPlaneXBiggerCornerPlaneX = false;
-        //}
-        //if (planes[localPlane].z < botLeftCorner.z) {
-        //    localPlaneZBiggerCornerPlaneZ = false;
-        //}
-
-        //Based on the 4 booleans either destroy the enemy or switch it between planes
-
-        //Switch enemy between planes
-        //Destroy enemy if it's beyond the total plane 
-
-        if(parent.transform.position.x < botLeftCorner.x ||
-           parent.transform.position.x > botLeftCorner.x + planeSize.x * 2 ||
-           parent.transform.position.z < botLeftCorner.z ||
-           parent.transform.position.z > botLeftCorner.z + planeSize.z * 2) {
+        //Destroy enemy if outside the total plane or switch enemy between planes when crossing their border
+        if(isInsidePlane(parent.transform.position, totalPlaneMidPoint, totalPlaneSize) == Positions.OUTSIDE) {
             EnemySpawner.planeEnemies[localPlane].Remove(parent.GetInstanceID());
             Destroy(parent);
         } else {
+            Positions objAgainstLocalPlane = getPosAgainstPlane(parent.transform.position, localPlaneCoord, planeSize);
 
-        }
-    }
-
-    private Vector3 getGlobalPlaneBottomLeftCoord(ref LocalPlanes botLeftPlane) {
-        float xExtremity = planes[LocalPlanes.CURRENT_PLANE].x - planeSize.x /2;
-        float zExtremity = planes[LocalPlanes.CURRENT_PLANE].z - planeSize.z /2;
-        botLeftPlane = LocalPlanes.CURRENT_PLANE;
-
-        if(planes[LocalPlanes.CURRENT_PLANE].x > planes[LocalPlanes.X_PLANE].x) {
-            xExtremity = planes[LocalPlanes.X_PLANE].x - planeSize.x / 2;
-            botLeftPlane = LocalPlanes.X_PLANE;
-        }
-        if(planes[LocalPlanes.CURRENT_PLANE].z > planes[LocalPlanes.Z_PLANE].z) {
-            zExtremity = planes[LocalPlanes.Z_PLANE].z - planeSize.z / 2;
-
-            if (botLeftPlane == LocalPlanes.X_PLANE) {
-                botLeftPlane = LocalPlanes.XZ_PLANE;
+            if(objAgainstLocalPlane == Positions.INSIDE) {
+                return;
             }
+
+            bool isInsideXPlane = Positions.INSIDE == isInsidePlane(parent.transform.position, planes[LocalPlanes.X_PLANE], planeSize);
+            bool isInsideZPlane = Positions.INSIDE == isInsidePlane(parent.transform.position, planes[LocalPlanes.Z_PLANE], planeSize);
+            bool isInsideXZPlane = Positions.INSIDE == isInsidePlane(parent.transform.position, planes[LocalPlanes.XZ_PLANE], planeSize);
+            LocalPlanes targetPlane = LocalPlanes.CURRENT_PLANE;
+            if (isInsideXPlane) {
+                targetPlane = LocalPlanes.X_PLANE;
+            } else if(isInsideZPlane) {
+                targetPlane = LocalPlanes.Z_PLANE;
+            }else if (isInsideXZPlane) {
+                targetPlane = LocalPlanes.XZ_PLANE;
+            }
+
+            EnemySpawner.moveEnemyToPlane(parent.GetInstanceID(), localPlane, targetPlane);
+            setLocalPlane(targetPlane, planes[targetPlane]);
+        }
+    }
+
+    private Positions getPosAgainstPlane(Vector3 objToLocate, Vector3 planePos, Vector3 planeSize) {
+        if(isInsidePlane(objToLocate, planePos, planeSize) == Positions.INSIDE) {
+            return Positions.INSIDE;
         }
 
-        return new Vector3(xExtremity, 0, zExtremity);
+        if (objToLocate.x < planePos.x - planeSize.x / 2) {
+            if (objToLocate.z < planePos.z - planeSize.z / 2) {
+                return Positions.LOWER_LEFT;
+            }
+            if (objToLocate.z > planePos.z + planeSize.z / 2) {
+                return Positions.UPPER_LEFT;
+            }
+            return Positions.LEFT;
+        }
+
+        if (objToLocate.x > planePos.x + planeSize.x / 2) {
+            if (objToLocate.z < planePos.z - planeSize.z / 2) {
+                return Positions.LOWER_RIGHT;
+            }
+            if (objToLocate.z > planePos.z + planeSize.z / 2) {
+                return Positions.UPPER_RIGHT;
+            }
+            return Positions.RIGHT;
+        }
+
+        if (objToLocate.z < planePos.z - planeSize.z / 2) {
+            return Positions.LOWER;
+        }
+
+        return Positions.UPPER;
     }
+
+    private Positions isInsidePlane(Vector3 objectToLocate, Vector3 planePos, Vector3 planeSize) {
+        if(objectToLocate.x > planePos.x + planeSize.x / 2 ||
+           objectToLocate.x < planePos.x - planeSize.x / 2 ||
+           objectToLocate.z > planePos.z + planeSize.z / 2 ||
+           objectToLocate.z < planePos.z - planeSize.z / 2) {
+            return Positions.OUTSIDE;
+        }
+
+        return Positions.INSIDE;
+    }
+
 }

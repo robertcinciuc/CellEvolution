@@ -58,6 +58,12 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemies[plane2] = tempEnemyEntry;
     }
 
+    public static void moveEnemyToPlane(int enemyID, LocalPlanes sourcePlane, LocalPlanes targetPlane) {
+        GameObject tempEnemy = planeEnemies[sourcePlane][enemyID];
+        planeEnemies[sourcePlane].Remove(enemyID);
+        planeEnemies[targetPlane].Add(enemyID, tempEnemy);
+    }
+
     private static void initializeDictionaries() {
         planeEnemyStatus = new Dictionary<LocalPlanes, bool>();
         planeEnemyStatus.Add(LocalPlanes.CURRENT_PLANE, false);

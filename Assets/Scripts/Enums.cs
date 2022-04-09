@@ -13,3 +13,7 @@ public enum Items {
 public enum Enemies {
     OG_ENEMY
 }
+
+public enum Positions {
+    UPPER, LOWER, RIGHT, LEFT, UPPER_RIGHT, UPPER_LEFT, LOWER_LEFT, LOWER_RIGHT, INSIDE, OUTSIDE
+}

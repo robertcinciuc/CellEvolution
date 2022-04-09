@@ -6,12 +6,12 @@ public class WorldPlaneRenderer : MonoBehaviour
 
     public GameObject planePrefab;
 
-    private GameObject currPlane;
-    private GameObject zPlane;
-    private GameObject xPlane;
-    private GameObject xzPlane;
+    public static GameObject currPlane;
+    public static GameObject zPlane;
+    public static GameObject xPlane;
+    public static GameObject xzPlane;
+    public static Vector3 planeSize;
     private GameObject player;
-    private Vector3 planeSize;
     private FoodSpawner foodSpawner;
     private bool startFoodCurrPlane = false;
     private bool startEnemyCurrPlane = false;

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
     public static int nbEnemiesPerPlane = 20;
+    public static Dictionary<LocalPlanes, Dictionary<int, GameObject>> planeEnemies;
 
     private static GameObject enemyBodyPrefab;
     private static GameObject enemyMouthPrefab;
     private static GameObject enemyFlagelPrefab;
     private static Dictionary<LocalPlanes, bool> planeEnemyStatus;
-    public static Dictionary<LocalPlanes, List<GameObject>> planeEnemies;
 
     void Start() {
         enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
@@ -37,10 +37,9 @@ public class EnemySpawner : MonoBehaviour {
             float yPos = 0.2f;
             float zPos = planeCoord.z + signs[zSign] * Random.Range(0, planeSize.z / 2);
 
-            GameObject enemy = instantiateEnemy(xPos, yPos, zPos);
+            GameObject enemy = instantiateEnemy(xPos, yPos, zPos, plane, planeCoord);
 
-            enemy.name = Enemies.OG_ENEMY.ToString();
-            planeEnemies[plane].Add(enemy);
+            planeEnemies[plane].Add(enemy.GetInstanceID(), enemy);
             planeEnemyStatus[plane] = true;
         }
     }
@@ -48,15 +47,15 @@ public class EnemySpawner : MonoBehaviour {
     public static void discardEnemiesOnPlane(LocalPlanes plane) {
         planeEnemyStatus[plane] = false;
 
-        foreach (GameObject enemy in planeEnemies[plane]) {
-            Destroy(enemy);
+        foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies[plane]) {
+            Destroy(enemyEntry.Value);
         }
     }
 
     public static void switchEnemiesOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {
-        List<GameObject> tempFood = planeEnemies[plane1];
+        Dictionary<int, GameObject> tempEnemyEntry = planeEnemies[plane1];
         planeEnemies[plane1] = planeEnemies[plane2];
-        planeEnemies[plane2] = tempFood;
+        planeEnemies[plane2] = tempEnemyEntry;
     }
 
     private static void initializeDictionaries() {
@@ -66,16 +65,17 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemyStatus.Add(LocalPlanes.Z_PLANE, false);
         planeEnemyStatus.Add(LocalPlanes.XZ_PLANE, false);
 
-        planeEnemies = new Dictionary<LocalPlanes, List<GameObject>>();
-        planeEnemies.Add(LocalPlanes.CURRENT_PLANE, new List<GameObject>());
-        planeEnemies.Add(LocalPlanes.X_PLANE, new List<GameObject>());
-        planeEnemies.Add(LocalPlanes.Z_PLANE, new List<GameObject>());
-        planeEnemies.Add(LocalPlanes.XZ_PLANE, new List<GameObject>());
+        planeEnemies = new Dictionary<LocalPlanes, Dictionary<int, GameObject>>();
+        planeEnemies.Add(LocalPlanes.CURRENT_PLANE, new Dictionary<int, GameObject>());
+        planeEnemies.Add(LocalPlanes.X_PLANE, new Dictionary<int, GameObject>());
+        planeEnemies.Add(LocalPlanes.Z_PLANE, new Dictionary<int, GameObject>());
+        planeEnemies.Add(LocalPlanes.XZ_PLANE, new Dictionary<int, GameObject>());
     }
 
-    private static GameObject instantiateEnemy(float xPos, float yPos, float zPos) {
+    private static GameObject instantiateEnemy(float xPos, float yPos, float zPos, LocalPlanes localPlane, Vector3 localPlaneCoord) {
 
         GameObject enemy = new GameObject();
+        enemy.name = Enemies.OG_ENEMY.ToString();
         enemy.transform.position = new Vector3(xPos, yPos, zPos);
 
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
@@ -88,6 +88,7 @@ public class EnemySpawner : MonoBehaviour {
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         enemy.AddComponent<Rigidbody>();
+        enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
 
         return enemy;
     }

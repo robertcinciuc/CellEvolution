@@ -20,14 +20,14 @@ public class EnemyMovement : MonoBehaviour
     void FixedUpdate() {
         timeLeft -= Time.deltaTime;
         if (timeLeft < 0) {
-            foreach (KeyValuePair<LocalPlanes, List<GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
-                foreach (GameObject enemy in planeEnemies.Value) {
+            foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
+                foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies.Value) {
                     Vector3 randomDirection = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
 
-                    if (enemyDirections.ContainsKey(enemy.GetInstanceID())) {
-                        enemyDirections[enemy.GetInstanceID()] = randomDirection;
+                    if (enemyDirections.ContainsKey(enemyEntry.Value.GetInstanceID())) {
+                        enemyDirections[enemyEntry.Value.GetInstanceID()] = randomDirection;
                     } else {
-                        enemyDirections.Add(enemy.GetInstanceID(), randomDirection);
+                        enemyDirections.Add(enemyEntry.Value.GetInstanceID(), randomDirection);
                     }
                 }
             }
@@ -35,9 +35,9 @@ public class EnemyMovement : MonoBehaviour
         }
 
         //Update the velocity each tick
-        foreach (KeyValuePair<LocalPlanes, List<GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
-            foreach (GameObject enemy in planeEnemies.Value) {
-                enemy.GetComponent<Rigidbody>().velocity = enemyDirections[enemy.GetInstanceID()] * 5;
+        foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
+            foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies.Value) {
+                enemyEntry.Value.GetComponent<Rigidbody>().velocity = enemyDirections[enemyEntry.Value.GetInstanceID()] * 5;
             }
         }
     }

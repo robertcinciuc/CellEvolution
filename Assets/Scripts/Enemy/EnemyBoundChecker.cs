@@ -6,10 +6,6 @@ public class EnemyBoundChecker : MonoBehaviour
 {
 
     private Vector3 planeSize;
-    private Vector3 currPlaneCoord;
-    private Vector3 xPlaneCoord;
-    private Vector3 zPlaneCoord;
-    private Vector3 xzPlaneCoord;
     private Dictionary<LocalPlanes, Vector3> planes;
     private GameObject parent;
     private LocalPlanes localPlane;
@@ -34,10 +30,10 @@ public class EnemyBoundChecker : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        currPlaneCoord = WorldPlaneRenderer.currPlane.transform.position;
-        xPlaneCoord = WorldPlaneRenderer.xPlane.transform.position;
-        zPlaneCoord = WorldPlaneRenderer.zPlane.transform.position;
-        xzPlaneCoord = WorldPlaneRenderer.xzPlane.transform.position;
+        planes[LocalPlanes.CURRENT_PLANE] = WorldPlaneRenderer.currPlane.transform.position;
+        planes[LocalPlanes.X_PLANE] = WorldPlaneRenderer.xPlane.transform.position;
+        planes[LocalPlanes.Z_PLANE] = WorldPlaneRenderer.zPlane.transform.position;
+        planes[LocalPlanes.XZ_PLANE] = WorldPlaneRenderer.xzPlane.transform.position;
 
         LocalPlanes botLeftPlane = LocalPlanes.XZ_PLANE;
         Vector3 botLeftCorner = getGlobalPlaneBottomLeftCoord(ref botLeftPlane);
@@ -84,20 +80,22 @@ public class EnemyBoundChecker : MonoBehaviour
            parent.transform.position.z > botLeftCorner.z + planeSize.z * 2) {
             EnemySpawner.planeEnemies[localPlane].Remove(parent.GetInstanceID());
             Destroy(parent);
+        } else {
+
         }
     }
 
     private Vector3 getGlobalPlaneBottomLeftCoord(ref LocalPlanes botLeftPlane) {
-        float xExtremity = currPlaneCoord.x - planeSize.x /2;
-        float zExtremity = currPlaneCoord.z - planeSize.z /2;
+        float xExtremity = planes[LocalPlanes.CURRENT_PLANE].x - planeSize.x /2;
+        float zExtremity = planes[LocalPlanes.CURRENT_PLANE].z - planeSize.z /2;
         botLeftPlane = LocalPlanes.CURRENT_PLANE;
 
-        if(currPlaneCoord.x > xPlaneCoord.x) {
-            xExtremity = xPlaneCoord.x - planeSize.x / 2;
+        if(planes[LocalPlanes.CURRENT_PLANE].x > planes[LocalPlanes.X_PLANE].x) {
+            xExtremity = planes[LocalPlanes.X_PLANE].x - planeSize.x / 2;
             botLeftPlane = LocalPlanes.X_PLANE;
         }
-        if(currPlaneCoord.z > zPlaneCoord.z) {
-            zExtremity = zPlaneCoord.z - planeSize.z / 2;
+        if(planes[LocalPlanes.CURRENT_PLANE].z > planes[LocalPlanes.Z_PLANE].z) {
+            zExtremity = planes[LocalPlanes.Z_PLANE].z - planeSize.z / 2;
 
             if (botLeftPlane == LocalPlanes.X_PLANE) {
                 botLeftPlane = LocalPlanes.XZ_PLANE;

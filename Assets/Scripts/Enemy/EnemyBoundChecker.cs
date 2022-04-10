@@ -35,6 +35,8 @@ public class EnemyBoundChecker : MonoBehaviour
         planes[LocalPlanes.Z_PLANE] = WorldPlaneRenderer.zPlane.transform.position;
         planes[LocalPlanes.XZ_PLANE] = WorldPlaneRenderer.xzPlane.transform.position;
 
+        updateLocalPlane();
+
         updateEnemyOwnership();
     }
 
@@ -114,6 +116,15 @@ public class EnemyBoundChecker : MonoBehaviour
 
             EnemySpawner.moveEnemyToPlane(parent.GetInstanceID(), localPlane, targetPlane);
             setLocalPlane(targetPlane, planes[targetPlane]);
+        }
+    }
+
+    private void updateLocalPlane() {
+        foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEntry in EnemySpawner.planeEnemies) {
+            if (planeEntry.Value.ContainsKey(parent.GetInstanceID())) {
+                localPlane = planeEntry.Key;
+                localPlaneCoord = WorldPlaneRenderer.getPlaneObject(localPlane).transform.position;
+            }
         }
     }
 }

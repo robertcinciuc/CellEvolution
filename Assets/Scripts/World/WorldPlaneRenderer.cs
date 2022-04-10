@@ -48,6 +48,20 @@ public class WorldPlaneRenderer : MonoBehaviour
         renderXZPlane();
     }
 
+    public static GameObject getPlaneObject(LocalPlanes planeName) {
+        if (planeName == LocalPlanes.CURRENT_PLANE) {
+            return currPlane;
+        }
+        if (planeName == LocalPlanes.X_PLANE) {
+            return xPlane;
+        }
+        if (planeName == LocalPlanes.Z_PLANE) {
+            return zPlane;
+        }
+
+        return xzPlane;
+    }
+
     private void renderXPlane() {
         int sign = 1;
         if (player.transform.position.x < currPlane.transform.position.x) {

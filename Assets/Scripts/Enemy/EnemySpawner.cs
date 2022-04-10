@@ -50,6 +50,8 @@ public class EnemySpawner : MonoBehaviour {
         foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies[plane]) {
             Destroy(enemyEntry.Value);
         }
+        planeEnemies[plane].Clear();
+
     }
 
     public static void switchEnemiesOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {

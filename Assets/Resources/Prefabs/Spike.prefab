@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6645322226185967477}
   - component: {fileID: 677839226505662346}
   m_Layer: 0
-  m_Name: Cone
+  m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

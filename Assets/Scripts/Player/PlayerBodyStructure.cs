@@ -21,7 +21,7 @@ public class PlayerBodyStructure : MonoBehaviour
         
         playerSpike = Instantiate((GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
         playerSpike.transform.SetParent(this.gameObject.transform);
-        playerSpike.transform.localPosition = new Vector3(-0.3f, 0.1f, 0.5f);
+        playerSpike.transform.localPosition = new Vector3(-0.5f, 0.3f, 0.5f);
         playerSpike.transform.localRotation = new Quaternion(0, 0, 0.71f, 0.71f);
 
     }

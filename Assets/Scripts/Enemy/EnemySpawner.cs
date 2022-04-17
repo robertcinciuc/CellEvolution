@@ -108,6 +108,7 @@ public class EnemySpawner : MonoBehaviour {
         enemy.AddComponent<Rigidbody>();
         enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
         enemy.AddComponent<EnemyState>();
+        enemy.AddComponent<EnemyHealthBar>().setPosition();
 
         return enemy;
     }

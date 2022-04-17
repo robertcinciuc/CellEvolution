@@ -16,9 +16,6 @@ public class PlayerState : MonoBehaviour
     }
 
     void Update(){
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            takeDamage(20);
-        }
     }
 
     public static void setInactive() {

@@ -66,6 +66,16 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemies[targetPlane].Add(enemyID, tempEnemy);
     }
 
+    public static void deleteEnemy(int enemyID) {
+        foreach(KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> enemyEntry in planeEnemies){
+            if (enemyEntry.Value.ContainsKey(enemyID)) {
+                GameObject tempObj = planeEnemies[enemyEntry.Key][enemyID];
+                planeEnemies[enemyEntry.Key].Remove(enemyID);
+                Destroy(tempObj);
+            }
+        }
+    }
+
     private static void initializeDictionaries() {
         planeEnemyStatus = new Dictionary<LocalPlanes, bool>();
         planeEnemyStatus.Add(LocalPlanes.CURRENT_PLANE, false);
@@ -97,6 +107,7 @@ public class EnemySpawner : MonoBehaviour {
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         enemy.AddComponent<Rigidbody>();
         enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
+        enemy.AddComponent<EnemyState>();
 
         return enemy;
     }

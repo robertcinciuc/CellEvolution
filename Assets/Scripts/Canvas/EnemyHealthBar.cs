@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
+    public Slider slider;
+
     void Start(){
     }
 
@@ -11,9 +14,12 @@ public class EnemyHealthBar : MonoBehaviour
         
     }
 
-    public void setPosition() {
-        Vector3 parentPos = gameObject.transform.position + new Vector3(0, 1, 0);
+    public void setMaxHealth(float maxHealth) {
+        slider.maxValue = maxHealth;
+        slider.value = maxHealth;
+    }
 
-        Instantiate((GameObject)Resources.Load("Prefabs/TestPrefab", typeof(GameObject)), parentPos, Quaternion.identity);
+    public void setHealth(float healthValue) {
+        slider.value = healthValue;
     }
 }

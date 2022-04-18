@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyState : MonoBehaviour
 {
-    private float maxHealth = 100;
+    public float maxHealth = 100;
     private float health = 100;
 
     void Start(){
@@ -22,7 +22,7 @@ public class EnemyState : MonoBehaviour
             health -= damage;
         }
 
-        //healthBar.setHealth(health);
+        gameObject.transform.Find("EnemyHealthBar(Clone)").transform.Find("Canvas").Find("EnemyHealthBar").GetComponent<EnemyHealthBar>().setHealth(health);
     }
 
     public void heal(float amount) {
@@ -32,6 +32,6 @@ public class EnemyState : MonoBehaviour
             health += amount;
         }
 
-        //healthBar.setHealth(health);
+        gameObject.transform.GetComponent<EnemyHealthBar>().setHealth(health);
     }
 }

@@ -11,7 +11,7 @@ public class EnemyHealthBar : MonoBehaviour
     }
 
     void Update(){
-        
+        gameObject.transform.rotation = new Quaternion(0.71f, 0, 0, -0.71f);    
     }
 
     public void setMaxHealth(float maxHealth) {

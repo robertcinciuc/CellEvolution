@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour {
     public static int nbEnemiesPerPlane = 20;
@@ -66,6 +67,16 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemies[targetPlane].Add(enemyID, tempEnemy);
     }
 
+    public static void deleteEnemy(int enemyID) {
+        foreach(KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> enemyEntry in planeEnemies){
+            if (enemyEntry.Value.ContainsKey(enemyID)) {
+                GameObject tempObj = planeEnemies[enemyEntry.Key][enemyID];
+                planeEnemies[enemyEntry.Key].Remove(enemyID);
+                Destroy(tempObj);
+            }
+        }
+    }
+
     private static void initializeDictionaries() {
         planeEnemyStatus = new Dictionary<LocalPlanes, bool>();
         planeEnemyStatus.Add(LocalPlanes.CURRENT_PLANE, false);
@@ -89,14 +100,20 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
         GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 0.5f), Quaternion.identity);
         GameObject enemyFlagel = Instantiate(enemyFlagelPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
+        GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
+
 
         enemyBody.transform.SetParent(enemy.transform);
         enemyMouth.transform.SetParent(enemy.transform);
         enemyFlagel.transform.SetParent(enemy.transform);
+        enemyHealthBar.transform.SetParent(enemy.transform);
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         enemy.AddComponent<Rigidbody>();
         enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
+        enemy.AddComponent<EnemyState>();
+
+        enemyHealthBar.transform.Find("Canvas").Find("EnemyHealthBar").GetComponent<EnemyHealthBar>().setMaxHealth(100f);
 
         return enemy;
     }

@@ -11,8 +11,10 @@ public class MainCameraMovement : MonoBehaviour
     }
 
     void Update(){
-        cameraPosition = player.transform.position;
-        cameraPosition.y += cameraYOffset;
-        transform.position = cameraPosition;
+        if (player != null) {
+            cameraPosition = player.transform.position;
+            cameraPosition.y += cameraYOffset;
+            transform.position = cameraPosition;
+        }
     }
 }

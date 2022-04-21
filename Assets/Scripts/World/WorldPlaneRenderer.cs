@@ -43,6 +43,10 @@ public class WorldPlaneRenderer : MonoBehaviour
             EnemySpawner.spawnEnemiesOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
         }
 
+        if (player == null) {
+            return;
+        }
+
         renderXPlane();
         renderZPlane();
         renderXZPlane();

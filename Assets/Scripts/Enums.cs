@@ -17,3 +17,7 @@ public enum Enemies {
 public enum Positions {
     UPPER, LOWER, RIGHT, LEFT, UPPER_RIGHT, UPPER_LEFT, LOWER_LEFT, LOWER_RIGHT, INSIDE, OUTSIDE
 }
+
+public enum BodyPartTypes {
+    Mouth, Flagel, Spike
+}

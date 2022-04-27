@@ -11,7 +11,7 @@ public class EnemyHealthBar : MonoBehaviour
     }
 
     void Update(){
-        gameObject.transform.rotation = new Quaternion(0.71f, 0, 0, -0.71f);    
+        updatePosAndRotation();
     }
 
     public void setMaxHealth(float maxHealth) {
@@ -22,4 +22,11 @@ public class EnemyHealthBar : MonoBehaviour
     public void setHealth(float healthValue) {
         slider.value = healthValue;
     }
+
+    private void updatePosAndRotation() {
+        gameObject.transform.rotation = new Quaternion(0.71f, 0, 0, -0.71f);
+        gameObject.transform.position = new Vector3(gameObject.transform.parent.position.x, 2, gameObject.transform.parent.position.z + 1);
+    }
+
+
 }

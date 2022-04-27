@@ -93,8 +93,7 @@ public class EnemyBoundChecker : MonoBehaviour
 
         //Destroy enemy if outside the total plane or switch enemy between planes when crossing their border
         if (isInsidePlane(parent.transform.position, totalPlaneMidPoint, totalPlaneSize) == Positions.OUTSIDE) {
-            EnemySpawner.planeEnemies[localPlane].Remove(parent.GetInstanceID());
-            Destroy(parent);
+            EnemySpawner.deleteEnemy(parent.GetInstanceID());
         } else {
             Positions objAgainstLocalPlane = getPosAgainstPlane(parent.transform.position, localPlaneCoord, planeSize);
 

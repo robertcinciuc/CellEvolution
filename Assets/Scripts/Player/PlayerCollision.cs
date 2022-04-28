@@ -22,9 +22,9 @@ public class PlayerCollision : MonoBehaviour
             Destroy(collision.gameObject);
             playerState.heal(10);
         }else if (firstCollider.name.Contains(BodyPartTypes.Spike.ToString()) && System.Enum.IsDefined(typeof(Enemies), collision.gameObject.name)) {
-            //playerState.takeDamage(10);
-
             collision.gameObject.GetComponent<EnemyState>().takeDamage(30);
+        }else if (collision.GetContact(0).otherCollider.name.Contains(BodyPartTypes.Spike.ToString()) && !firstCollider.name.Contains(BodyPartTypes.Spike.ToString()) ) {
+            playerState.takeDamage(10);
         }
     }
 }

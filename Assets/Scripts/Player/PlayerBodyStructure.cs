@@ -13,6 +13,7 @@ public class PlayerBodyStructure : MonoBehaviour
         playerMouth.transform.SetParent(this.gameObject.transform);
         playerMouth.transform.localPosition = new Vector3(0, 0, 1);
         playerMouth.transform.localRotation = Quaternion.identity;
+        playerMouth.name = Mouths.Mouth.ToString();
         
         playerFlagel = Instantiate((GameObject)Resources.Load("Prefabs/Flagel", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
         playerFlagel.transform.SetParent(this.gameObject.transform);

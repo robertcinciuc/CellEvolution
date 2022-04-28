@@ -18,7 +18,7 @@ public class PlayerCollision : MonoBehaviour
     private void OnCollisionEnter(Collision collision) {
         Collider firstCollider = collision.GetContact(0).thisCollider;
 
-        if ( firstCollider.name.Contains(BodyPartTypes.Mouth.ToString()) && collision.gameObject.name == Items.FOOD.ToString()) {
+        if ( System.Enum.IsDefined(typeof(Mouths), firstCollider.name) && collision.gameObject.name == Items.FOOD.ToString()) {
             Destroy(collision.gameObject);
             playerState.heal(10);
         }else if (firstCollider.name.Contains(BodyPartTypes.Spike.ToString()) && System.Enum.IsDefined(typeof(Enemies), collision.gameObject.name)) {

@@ -19,11 +19,13 @@ public class PlayerBodyStructure : MonoBehaviour
         playerFlagella.transform.SetParent(this.gameObject.transform);
         playerFlagella.transform.localPosition = new Vector3(0, -0.3f, -0.5f);
         playerFlagella.transform.localRotation = new Quaternion(0.71f, 0, 0, -0.71f);
+        playerFlagella.name = LocomotionOrgans.Flagella.ToString();
         
         playerSpike = Instantiate((GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
         playerSpike.transform.SetParent(this.gameObject.transform);
         playerSpike.transform.localPosition = new Vector3(-0.5f, 0.3f, 0.5f);
         playerSpike.transform.localRotation = new Quaternion(0, 0, 0.71f, 0.71f);
+        playerSpike.name = AttackOrgans.Spike.ToString();
 
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerBodyStructure : MonoBehaviour
 {
     private GameObject playerMouth;
-    private GameObject playerFlagel;
+    private GameObject playerFlagella;
     private GameObject playerSpike;
 
     void Start(){
@@ -15,10 +15,10 @@ public class PlayerBodyStructure : MonoBehaviour
         playerMouth.transform.localRotation = Quaternion.identity;
         playerMouth.name = Mouths.Mouth.ToString();
         
-        playerFlagel = Instantiate((GameObject)Resources.Load("Prefabs/Flagel", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
-        playerFlagel.transform.SetParent(this.gameObject.transform);
-        playerFlagel.transform.localPosition = new Vector3(0, -0.3f, -0.5f);
-        playerFlagel.transform.localRotation = new Quaternion(0.71f, 0, 0, -0.71f);
+        playerFlagella = Instantiate((GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
+        playerFlagella.transform.SetParent(this.gameObject.transform);
+        playerFlagella.transform.localPosition = new Vector3(0, -0.3f, -0.5f);
+        playerFlagella.transform.localRotation = new Quaternion(0.71f, 0, 0, -0.71f);
         
         playerSpike = Instantiate((GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject)), new Vector3(0, 0, 0), Quaternion.identity);
         playerSpike.transform.SetParent(this.gameObject.transform);

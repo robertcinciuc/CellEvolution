@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2877049953667243940}
   - component: {fileID: -869111888536214793}
   m_Layer: 0
-  m_Name: Flagel
+  m_Name: Flagella
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

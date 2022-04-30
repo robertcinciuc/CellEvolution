@@ -9,7 +9,7 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static Vector3 ogPlayerPos;
     private static Quaternion ogPlayerRot;
     private static GameObject playerMouth;
-    private static GameObject playerFlagel;
+    private static GameObject playerFlagella;
     private static GameObject playerSpike;
 
     void Start(){
@@ -44,13 +44,13 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     private static void instMenuBodyParts() {
         playerMouth = Instantiate((GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 2), Quaternion.identity);
-        playerFlagel = Instantiate((GameObject)Resources.Load("Prefabs/Flagel", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f));
+        playerFlagella = Instantiate((GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject)), player.transform.position + new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f));
         playerSpike = Instantiate((GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject)), player.transform.position + new Vector3(2, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f));
     }
 
     private static void destroyMenuBodyParts() {
         Destroy(playerMouth);
-        Destroy(playerFlagel);
+        Destroy(playerFlagella);
         Destroy(playerSpike);
     }
 }

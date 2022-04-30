@@ -19,9 +19,13 @@ public enum Positions {
 }
 
 public enum BodyPartTypes {
-    Mouth, Flagel, Spike
+    Mouth, Flagella, Spike
 }
 
 public enum Mouths {
     Mouth, MouthClaw
+}
+
+public enum Locomotors {
+    Flagella
 }

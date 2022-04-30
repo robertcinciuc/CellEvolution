@@ -29,7 +29,9 @@ public class UpgradeMenuLogic : MonoBehaviour
         ogPlayerRot = player.transform.rotation;
         player.transform.position = upgradeMenuPlane.transform.position + new Vector3(0, 1, 0);
         player.transform.rotation = new Quaternion(1, 0, 0, 0);
-        
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
         instMenuBodyParts();
     }
 

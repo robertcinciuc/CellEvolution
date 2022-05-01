@@ -16,8 +16,5 @@ public class Mouth : BodyPart
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.name == Foods.Meat.ToString()) {
-            Destroy(collision.gameObject);
-        }
     }
 }

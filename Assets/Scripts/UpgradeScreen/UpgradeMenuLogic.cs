@@ -11,7 +11,9 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static GameObject playerMouth;
     private static GameObject playerMouthClaw;
     private static GameObject playerFlagella;
+    private static GameObject playerTwinFlagella;
     private static GameObject playerSpike;
+    private static GameObject playerTooth;
 
     void Start(){
         player = GameObject.Find("Player");
@@ -48,27 +50,23 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     private static void instMenuOrgans() {
-        playerMouth = instMenuOrgan("Prefabs/Mouth", new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
+        playerMouth = instMenuOrgan("Prefabs/Mouth", new Vector3(1, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
         playerMouthClaw = instMenuOrgan("Prefabs/MouthClaw", new Vector3(4, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.MouthClaw.ToString());
         playerFlagella = instMenuOrgan("Prefabs/Flagella", new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
+        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", new Vector3(4, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
         playerSpike = instMenuOrgan("Prefabs/Spike", new Vector3(2, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Spike.ToString());
+        playerTooth = instMenuOrgan("Prefabs/Tooth", new Vector3(4, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Spike.ToString());
     }
 
     private static GameObject instMenuOrgan(string prefabPath, Vector3 relativePos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), player.transform.position + relativePos, rot);
+        GameObject organModel = organ.transform.GetChild(0).gameObject;
         organ.name = organName;
 
-        //Take the mesh collider from child for prefabs from ProBuilder
-        if (organ.transform.childCount > 0) {
-            MeshCollider meshCollider = organ.transform.GetChild(0).gameObject.GetComponent<MeshCollider>();
-            MeshCollider meshCollider1 = organ.AddComponent<MeshCollider>();
-            meshCollider1.sharedMesh = meshCollider.sharedMesh;
-            meshCollider1.convex = true;
-        }
-
-        ClickableOrgan clickableOrgan = organ.AddComponent<ClickableOrgan>();
+        ClickableOrgan clickableOrgan = organModel.AddComponent<ClickableOrgan>();
         clickableOrgan.player = player;
         clickableOrgan.organType = organType;
+        clickableOrgan.organ = organ;
 
         return organ;
     }
@@ -77,7 +75,9 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerMouth);
         Destroy(playerMouthClaw);
         Destroy(playerFlagella);
+        Destroy(playerTwinFlagella);
         Destroy(playerSpike);
+        Destroy(playerTooth);
     }
 
 }

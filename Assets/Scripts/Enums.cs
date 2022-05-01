@@ -27,9 +27,9 @@ public enum Mouths {
 }
 
 public enum LocomotionOrgans {
-    Flagella
+    Flagella, TwinFlagella
 }
 
 public enum AttackOrgans {
-    Spike
+    Spike, Tooth
 }

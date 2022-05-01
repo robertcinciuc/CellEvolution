@@ -100,9 +100,9 @@ public class EnemySpawner : MonoBehaviour {
         enemy.transform.position = new Vector3(xPos, yPos, zPos);
 
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
-        GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 0.5f), Quaternion.identity);
+        GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 1f), Quaternion.identity);
         GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
-        GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1f), new Quaternion(0.71f, 0, 0, 0.71f));
+        GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1.5f), new Quaternion(0.71f, 0, 0, 0.71f));
         GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
 
 

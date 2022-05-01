@@ -6,6 +6,7 @@ public class ClickableOrgan : MonoBehaviour
 {
     public GameObject player;
     public System.Type organType;
+    public GameObject organ;
 
     void Start(){
         
@@ -17,7 +18,7 @@ public class ClickableOrgan : MonoBehaviour
 
     void OnMouseOver() {
         if (Input.GetMouseButtonDown(0)) {
-            player.GetComponent<PlayerBodyStructure>().setOrganByType(organType, gameObject);
+            player.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
         }
     }
 }

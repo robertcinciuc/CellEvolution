@@ -40,7 +40,7 @@ public class FoodSpawner : MonoBehaviour
                 new Vector3(planeCoord.x + signs[xSign] * xPos, 0, planeCoord.z + signs[zSign] * zPos),
                 Quaternion.identity);
 
-            foodItem.name = Items.FOOD.ToString();
+            foodItem.name = Foods.Meat.ToString();
             planeFood[plane].Add(foodItem);
             planeFedStatus[plane] = true;
         }

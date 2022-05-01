@@ -9,13 +9,15 @@ public class EnemySpawner : MonoBehaviour {
 
     private static GameObject enemyBodyPrefab;
     private static GameObject enemyMouthPrefab;
-    private static GameObject enemyFlagelPrefab;
+    private static GameObject enemyFlagellaPrefab;
+    private static GameObject enemySpikePrefab;
     private static Dictionary<LocalPlanes, bool> planeEnemyStatus;
 
     void Start() {
         enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
         enemyMouthPrefab = (GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject));
-        enemyFlagelPrefab = (GameObject)Resources.Load("Prefabs/Flagel", typeof(GameObject));
+        enemyFlagellaPrefab = (GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject));
+        enemySpikePrefab = (GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject));
 
         initializeDictionaries();
     }
@@ -98,14 +100,16 @@ public class EnemySpawner : MonoBehaviour {
         enemy.transform.position = new Vector3(xPos, yPos, zPos);
 
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
-        GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 0.5f), Quaternion.identity);
-        GameObject enemyFlagel = Instantiate(enemyFlagelPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
+        GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 1f), Quaternion.identity);
+        GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
+        GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1.5f), new Quaternion(0.71f, 0, 0, 0.71f));
         GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
 
 
         enemyBody.transform.SetParent(enemy.transform);
         enemyMouth.transform.SetParent(enemy.transform);
-        enemyFlagel.transform.SetParent(enemy.transform);
+        enemyFlagella.transform.SetParent(enemy.transform);
+        enemySpike.transform.SetParent(enemy.transform);
         enemyHealthBar.transform.SetParent(enemy.transform);
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);

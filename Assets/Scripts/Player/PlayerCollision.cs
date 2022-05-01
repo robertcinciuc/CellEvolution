@@ -16,15 +16,22 @@ public class PlayerCollision : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        Collider firstCollider = collision.GetContact(0).thisCollider;
+        Collider firstThisCollider = collision.GetContact(0).thisCollider;
+        Collider firstOtherCollider = collision.GetContact(0).otherCollider;
 
-        if ( firstCollider.name.Contains(BodyPartTypes.Mouth.ToString()) && collision.gameObject.name == Items.FOOD.ToString()) {
+        if (enumContainsElem(typeof(Mouths), firstThisCollider.name) && enumContainsElem(typeof(Foods), collision.gameObject.name)) {
             Destroy(collision.gameObject);
             playerState.heal(10);
-        }else if (firstCollider.name.Contains(BodyPartTypes.Spike.ToString()) && System.Enum.IsDefined(typeof(Enemies), collision.gameObject.name)) {
-            //playerState.takeDamage(10);
 
+        }else if (enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) &&  enumContainsElem(typeof(Enemies), collision.gameObject.name)) {
             collision.gameObject.GetComponent<EnemyState>().takeDamage(30);
+
+        }else if (enumContainsElem(typeof(AttackOrgans), firstOtherCollider.name) && !enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) ) {
+            playerState.takeDamage(10);
         }
+    }
+
+    private bool enumContainsElem(System.Type enumType, string word){
+        return System.Enum.IsDefined(enumType, word);
     }
 }

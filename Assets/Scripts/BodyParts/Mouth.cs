@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mouth : BodyPart
+public class Mouth : Organ
 {
     void Start(){
     }
@@ -16,8 +16,5 @@ public class Mouth : BodyPart
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.name == Items.FOOD.ToString()) {
-            Destroy(collision.gameObject);
-        }
     }
 }

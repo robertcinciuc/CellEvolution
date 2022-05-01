@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyPart : MonoBehaviour
+public class Organ : MonoBehaviour
 {
+    public System.Type organType;
+
     void Start(){
         
     }

@@ -6,8 +6,8 @@ public enum LocalPlanes{
     CURRENT_PLANE, X_PLANE, Z_PLANE, XZ_PLANE
 }
 
-public enum Items {
-    FOOD
+public enum Foods {
+    Meat
 }
 
 public enum Enemies {
@@ -19,5 +19,21 @@ public enum Positions {
 }
 
 public enum BodyPartTypes {
-    Mouth, Flagel, Spike
+    Mouths, LocomotionOrgans, AttackOrgans, Bodies
+}
+
+public enum Mouths {
+    Mouth, MouthClaw
+}
+
+public enum LocomotionOrgans {
+    Flagella, TwinFlagella
+}
+
+public enum AttackOrgans {
+    Spike, Tooth
+}
+
+public enum Bodies {
+    PlayerBody, OriginalEnemyBody
 }

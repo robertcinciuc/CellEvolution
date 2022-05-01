@@ -38,7 +38,7 @@ public class EnemyMovement : MonoBehaviour
                     enemyEntry.Value.GetComponent<Rigidbody>().rotation = Quaternion.Slerp(enemyEntry.Value.GetComponent<Rigidbody>().transform.rotation, Quaternion.LookRotation(randomDirection), 50 * Time.deltaTime);
                 }
             }
-            timeLeft = 2f;
+            timeLeft = 5f;
         } else {
             Dictionary<int, Vector3> enemyDirectionsTemp = new Dictionary<int, Vector3>(enemyDirections);
             enemyDirections.Clear();

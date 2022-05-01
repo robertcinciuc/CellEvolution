@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mouth : BodyPart
+public class Mouth : Organ
 {
     void Start(){
     }

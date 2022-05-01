@@ -19,7 +19,7 @@ public enum Positions {
 }
 
 public enum BodyPartTypes {
-    Mouths, LocomotionOrgans, AttackOrgans
+    Mouths, LocomotionOrgans, AttackOrgans, Bodies
 }
 
 public enum Mouths {
@@ -32,4 +32,8 @@ public enum LocomotionOrgans {
 
 public enum AttackOrgans {
     Spike, Tooth
+}
+
+public enum Bodies {
+    PlayerBody, OriginalEnemyBody
 }

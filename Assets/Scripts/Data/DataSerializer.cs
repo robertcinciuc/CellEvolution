@@ -7,40 +7,15 @@ using System.IO;
 
 public class DataSerializer : MonoBehaviour
 {
-	int intToSave;
-	float floatToSave;
-	bool boolToSave;
+	//TODO: Move these stats to a sepparate class
+	public static int intToSave;
+	public static float floatToSave;
+	public static bool boolToSave;
 
-	void OnGUI() {
-		if (GUI.Button(new Rect(0, 0, 125, 50), "Raise Integer")) {
-			intToSave++;
-		}
-		if (GUI.Button(new Rect(0, 100, 125, 50), "Raise Float")) {
-			floatToSave += 0.1f;
-		}
-		if (GUI.Button(new Rect(0, 200, 125, 50), "Change Bool")) {
-			boolToSave = boolToSave ? boolToSave = false : boolToSave = true;
-		}
-		
-		GUI.Label(new Rect(375, 0, 125, 50), "Integer value is " + intToSave);
-		GUI.Label(new Rect(375, 100, 125, 50), "Float value is " + floatToSave.ToString("F1"));
-		GUI.Label(new Rect(375, 200, 125, 50), "Bool value is " + boolToSave);
-		
-		if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game")) {
-			SaveGame();
-		}
-		if (GUI.Button(new Rect(750, 100, 125, 50), "Load Your Game")) {
-			LoadGame();
-		}
-		if (GUI.Button(new Rect(750, 200, 125, 50), "Reset Save Data")) {
-			ResetData();
-		}
-	}
-
-	private void SaveGame() {
+	public static void SaveGame() {
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/MySaveData.dat");
-		SaveData data = new SaveData();
+		ProgressData data = new ProgressData();
 		data.savedInt = intToSave;
 		data.savedFloat = floatToSave;
 		data.savedBool = boolToSave;
@@ -49,11 +24,11 @@ public class DataSerializer : MonoBehaviour
 		Debug.Log("Game data saved!");
 	}
 
-	private void LoadGame() {
+	public static void LoadGame() {
 		if (File.Exists(Application.persistentDataPath + "/MySaveData.dat")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/MySaveData.dat", FileMode.Open);
-			SaveData data = (SaveData)bf.Deserialize(file);
+			ProgressData data = (ProgressData)bf.Deserialize(file);
 			file.Close();
 			intToSave = data.savedInt;
 			floatToSave = data.savedFloat;
@@ -64,7 +39,7 @@ public class DataSerializer : MonoBehaviour
 		}
 	}
 
-	private void ResetData() {
+	public static void ResetData() {
 		if (File.Exists(Application.persistentDataPath + "/MySaveData.dat")) {
 			File.Delete(Application.persistentDataPath + "/MySaveData.dat");
 			intToSave = 0;
@@ -75,12 +50,4 @@ public class DataSerializer : MonoBehaviour
 			Debug.LogError("No save data to delete.");
 		}
 	}
-}
-
-
-[Serializable]
-class SaveData {
-    public int savedInt;
-    public float savedFloat;
-    public bool savedBool;
 }

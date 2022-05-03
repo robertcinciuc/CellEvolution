@@ -22,6 +22,7 @@ public class PlayerCollision : MonoBehaviour
         if (enumContainsElem(typeof(Mouths), firstThisCollider.name) && enumContainsElem(typeof(Foods), collision.gameObject.name)) {
             Destroy(collision.gameObject);
             playerState.heal(10);
+            ProgressionData.nbMeatsEaten++;
 
         }else if (enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) &&  enumContainsElem(typeof(Enemies), collision.gameObject.name)) {
             collision.gameObject.GetComponent<EnemyState>().takeDamage(30, Characters.Player);

@@ -6,4 +6,5 @@ using System;
 [Serializable]
 public class DataPacket {
     public int nbEnemiesKilled;
+    public int nbMeatsEaten;
 }

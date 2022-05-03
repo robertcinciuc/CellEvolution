@@ -24,8 +24,7 @@ public class PlayerCollision : MonoBehaviour
             playerState.heal(10);
 
         }else if (enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) &&  enumContainsElem(typeof(Enemies), collision.gameObject.name)) {
-            collision.gameObject.GetComponent<EnemyState>().takeDamage(30);
-            ProgressionData.nbEnemiesKilled++;
+            collision.gameObject.GetComponent<EnemyState>().takeDamage(30, Characters.Player);
 
         }else if (enumContainsElem(typeof(AttackOrgans), firstOtherCollider.name) && !enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) ) {
             playerState.takeDamage(10);

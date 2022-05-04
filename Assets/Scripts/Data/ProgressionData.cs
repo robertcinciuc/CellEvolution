@@ -6,23 +6,28 @@ public class ProgressionData : MonoBehaviour
 {
     public static int nbEnemiesKilled = 0;
 	public static int nbMeatsEaten = 0;
+	
+	public PlayerState playerState;
 
-	public static DataPacket buildDatapacketForStoring() {
+	public DataPacket buildDatapacketForStoring() {
 		DataPacket data = new DataPacket();
 		data.nbEnemiesKilled = nbEnemiesKilled;
 		data.nbMeatsEaten= nbMeatsEaten;
+		data.health = playerState.health;
 
-		return data;
+        return data;
 	}
 
-	public static void loadFromDataPacket(DataPacket data) {
+	public void loadFromDataPacket(DataPacket data) {
         nbEnemiesKilled = data.nbEnemiesKilled;
 		nbMeatsEaten = data.nbMeatsEaten;
+		playerState.sethealth(data.health);
     }
 
-    public static void applyReset() {
+    public void applyReset() {
 		nbEnemiesKilled = 0;
 		nbMeatsEaten = 0;
+		playerState.sethealth(playerState.maxHealth);
 	}
 
 }

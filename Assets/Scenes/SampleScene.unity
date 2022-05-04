@@ -640,6 +640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 453623736}
   - component: {fileID: 453623735}
+  - component: {fileID: 453623737}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -659,6 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4995869b656ee4744b0935f22ba98de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  progressionData: {fileID: 453623737}
 --- !u!4 &453623736
 Transform:
   m_ObjectHideFlags: 0
@@ -673,6 +675,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &453623737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453623734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e46a4dc6e969a74d81ad5bd5ee89c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerState: {fileID: 1887967015}
 --- !u!1 &602796631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1696,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 328233447}
+  health: 100
+  maxHealth: 100
 --- !u!114 &1887967016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,3 +1829,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0b6032ae97ed24d9fda0ca0a0ed3ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataSerializer: {fileID: 453623735}

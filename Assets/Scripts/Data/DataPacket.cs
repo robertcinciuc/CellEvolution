@@ -7,4 +7,5 @@ using System;
 public class DataPacket {
     public int nbEnemiesKilled;
     public int nbMeatsEaten;
+    public float health;
 }

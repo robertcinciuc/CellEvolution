@@ -7,33 +7,35 @@ using System.IO;
 
 public class DataSerializer : MonoBehaviour
 {
-	public static void SaveGame() {
+	public ProgressionData progressionData;
+
+	public void SaveGame() {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/MySaveData.dat");
-        DataPacket data = ProgressionData.buildDatapacketForStoring();
+        DataPacket data = progressionData.buildDatapacketForStoring();
         bf.Serialize(file, data);
         file.Close();
 
         Debug.Log("Game data saved!");
     }
 
-    public static void LoadGame() {
+    public void LoadGame() {
 		if (File.Exists(Application.persistentDataPath + "/MySaveData.dat")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/MySaveData.dat", FileMode.Open);
 			DataPacket data = (DataPacket)bf.Deserialize(file);
 			file.Close();
-			ProgressionData.loadFromDataPacket(data);
+			progressionData.loadFromDataPacket(data);
 			Debug.Log("Game data loaded!");
 		} else {
 			Debug.LogError("There is no save data!");
 		}
 	}
 
-	public static void ResetData() {
+	public void ResetData() {
 		if (File.Exists(Application.persistentDataPath + "/MySaveData.dat")) {
 			File.Delete(Application.persistentDataPath + "/MySaveData.dat");
-			ProgressionData.applyReset();
+			progressionData.applyReset();
 			Debug.Log("Data reset complete!");
 		} else {
 			Debug.LogError("No save data to delete.");

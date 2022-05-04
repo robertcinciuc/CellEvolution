@@ -6,9 +6,8 @@ public class PlayerState : MonoBehaviour
 {
     public static bool isActive;
     public HealthBar healthBar;
-
-    private float health = 100;
-    private float maxHealth = 100;
+    public float health = 100;
+    public float maxHealth = 100;
 
     void Start(){
         isActive = true;
@@ -45,5 +44,10 @@ public class PlayerState : MonoBehaviour
         }
 
         healthBar.setHealth(health);
+    }
+
+    public void sethealth(float amount){
+        health = amount;
+        healthBar.setHealth(amount);
     }
 }

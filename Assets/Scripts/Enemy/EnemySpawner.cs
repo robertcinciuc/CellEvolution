@@ -104,18 +104,20 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
         GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1.5f), new Quaternion(0.71f, 0, 0, 0.71f));
         GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
-
+        GameObject enemyVisionCone = Instantiate((GameObject)Resources.Load("Prefabs/EnemyVisionCone", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
 
         enemyBody.transform.SetParent(enemy.transform);
         enemyMouth.transform.SetParent(enemy.transform);
         enemyFlagella.transform.SetParent(enemy.transform);
         enemySpike.transform.SetParent(enemy.transform);
         enemyHealthBar.transform.SetParent(enemy.transform);
+        enemyVisionCone.transform.SetParent(enemy.transform);
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         enemy.AddComponent<Rigidbody>();
         enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
         enemy.AddComponent<EnemyState>();
+        enemy.AddComponent<EnemyMovement>();
 
         enemyHealthBar.transform.Find("Canvas").Find("EnemyHealthBar").GetComponent<EnemyHealthBar>().setMaxHealth(100f);
 

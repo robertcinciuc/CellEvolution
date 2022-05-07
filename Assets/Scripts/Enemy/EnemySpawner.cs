@@ -104,7 +104,8 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), new Quaternion(0.71f, 0, 0, -0.71f));
         GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1.5f), new Quaternion(0.71f, 0, 0, 0.71f));
         GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
-        GameObject enemyVisionCone = Instantiate((GameObject)Resources.Load("Prefabs/EnemyVisionCone", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
+        GameObject enemyVisionCone = Instantiate((GameObject)Resources.Load("Prefabs/EnemyVisionCone", typeof(GameObject)), enemy.transform.position + new Vector3(0, 0, 3), Quaternion.identity);
+        //enemyVisionCone.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
 
         enemyBody.transform.SetParent(enemy.transform);
         enemyMouth.transform.SetParent(enemy.transform);

@@ -16,7 +16,7 @@ public class EnemyMovement : MonoBehaviour
     private void FixedUpdate() {
         timeLeft -= Time.deltaTime;
 
-        updateVelocityRotation();
+        //updateVelocityRotation();
     }
     
     public void goTowards(Vector3 characterPos) {

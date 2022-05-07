@@ -9,13 +9,15 @@ public class EnemyVision : MonoBehaviour
     }
 
     void Update(){
-        
+        //TODO: fix vision rotation lock
+        gameObject.transform.rotation = new Quaternion(0, transform.parent.transform.rotation.y, 0, transform.parent.transform.rotation.w); ;
     }
 
     private void OnTriggerEnter(Collider other) {
         //transform.parent.GetComponent<EnemyMovement>().goTowards(other.transform.position);
-        //if (other.transform.parent.name.Contains("layer")) {
-        //    Debug.Log("Player is inside");
-        //}
+        if (other.transform.gameObject.name.Contains("layer")) {
+            Debug.Log("Player is inside");
+        }
+        //Debug.Log("collision with enemy vision");
     }
 }

@@ -32,6 +32,11 @@ public class PlayerCollision : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other) {
+        Debug.Log("trigger enter");
+        other.transform.parent.transform.parent.gameObject.GetComponent<EnemyMovement>().goTowards(this.transform.position);
+    }
+
     private bool enumContainsElem(System.Type enumType, string word){
         return System.Enum.IsDefined(enumType, word);
     }

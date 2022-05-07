@@ -14,10 +14,15 @@ public class EnemyState : MonoBehaviour
     void Update(){
         
     }
-    public void takeDamage(float damage) {
+    public void takeDamage(float damage, System.Enum source) {
         if (health - damage <= 0) {
             health = 0;
             EnemySpawner.deleteEnemy(gameObject.GetInstanceID());
+
+            if (Characters.Player.Equals(source)) {
+                ProgressionData.nbEnemiesKilled++;
+            }
+
         } else {
             health -= damage;
         }

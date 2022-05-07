@@ -4,62 +4,44 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-
+    private bool followingSomeone = false;
     private float timeLeft = -1f;
     private float maxSpeed = 5f;
-    private Dictionary<int, Vector3> enemyDirections;
+    private Vector3 randomDirection;
 
     void Start(){
-        enemyDirections = new Dictionary<int, Vector3>();
+        randomDirection = new Vector3(Random.Range(-maxSpeed, maxSpeed), 0, Random.Range(-maxSpeed, maxSpeed));
     }
 
-    void Update(){
-        
-    }
-
-    void FixedUpdate() {
+    private void FixedUpdate() {
         timeLeft -= Time.deltaTime;
 
         updateVelocityRotation();
     }
+    
+    public void startFollowing(Vector3 characterPos) {
+        Quaternion rotAngle = Quaternion.LookRotation(characterPos - transform.position);
+        this.gameObject.GetComponent<Rigidbody>().rotation = Quaternion.Slerp(this.gameObject.GetComponent<Rigidbody>().transform.rotation, rotAngle, 3 * Time.deltaTime);
+        this.gameObject.GetComponent<Rigidbody>().velocity = characterPos - transform.position;
+        followingSomeone = true;
+    }
+
+    public void stopFollowing(){
+        followingSomeone = false;
+        randomDirection = this.gameObject.GetComponent<Rigidbody>().velocity;
+        this.gameObject.GetComponent<Rigidbody>().rotation = Quaternion.Slerp(this.gameObject.GetComponent<Rigidbody>().transform.rotation, Quaternion.LookRotation(randomDirection), 2 * Time.deltaTime);
+    }
 
     private void updateVelocityRotation() {
-        if (timeLeft < 0) {
-            foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
-                foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies.Value) {
-                    Vector3 randomDirection = new Vector3(Random.Range(-maxSpeed, maxSpeed), 0, Random.Range(-maxSpeed, maxSpeed));
-
-                    if (enemyDirections.ContainsKey(enemyEntry.Key)) {
-                        enemyDirections[enemyEntry.Key] = randomDirection;
-                    } else {
-                        enemyDirections.Add(enemyEntry.Key, randomDirection);
-                    }
-
-                    enemyEntry.Value.GetComponent<Rigidbody>().rotation = Quaternion.Slerp(enemyEntry.Value.GetComponent<Rigidbody>().transform.rotation, Quaternion.LookRotation(randomDirection), 50 * Time.deltaTime);
-                }
+        if (!followingSomeone) {
+            if (timeLeft < 0) {
+                randomDirection = new Vector3(Random.Range(-maxSpeed, maxSpeed), 0, Random.Range(-maxSpeed, maxSpeed));
+                this.gameObject.GetComponent<Rigidbody>().rotation = Quaternion.Slerp(this.gameObject.GetComponent<Rigidbody>().transform.rotation, Quaternion.LookRotation(randomDirection), 50 * Time.deltaTime);
+                timeLeft = 5f;
             }
-            timeLeft = 5f;
-        } else {
-            Dictionary<int, Vector3> enemyDirectionsTemp = new Dictionary<int, Vector3>(enemyDirections);
-            enemyDirections.Clear();
-            foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
-                foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies.Value) {
-                    Vector3 randomDirection = new Vector3(Random.Range(-maxSpeed, maxSpeed), 0, Random.Range(-5f, 5f));
 
-                    if (enemyDirectionsTemp.ContainsKey(enemyEntry.Key)) {
-                        enemyDirections.Add(enemyEntry.Key, enemyDirectionsTemp[enemyEntry.Key]);
-                    } else {
-                        enemyDirections.Add(enemyEntry.Key, randomDirection);
-                    }
-                }
-            }
-        }
-
-        //Update the velocity each tick
-        foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEnemies in EnemySpawner.planeEnemies) {
-            foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies.Value) {
-                enemyEntry.Value.GetComponent<Rigidbody>().velocity = enemyDirections[enemyEntry.Key];
-            }
+            this.gameObject.GetComponent<Rigidbody>().velocity = randomDirection;
         }
     }
+
 }

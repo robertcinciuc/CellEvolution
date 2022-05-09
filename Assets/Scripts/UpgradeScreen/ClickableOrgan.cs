@@ -27,7 +27,8 @@ public class ClickableOrgan : MonoBehaviour
         } else {
             if (Input.GetMouseButton(1)) {
                 Camera camera1 = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
-                mousePosition = camera1.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 mousePosition1 = Input.mousePosition;
+                mousePosition = camera1.ScreenToWorldPoint( new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 transform.position = Vector2.Lerp(transform.position, mousePosition, moveSpeed);
             }
         }

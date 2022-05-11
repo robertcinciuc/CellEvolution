@@ -9,10 +9,13 @@ public class ClickableOrgan : MonoBehaviour
     public System.Type organType;
     public GameObject organ;
 
+    private bool rightClickPressedOnOrgan = false;
+
     void Start(){
     }
 
     void Update(){
+        moveOrganToMouse();
     }
 
     void OnMouseOver() {
@@ -21,9 +24,17 @@ public class ClickableOrgan : MonoBehaviour
             playerCopy.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
         } else {
             if (Input.GetMouseButton(1)) {
-                Camera upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
-                transform.position = upgradeMenuCamera.ScreenToWorldPoint( new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
+                rightClickPressedOnOrgan = true;
             }
+        }
+    }
+
+    private void moveOrganToMouse() {
+        if (rightClickPressedOnOrgan & Input.GetMouseButton(1)) {
+            Camera upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
+            transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
+        } else {
+            rightClickPressedOnOrgan = false;
         }
     }
 

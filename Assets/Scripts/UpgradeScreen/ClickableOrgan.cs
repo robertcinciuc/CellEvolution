@@ -9,12 +9,7 @@ public class ClickableOrgan : MonoBehaviour
     public System.Type organType;
     public GameObject organ;
 
-
-    private Vector3 mousePosition;
-    private float moveSpeed = 0.1f;
-
     void Start(){
-        mousePosition = new Vector3(0, 0, 0);        
     }
 
     void Update(){
@@ -26,10 +21,8 @@ public class ClickableOrgan : MonoBehaviour
             playerCopy.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
         } else {
             if (Input.GetMouseButton(1)) {
-                Camera camera1 = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
-                Vector3 mousePosition1 = Input.mousePosition;
-                mousePosition = camera1.ScreenToWorldPoint( new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                transform.position = Vector2.Lerp(transform.position, mousePosition, moveSpeed);
+                Camera upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
+                transform.position = upgradeMenuCamera.ScreenToWorldPoint( new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
             }
         }
     }

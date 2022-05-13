@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UpgradeMenuLogic : MonoBehaviour
 {
+    public static bool organIsDragged = false;
+
     private static GameObject player;
     private static GameObject playerCopy;
     private static GameObject upgradeMenuPlane;

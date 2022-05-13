@@ -26,7 +26,7 @@ public class ClickableOrgan : MonoBehaviour
             player.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
             playerCopy.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
         } else {
-            if (Input.GetMouseButton(1)) {
+            if (Input.GetMouseButton(1) && !UpgradeMenuLogic.organIsDragged) {
                 if (!rightClickPressedOnOrgan) {
                     initialPosition = gameObject.transform.position;
                     player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
@@ -34,6 +34,7 @@ public class ClickableOrgan : MonoBehaviour
                 }
 
                 rightClickPressedOnOrgan = true;
+                UpgradeMenuLogic.organIsDragged = true;
             }
         }
     }
@@ -60,6 +61,7 @@ public class ClickableOrgan : MonoBehaviour
 
             endDragable = false;
             rightClickPressedOnOrgan = false;
+            UpgradeMenuLogic.organIsDragged = false;
         }
     }
 

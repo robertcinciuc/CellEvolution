@@ -39,6 +39,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         //Render organs
         playerCopy = new GameObject();
         playerCopy.name = "PlayerCopy";
+        playerCopy.transform.position = upgradeMenuPlane.transform.position + displayOffset;
         PlayerBodyStructure playerCopyBodyStructure = playerCopy.AddComponent<PlayerBodyStructure>();
         foreach(Transform child in player.transform) {
             Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;

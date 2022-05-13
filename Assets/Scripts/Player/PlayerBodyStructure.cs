@@ -53,6 +53,22 @@ public class PlayerBodyStructure : MonoBehaviour
         playerOrgansByType.Add(organType, organCopy);
     }
 
+    public void removeOrganByType(System.Type organType) {
+        GameObject organToRemove = playerOrgansByType[organType];
+        playerOrgansByType.Remove(organType);
+        Destroy(organToRemove);
+    }
+
+    public void addOrganByTypeWithPosition(System.Type organType, GameObject organ, Vector3 posDelta) {
+        GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
+        newOrgan.AddComponent<Organ>().organType = organType;
+        newOrgan.transform.SetParent(this.gameObject.transform);
+        newOrgan.transform.localPosition = posDelta;
+        newOrgan.transform.localRotation = organ.transform.rotation;
+        newOrgan.name = organ.name;
+
+        playerOrgansByType[organType] = newOrgan;
+    }
     private void addPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         organ.AddComponent<Organ>().organType = organType;

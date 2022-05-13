@@ -13,8 +13,8 @@ public class PlayerBodyStructure : MonoBehaviour
         if (gameObject.name == "Player") {
             addPlayerOrgan(Bodies.PlayerBody.ToString(), "Prefabs/PlayerBody", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 0), Quaternion.identity, typeof(Bodies));
             addPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths));
-            addPlayerOrgan(LocomotionOrgans.Flagella.ToString(), "Prefabs/Flagella", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, -1f), new Quaternion(0.71f, 0, 0, -0.71f), typeof(LocomotionOrgans));
-            addPlayerOrgan(AttackOrgans.Spike.ToString(), "Prefabs/Spike", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(-0.5f, 0.3f, 0.5f), new Quaternion(0, 0, 0.71f, 0.71f), typeof(AttackOrgans));
+            addPlayerOrgan(LocomotionOrgans.Flagella.ToString(), "Prefabs/Flagella", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, -1f), Quaternion.identity, typeof(LocomotionOrgans));
+            addPlayerOrgan(AttackOrgans.Spike.ToString(), "Prefabs/Spike", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(-0.7f, 0.3f, 0.5f), Quaternion.identity, typeof(AttackOrgans));
         }
     }
 
@@ -42,13 +42,13 @@ public class PlayerBodyStructure : MonoBehaviour
     public void addOrganFromMeshByType(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
         GameObject organCopy = new GameObject();
         organCopy.name = organName;
-        organCopy.transform.position = pos;
-        organCopy.transform.rotation = rot;
+        organCopy.transform.localPosition = pos;
         organCopy.transform.SetParent(gameObject.transform);
 
         MeshRenderer organCopyMeshRend = Instantiate(organMeshRend, pos, rot);
         organCopyMeshRend.name = organName + "Renderer";
         organCopyMeshRend.transform.SetParent(organCopy.transform);
+        organCopyMeshRend.transform.localRotation = rot;
 
         playerOrgansByType.Add(organType, organCopy);
     }

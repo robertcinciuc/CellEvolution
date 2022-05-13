@@ -12,6 +12,7 @@ public class ClickableOrgan : MonoBehaviour
     private bool rightClickPressedOnOrgan = false;
     private bool endDragable = false;
     private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
     void Start(){
     }
@@ -28,7 +29,10 @@ public class ClickableOrgan : MonoBehaviour
         } else {
             if (Input.GetMouseButton(1) && !UpgradeMenuLogic.organIsDragged) {
                 if (!rightClickPressedOnOrgan) {
-                    initialPosition = gameObject.transform.position;
+                    //Save initial pos & rot
+                    initialPosition = gameObject.transform.parent.transform.position;
+                    initialRotation = gameObject.transform.parent.transform.rotation;
+
                     player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
                     playerCopy.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
                 }
@@ -43,10 +47,12 @@ public class ClickableOrgan : MonoBehaviour
         if (rightClickPressedOnOrgan & Input.GetMouseButton(1)) {
             Camera upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
+            Vector3 deltaPos = gameObject.transform.position - playerCopy.transform.position;
+            transform.parent.rotation = Quaternion.Slerp(transform.parent.transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
         }
 
         if (endDragable) {
-            //Get delta, put parent where child is, reset child local pos 
+            //Put parent where child is, reset child local pos 
             Vector3 deltaPos = gameObject.transform.position - playerCopy.transform.position;
             gameObject.transform.parent.transform.position = organ.transform.position;
             gameObject.transform.localPosition = Vector3.zero;
@@ -56,8 +62,8 @@ public class ClickableOrgan : MonoBehaviour
             player.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, organ, deltaPos);
 
             //Reset object and parent to original display position
-            gameObject.transform.position = initialPosition;
             gameObject.transform.parent.transform.position = initialPosition;
+            gameObject.transform.parent.transform.rotation = initialRotation;
 
             endDragable = false;
             rightClickPressedOnOrgan = false;

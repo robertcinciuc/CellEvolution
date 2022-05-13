@@ -45,7 +45,9 @@ public class UpgradeMenuLogic : MonoBehaviour
         PlayerBodyStructure playerCopyBodyStructure = playerCopy.AddComponent<PlayerBodyStructure>();
         foreach(Transform child in player.transform) {
             Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
-            playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, child.transform.localRotation, child.name, child.gameObject.GetComponent<Organ>().organType);
+
+            Quaternion childModelRot = child.GetChild(0).transform.localRotation;
+            playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, childModelRot, child.name, child.gameObject.GetComponent<Organ>().organType);
         }
     }
 
@@ -61,10 +63,10 @@ public class UpgradeMenuLogic : MonoBehaviour
 
         playerMouth = instMenuOrgan("Prefabs/Mouth", displayPosition + new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
         playerMouthClaw = instMenuOrgan("Prefabs/MouthClaw", displayPosition + new Vector3(4, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.MouthClaw.ToString());
-        playerFlagella = instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
-        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
-        playerSpike = instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Spike.ToString());
-        playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
+        playerFlagella = instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
+        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
+        playerSpike = instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Spike.ToString());
+        playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
     }
 
     public static void destroyMenuBodyParts() {

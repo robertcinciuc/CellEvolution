@@ -7,7 +7,7 @@ public class UpgradeMenuLogic : MonoBehaviour
     public static bool organIsDragged = false;
 
     private static GameObject player;
-    private static GameObject playerCopy;
+    private static GameObject playerFigure;
     private static GameObject upgradeMenuPlane;
     private static Vector3 safetyOffset = new Vector3(0, 5, 0);
     private static GameObject playerMouth;
@@ -39,10 +39,10 @@ public class UpgradeMenuLogic : MonoBehaviour
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         //Render organs
-        playerCopy = new GameObject();
-        playerCopy.name = "PlayerCopy";
-        playerCopy.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-        PlayerBodyStructure playerCopyBodyStructure = playerCopy.AddComponent<PlayerBodyStructure>();
+        playerFigure = new GameObject();
+        playerFigure.name = "PlayerCopy";
+        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
         foreach(Transform child in player.transform) {
             Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
 
@@ -52,7 +52,7 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     public static void copyPlayerToWorld() {
-        Destroy(playerCopy);
+        Destroy(playerFigure);
 
         player.transform.position -= safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = true;
@@ -76,7 +76,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerTwinFlagella);
         Destroy(playerSpike);
         Destroy(playerTooth);
-        Destroy(playerCopy);
+        Destroy(playerFigure);
     }
 
     private static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
@@ -86,7 +86,7 @@ public class UpgradeMenuLogic : MonoBehaviour
 
         ClickableOrgan clickableOrgan = organModel.AddComponent<ClickableOrgan>();
         clickableOrgan.player = player;
-        clickableOrgan.playerCopy = playerCopy;
+        clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;
         clickableOrgan.organ = organ;
 

@@ -9,7 +9,7 @@ public class ClickableOrgan : MonoBehaviour
     public System.Type organType;
     public GameObject organ;
 
-    private bool rightClickPressedOnOrgan = false;
+    private bool clickPressedOnOrgan = false;
     private bool endDragable = false;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
@@ -18,33 +18,28 @@ public class ClickableOrgan : MonoBehaviour
     }
 
     void Update(){
-        detectEndRightClick();
+        detectEndClick();
         moveOrganToMouse();
     }
 
     void OnMouseOver() {
-        if (Input.GetMouseButtonDown(0)) {
-            player.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
-            playerFigure.GetComponent<PlayerBodyStructure>().setOrganByType(organType, organ);
-        } else {
-            if (Input.GetMouseButton(1) && !UpgradeMenuLogic.organIsDragged) {
-                if (!rightClickPressedOnOrgan) {
-                    //Save initial pos & rot
-                    initialPosition = gameObject.transform.parent.transform.position;
-                    initialRotation = gameObject.transform.parent.transform.rotation;
+        if (Input.GetMouseButton(0) && !UpgradeMenuLogic.organIsDragged) {
+            if (!clickPressedOnOrgan) {
+                //Save initial pos & rot
+                initialPosition = gameObject.transform.parent.transform.position;
+                initialRotation = gameObject.transform.parent.transform.rotation;
 
-                    player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
-                    playerFigure.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
-                }
-
-                rightClickPressedOnOrgan = true;
-                UpgradeMenuLogic.organIsDragged = true;
+                player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
+                playerFigure.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
             }
+
+            clickPressedOnOrgan = true;
+            UpgradeMenuLogic.organIsDragged = true;
         }
     }
 
     private void moveOrganToMouse() {
-        if (rightClickPressedOnOrgan & Input.GetMouseButton(1)) {
+        if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
             Camera upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
@@ -73,13 +68,13 @@ public class ClickableOrgan : MonoBehaviour
             gameObject.transform.parent.transform.rotation = initialRotation;
 
             endDragable = false;
-            rightClickPressedOnOrgan = false;
+            clickPressedOnOrgan = false;
             UpgradeMenuLogic.organIsDragged = false;
         }
     }
 
-    private void detectEndRightClick() {
-        if (rightClickPressedOnOrgan && !Input.GetMouseButton(1)) {
+    private void detectEndClick() {
+        if (clickPressedOnOrgan && !Input.GetMouseButton(0)) {
             endDragable = true;
         }
     }

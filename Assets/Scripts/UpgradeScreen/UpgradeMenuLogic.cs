@@ -17,6 +17,7 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static GameObject playerSpike;
     private static GameObject playerTooth;
     private static Vector3 displayOffset = new Vector3(0, 0.5f, 0);
+    private static bool playerFigureInstantiated = false;
 
     void Start(){
         player = GameObject.Find("Player");
@@ -30,30 +31,33 @@ public class UpgradeMenuLogic : MonoBehaviour
     private void FixedUpdate() {
         
     }
-    public static void copyPlayerToUpgradeMenu() {
+    public static void renderPlayerFigure() {
+        if (!playerFigureInstantiated) {
+            //Render organs
+            playerFigure = new GameObject();
+            playerFigure.name = "PlayerCopy";
+            playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+            PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+            foreach(Transform child in player.transform) {
+                Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
 
+                Quaternion childModelRot = child.GetChild(0).transform.localRotation;
+                playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, childModelRot, child.name, child.gameObject.GetComponent<Organ>().organType);
+            }
+
+            playerFigureInstantiated = true;
+        }
+    }
+
+    public static void protectPlayer() {
         //Protect original player with offsetting and immobilizing
         player.transform.position += safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = false;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-        //Render organs
-        playerFigure = new GameObject();
-        playerFigure.name = "PlayerCopy";
-        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
-        foreach(Transform child in player.transform) {
-            Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
-
-            Quaternion childModelRot = child.GetChild(0).transform.localRotation;
-            playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, childModelRot, child.name, child.gameObject.GetComponent<Organ>().organType);
-        }
     }
 
-    public static void copyPlayerToWorld() {
-        Destroy(playerFigure);
-
+    public static void uprotectPlayer() {
         player.transform.position -= safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = true;
     }
@@ -76,7 +80,6 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerTwinFlagella);
         Destroy(playerSpike);
         Destroy(playerTooth);
-        Destroy(playerFigure);
     }
 
     private static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {

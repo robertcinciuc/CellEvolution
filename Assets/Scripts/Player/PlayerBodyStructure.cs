@@ -25,20 +25,6 @@ public class PlayerBodyStructure : MonoBehaviour
     void FixedUpdate() {
     }
 
-    public void setOrganByType(System.Type organType, GameObject organ) {
-        GameObject oldOrgan = playerOrgansByType[organType];
-        GameObject newOrgan = Instantiate(organ, oldOrgan.transform.position, oldOrgan.transform.rotation);
-        newOrgan.AddComponent<Organ>().organType = organType;
-        newOrgan.transform.SetParent(this.gameObject.transform);
-        newOrgan.transform.localPosition = oldOrgan.transform.localPosition;
-        newOrgan.transform.localRotation = oldOrgan.transform.localRotation;
-        newOrgan.name = organ.name;
-
-        Destroy(oldOrgan);
-
-        playerOrgansByType[organType] = newOrgan;
-    }
-
     public void addOrganFromMeshByType(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
         GameObject organCopy = new GameObject();
         organCopy.name = organName;
@@ -54,9 +40,11 @@ public class PlayerBodyStructure : MonoBehaviour
     }
 
     public void removeOrganByType(System.Type organType) {
-        GameObject organToRemove = playerOrgansByType[organType];
-        playerOrgansByType.Remove(organType);
-        Destroy(organToRemove);
+        if (playerOrgansByType.ContainsKey(organType)) {
+            GameObject organToRemove = playerOrgansByType[organType];
+            playerOrgansByType.Remove(organType);
+            Destroy(organToRemove);
+        }
     }
 
     public GameObject addOrganByTypeWithPosition(System.Type organType, GameObject organ, Vector3 posDelta) {

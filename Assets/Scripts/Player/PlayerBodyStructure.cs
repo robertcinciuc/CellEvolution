@@ -25,7 +25,7 @@ public class PlayerBodyStructure : MonoBehaviour
     void FixedUpdate() {
     }
 
-    public void addOrganFromMeshByType(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
+    public GameObject addOrganFromMeshByType(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
         GameObject organCopy = new GameObject();
         organCopy.name = organName;
         organCopy.transform.localPosition = pos;
@@ -37,6 +37,8 @@ public class PlayerBodyStructure : MonoBehaviour
         organCopyMeshRend.transform.localRotation = rot;
 
         playerOrgansByType.Add(organType, organCopy);
+
+        return organCopy;
     }
 
     public void removeOrganByType(System.Type organType) {

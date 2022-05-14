@@ -7,7 +7,7 @@ public class ClickableOrgan : MonoBehaviour
     public GameObject player;
     public GameObject playerFigure;
     public System.Type organType;
-    public GameObject organ;
+    public GameObject parentOrgan;
 
     private bool clickPressedOnOrgan = false;
     private bool endDragable = false;
@@ -49,18 +49,18 @@ public class ClickableOrgan : MonoBehaviour
         if (endDragable) {
             //Put parent where child is, reset child local pos 
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
-            gameObject.transform.parent.transform.position = organ.transform.position;
+            gameObject.transform.parent.transform.position = parentOrgan.transform.position;
             gameObject.transform.localPosition = Vector3.zero;
 
             //Update player structures
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, organ, deltaPos);
-            player.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, organ, deltaPos);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, parentOrgan, deltaPos);
+            player.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, parentOrgan, deltaPos);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
             attachedOrgan.playerFigure = playerFigure;
             attachedOrgan.player = player;
-            attachedOrgan.organ = playerFigureOrgan;
+            attachedOrgan.parentOrgan = playerFigureOrgan;
             attachedOrgan.organType = organType;
 
             //Reset object and parent to original display position

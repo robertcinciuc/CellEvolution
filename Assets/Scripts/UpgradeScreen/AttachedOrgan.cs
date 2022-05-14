@@ -6,7 +6,7 @@ public class AttachedOrgan : MonoBehaviour
 {
     public GameObject player;
     public GameObject playerFigure;
-    public GameObject organ;
+    public GameObject parentOrgan;
     public System.Type organType;
 
     void Start(){

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Organ : MonoBehaviour
 {
     public System.Type organType;
+    public System.Guid id;
 
     void Start(){
         

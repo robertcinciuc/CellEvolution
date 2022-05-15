@@ -19,8 +19,8 @@ public class AttachedOrgan : MonoBehaviour
 
     private void OnMouseOver() {
         if (Input.GetKeyDown(KeyCode.R)) {
-            playerFigure.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
-            player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
+            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
+            player.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
         }
     }
 

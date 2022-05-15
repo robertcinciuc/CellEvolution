@@ -28,9 +28,6 @@ public class ClickableOrgan : MonoBehaviour
                 //Save initial pos & rot
                 initialPosition = gameObject.transform.parent.transform.position;
                 initialRotation = gameObject.transform.parent.transform.rotation;
-
-                player.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
-                playerFigure.GetComponent<PlayerBodyStructure>().removeOrganByType(organType);
             }
 
             clickPressedOnOrgan = true;
@@ -53,8 +50,8 @@ public class ClickableOrgan : MonoBehaviour
             gameObject.transform.localPosition = Vector3.zero;
 
             //Update player structures
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, parentOrgan, deltaPos);
-            player.GetComponent<PlayerBodyStructure>().addOrganByTypeWithPosition(organType, parentOrgan, deltaPos);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos);
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();

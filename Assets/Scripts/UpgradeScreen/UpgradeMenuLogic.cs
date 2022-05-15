@@ -42,14 +42,14 @@ public class UpgradeMenuLogic : MonoBehaviour
                 Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
 
                 Quaternion childModelRot = child.GetChild(0).transform.localRotation;
-                GameObject newOrgan = playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, childModelRot, child.name, child.gameObject.GetComponent<Organ>().organType);
-
+                GameObject newOrgan = playerCopyBodyStructure.addOrganFromMesh(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, childModelRot, child.name, child.GetChild(0).gameObject.GetComponent<Organ>().organType);
+                
                 //Add attached organ behaviour
                 AttachedOrgan attachedOrgan = newOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
                 attachedOrgan.player = player;
                 attachedOrgan.playerFigure = playerFigure;
                 attachedOrgan.parentOrgan = child.gameObject;
-                attachedOrgan.organType = child.gameObject.GetComponent<Organ>().organType;
+                attachedOrgan.organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
             }
 
             playerFigureInstantiated = true;
@@ -94,6 +94,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         GameObject organModel = organ.transform.GetChild(0).gameObject;
         organ.name = organName;
 
+        //Add clickable organ component
         ClickableOrgan clickableOrgan = organModel.AddComponent<ClickableOrgan>();
         clickableOrgan.player = player;
         clickableOrgan.playerFigure = playerFigure;

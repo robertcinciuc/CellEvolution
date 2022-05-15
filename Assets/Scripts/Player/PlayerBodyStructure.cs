@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlayerBodyStructure : MonoBehaviour
 {
-    //Temporary map while there's only 1 organ of each type on body
-    private Dictionary<System.Type, GameObject> playerOrgansByType;
+    private Dictionary<System.Guid, GameObject> playerOrgans;
 
     void Awake(){
-        playerOrgansByType = new Dictionary<System.Type, GameObject>();
+        playerOrgans = new Dictionary<System.Guid, GameObject>();
 
         if (gameObject.name == "Player") {
             addPlayerOrgan(Bodies.PlayerBody.ToString(), "Prefabs/PlayerBody", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 0), Quaternion.identity, typeof(Bodies));
@@ -19,13 +18,12 @@ public class PlayerBodyStructure : MonoBehaviour
     }
 
     void Update(){
-        
     }
 
     void FixedUpdate() {
     }
 
-    public GameObject addOrganFromMeshByType(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
+    public GameObject addOrganFromMesh(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
         GameObject organCopy = new GameObject();
         organCopy.name = organName;
         organCopy.transform.localPosition = pos;
@@ -36,39 +34,54 @@ public class PlayerBodyStructure : MonoBehaviour
         organCopyMeshRend.transform.SetParent(organCopy.transform);
         organCopyMeshRend.transform.localRotation = rot;
 
-        playerOrgansByType.Add(organType, organCopy);
+        //Refresh organ component
+        Organ organComponent = organCopyMeshRend.GetComponent<Organ>();
+        organComponent.id = organMeshRend.GetComponent<Organ>().id;
+
+        playerOrgans.Add(organComponent.id, organCopy);
 
         return organCopy;
     }
 
-    public void removeOrganByType(System.Type organType) {
-        if (playerOrgansByType.ContainsKey(organType)) {
-            GameObject organToRemove = playerOrgansByType[organType];
-            playerOrgansByType.Remove(organType);
+    public void removeOrgan(System.Guid organId) {
+        if (playerOrgans.ContainsKey(organId)) {
+            GameObject organToRemove = playerOrgans[organId];
+            playerOrgans.Remove(organId);
             Destroy(organToRemove);
         }
     }
 
-    public GameObject addOrganByTypeWithPosition(System.Type organType, GameObject organ, Vector3 posDelta) {
+    public GameObject addOrganWithPosition(System.Type organType, GameObject organ, Vector3 posDelta) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
-        newOrgan.AddComponent<Organ>().organType = organType;
         newOrgan.transform.SetParent(this.gameObject.transform);
         newOrgan.transform.localPosition = posDelta;
         newOrgan.transform.localRotation = organ.transform.rotation;
         newOrgan.name = organ.name;
+        
+        //Add organ component
+        Organ organComponent = newOrgan.transform.GetChild(0).gameObject.AddComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = System.Guid.NewGuid();
 
-        playerOrgansByType[organType] = newOrgan;
+        playerOrgans.Add(organComponent.id, newOrgan);
+
 
         return newOrgan;
     }
+    
     private void addPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
-        organ.AddComponent<Organ>().organType = organType;
         organ.transform.SetParent(this.gameObject.transform);
         organ.transform.localPosition = localPos;
         organ.transform.localRotation = localRot;
         organ.name = name;
-        playerOrgansByType.Add(organType, organ);
+
+        //Add organ component
+        Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = System.Guid.NewGuid();
+
+        playerOrgans.Add(organComponent.id, organ);
     }
 
 }

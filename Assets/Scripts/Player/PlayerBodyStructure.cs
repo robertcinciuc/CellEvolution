@@ -51,7 +51,7 @@ public class PlayerBodyStructure : MonoBehaviour
         }
     }
 
-    public GameObject addOrganWithPosition(System.Type organType, GameObject organ, Vector3 posDelta) {
+    public GameObject addOrganWithPosition(System.Type organType, GameObject organ, Vector3 posDelta, System.Guid organId) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
         newOrgan.transform.SetParent(this.gameObject.transform);
         newOrgan.transform.localPosition = posDelta;
@@ -61,7 +61,10 @@ public class PlayerBodyStructure : MonoBehaviour
         //Add organ component
         Organ organComponent = newOrgan.transform.GetChild(0).gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
-        organComponent.id = System.Guid.NewGuid();
+        organComponent.id = organId;
+
+        //Remove clickable organ behaviour
+        Destroy(newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>());
 
         playerOrgans.Add(organComponent.id, newOrgan);
 
@@ -69,6 +72,10 @@ public class PlayerBodyStructure : MonoBehaviour
         return newOrgan;
     }
     
+    public void moveOrgan(System.Guid organId, Vector3 localPos) {
+        playerOrgans[organId].transform.localPosition = localPos;
+    }
+
     private void addPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         organ.transform.SetParent(this.gameObject.transform);

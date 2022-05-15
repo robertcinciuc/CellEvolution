@@ -50,8 +50,9 @@ public class ClickableOrgan : MonoBehaviour
             gameObject.transform.localPosition = Vector3.zero;
 
             //Update player structures
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos);
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos);
+            System.Guid organId = System.Guid.NewGuid();
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, organId);
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();

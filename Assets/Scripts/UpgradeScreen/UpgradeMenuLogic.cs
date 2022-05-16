@@ -52,6 +52,7 @@ public class UpgradeMenuLogic : MonoBehaviour
                 attachedOrgan.playerFigure = playerFigure;
                 attachedOrgan.parentOrgan = child.gameObject;
                 attachedOrgan.organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
+                attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             }
 
             playerFigureInstantiated = true;

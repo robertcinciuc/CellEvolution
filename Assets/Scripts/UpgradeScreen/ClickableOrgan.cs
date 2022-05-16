@@ -60,6 +60,7 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.player = player;
             attachedOrgan.parentOrgan = playerFigureOrgan;
             attachedOrgan.organType = organType;
+            attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
             //Reset object and parent to original display position
             gameObject.transform.parent.transform.position = initialPosition;

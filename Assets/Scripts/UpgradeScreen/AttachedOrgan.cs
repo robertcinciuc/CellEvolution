@@ -27,8 +27,9 @@ public class AttachedOrgan : MonoBehaviour
             playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
             player.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
         
-        } else if(Input.GetMouseButton(0)){
+        } else if(Input.GetMouseButton(0) && !UpgradeMenuLogic.attachedOrganIsDragged && !UpgradeMenuLogic.organIsDragged) {
             clickPressedOnOrgan = true;
+            UpgradeMenuLogic.attachedOrganIsDragged = true;
         }
     }
 
@@ -47,6 +48,7 @@ public class AttachedOrgan : MonoBehaviour
             player.GetComponent<PlayerBodyStructure>().moveOrgan(gameObject.GetComponent<Organ>().id, transform.parent.localPosition, transform.parent.rotation);
             endMoveable = false;
             clickPressedOnOrgan = false;
+            UpgradeMenuLogic.attachedOrganIsDragged = false;
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class UpgradeMenuLogic : MonoBehaviour
 {
     public static bool organIsDragged = false;
+    public static bool attachedOrganIsDragged = false;
 
     private static GameObject player;
     private static GameObject playerFigure;

@@ -24,7 +24,7 @@ public class ClickableOrgan : MonoBehaviour
     }
 
     void OnMouseOver() {
-        if (Input.GetMouseButton(0) && !UpgradeMenuLogic.organIsDragged) {
+        if (Input.GetMouseButton(0) && !UpgradeMenuLogic.organIsDragged && !UpgradeMenuLogic.attachedOrganIsDragged) {
             if (!clickPressedOnOrgan) {
                 //Save initial pos & rot
                 initialPosition = gameObject.transform.parent.transform.position;

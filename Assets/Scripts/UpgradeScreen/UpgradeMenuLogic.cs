@@ -18,9 +18,11 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static GameObject playerTooth;
     private static Vector3 displayOffset = new Vector3(0, 0.5f, 0);
     private static bool playerFigureInstantiated = false;
+    private static Camera upgradeMenuCamera;
 
     void Start(){
         player = GameObject.Find("Player");
+        upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
         upgradeMenuPlane = this.gameObject.transform.parent.gameObject.transform.Find("UpgradeMenuPlane").gameObject;
     }
 
@@ -100,6 +102,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;
         clickableOrgan.parentOrgan = organ;
+        clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
         return organ;
     }

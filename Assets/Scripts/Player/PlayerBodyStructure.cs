@@ -72,8 +72,9 @@ public class PlayerBodyStructure : MonoBehaviour
         return newOrgan;
     }
     
-    public void moveOrgan(System.Guid organId, Vector3 localPos) {
+    public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
         playerOrgans[organId].transform.localPosition = localPos;
+        playerOrgans[organId].transform.localRotation = rot;
     }
 
     private void addPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {

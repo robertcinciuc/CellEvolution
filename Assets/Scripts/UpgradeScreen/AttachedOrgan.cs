@@ -44,7 +44,7 @@ public class AttachedOrgan : MonoBehaviour
             gameObject.transform.parent.transform.position = transform.position;
             gameObject.transform.localPosition = Vector3.zero;
 
-            player.GetComponent<PlayerBodyStructure>().moveOrgan(gameObject.GetComponent<Organ>().id, transform.parent.localPosition);
+            player.GetComponent<PlayerBodyStructure>().moveOrgan(gameObject.GetComponent<Organ>().id, transform.parent.localPosition, transform.parent.rotation);
             endMoveable = false;
             clickPressedOnOrgan = false;
         }

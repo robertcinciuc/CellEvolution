@@ -6,6 +6,7 @@ public class UpgradeMenuLogic : MonoBehaviour
 {
     public static bool organIsDragged = false;
     public static bool attachedOrganIsDragged = false;
+    public static bool playerFigureInstantiated = false;
 
     private static GameObject player;
     private static GameObject playerFigure;
@@ -18,7 +19,6 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static GameObject playerSpike;
     private static GameObject playerTooth;
     private static Vector3 displayOffset = new Vector3(0, 0.5f, 0);
-    private static bool playerFigureInstantiated = false;
     private static Camera upgradeMenuCamera;
 
     void Start(){
@@ -36,6 +36,11 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
     public static void renderPlayerFigure() {
         if (!playerFigureInstantiated) {
+
+            if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
+                playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
+            }
+
             //Render organs
             playerFigure = new GameObject();
             playerFigure.name = "PlayerCopy";

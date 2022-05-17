@@ -24,7 +24,8 @@ public class ProgressionData : MonoBehaviour
 		nbMeatsEaten = data.nbMeatsEaten;
 		playerState.sethealth(data.health);
 		playerBodyStructure.addAllOrgans(data.playerSerialOrgans);
-    }
+		UpgradeMenuLogic.playerFigureInstantiated = false;
+	}
 
     public void applyReset() {
 		nbEnemiesKilled = 0;

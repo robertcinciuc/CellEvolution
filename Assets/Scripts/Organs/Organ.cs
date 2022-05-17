@@ -5,6 +5,8 @@ using UnityEngine;
 public class Organ : MonoBehaviour
 {
     public System.Type organType;
+    public System.Guid id;
+    public SerialOrgan serialOrgan;
 
     void Start(){
         
@@ -12,5 +14,9 @@ public class Organ : MonoBehaviour
 
     void Update(){
         
+    }
+
+    public SerialOrgan getSerialOrgan() {
+        return new SerialOrgan(transform.parent.gameObject);
     }
 }

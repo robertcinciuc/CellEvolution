@@ -25,13 +25,15 @@ public class LoadUpgradeMenu : MonoBehaviour
             PlayerState.setInactive();
             UpgradeMenuCameraState.setActive();
             MainCameraState.setInactive();
-            UpgradeMenuLogic.copyPlayerToUpgradeMenu();
+            UpgradeMenuLogic.protectPlayer();
+            UpgradeMenuLogic.renderPlayerFigure();
             UpgradeMenuLogic.instMenuOrgans();
+
         } else {
             PlayerState.setActive();
             MainCameraState.setActive();
             UpgradeMenuCameraState.setInactive();
-            UpgradeMenuLogic.copyPlayerToWorld();
+            UpgradeMenuLogic.uprotectPlayer();
             UpgradeMenuLogic.destroyMenuBodyParts();
         }
     }

@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class UpgradeMenuLogic : MonoBehaviour
 {
+    public static bool organIsDragged = false;
+    public static bool attachedOrganIsDragged = false;
+    public static bool playerFigureInstantiated = false;
+
     private static GameObject player;
-    private static GameObject playerCopy;
+    private static GameObject playerFigure;
     private static GameObject upgradeMenuPlane;
     private static Vector3 safetyOffset = new Vector3(0, 5, 0);
     private static GameObject playerMouth;
@@ -15,9 +19,11 @@ public class UpgradeMenuLogic : MonoBehaviour
     private static GameObject playerSpike;
     private static GameObject playerTooth;
     private static Vector3 displayOffset = new Vector3(0, 0.5f, 0);
+    private static Camera upgradeMenuCamera;
 
     void Start(){
         player = GameObject.Find("Player");
+        upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
         upgradeMenuPlane = this.gameObject.transform.parent.gameObject.transform.Find("UpgradeMenuPlane").gameObject;
     }
 
@@ -28,27 +34,47 @@ public class UpgradeMenuLogic : MonoBehaviour
     private void FixedUpdate() {
         
     }
-    public static void copyPlayerToUpgradeMenu() {
+    public static void renderPlayerFigure() {
+        if (!playerFigureInstantiated) {
 
+            if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
+                playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
+            }
+
+            //Render organs
+            playerFigure = new GameObject();
+            playerFigure.name = "PlayerCopy";
+            playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+            PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+            foreach(Transform child in player.transform) {
+                Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
+
+                Quaternion childModelRot = child.GetChild(0).transform.localRotation;
+                Quaternion parentRot = child.localRotation;
+                GameObject newOrgan = playerCopyBodyStructure.addOrganFromMesh(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, parentRot, childModelRot, child.name, child.GetChild(0).gameObject.GetComponent<Organ>().organType);
+                
+                //Add attached organ behaviour
+                AttachedOrgan attachedOrgan = newOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
+                attachedOrgan.player = player;
+                attachedOrgan.playerFigure = playerFigure;
+                attachedOrgan.parentOrgan = child.gameObject;
+                attachedOrgan.organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
+                attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+            }
+
+            playerFigureInstantiated = true;
+        }
+    }
+
+    public static void protectPlayer() {
         //Protect original player with offsetting and immobilizing
         player.transform.position += safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = false;
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-        //Render organs
-        playerCopy = new GameObject();
-        playerCopy.name = "PlayerCopy";
-        PlayerBodyStructure playerCopyBodyStructure = playerCopy.AddComponent<PlayerBodyStructure>();
-        foreach(Transform child in player.transform) {
-            Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
-            playerCopyBodyStructure.addOrganFromMeshByType(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, child.transform.localRotation, child.name, child.gameObject.GetComponent<Organ>().organType);
-        }
     }
 
-    public static void copyPlayerToWorld() {
-        Destroy(playerCopy);
-
+    public static void uprotectPlayer() {
         player.transform.position -= safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = true;
     }
@@ -58,10 +84,10 @@ public class UpgradeMenuLogic : MonoBehaviour
 
         playerMouth = instMenuOrgan("Prefabs/Mouth", displayPosition + new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
         playerMouthClaw = instMenuOrgan("Prefabs/MouthClaw", displayPosition + new Vector3(4, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.MouthClaw.ToString());
-        playerFlagella = instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
-        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), new Quaternion(0.71f, 0, 0, 0.71f), typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
-        playerSpike = instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Spike.ToString());
-        playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), new Quaternion(0.71f, 0, 0, 0.71f), typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
+        playerFlagella = instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
+        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
+        playerSpike = instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Spike.ToString());
+        playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
     }
 
     public static void destroyMenuBodyParts() {
@@ -71,7 +97,6 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerTwinFlagella);
         Destroy(playerSpike);
         Destroy(playerTooth);
-        Destroy(playerCopy);
     }
 
     private static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
@@ -79,11 +104,13 @@ public class UpgradeMenuLogic : MonoBehaviour
         GameObject organModel = organ.transform.GetChild(0).gameObject;
         organ.name = organName;
 
+        //Add clickable organ component
         ClickableOrgan clickableOrgan = organModel.AddComponent<ClickableOrgan>();
         clickableOrgan.player = player;
-        clickableOrgan.playerCopy = playerCopy;
+        clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;
-        clickableOrgan.organ = organ;
+        clickableOrgan.parentOrgan = organ;
+        clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
         return organ;
     }

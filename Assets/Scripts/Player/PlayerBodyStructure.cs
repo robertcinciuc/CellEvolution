@@ -100,8 +100,8 @@ public class PlayerBodyStructure : MonoBehaviour
 
         foreach (KeyValuePair<System.Guid, SerialOrgan> entry in organs) {
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.prefabName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
-            Vector3 organLocalPos = new Vector3(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ);
-            organ.transform.localRotation = new Quaternion(entry.Value.localRotW, entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ);
+            Vector3 organLocalPos = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
+            organ.transform.localRotation = new Quaternion(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ, entry.Value.localRotW);
             addOrganWithPosition(entry.Value.organType, organ, organLocalPos, entry.Key);
             Destroy(organ);
         }

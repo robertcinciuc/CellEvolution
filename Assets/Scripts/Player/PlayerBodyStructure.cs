@@ -86,7 +86,7 @@ public class PlayerBodyStructure : MonoBehaviour
     public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {
         Dictionary<System.Guid, SerialOrgan> serialOrgans = new Dictionary<System.Guid, SerialOrgan>();
         foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
-            serialOrgans.Add(entry.Key, entry.Value.transform.GetChild(0).GetComponent<Organ>().serialOrgan);
+            serialOrgans.Add(entry.Key, entry.Value.transform.GetChild(0).GetComponent<Organ>().getSerialOrgan());
         }
 
         return serialOrgans;

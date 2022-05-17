@@ -15,4 +15,8 @@ public class Organ : MonoBehaviour
     void Update(){
         
     }
+
+    public SerialOrgan getSerialOrgan() {
+        return new SerialOrgan(transform.parent.gameObject);
+    }
 }

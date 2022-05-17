@@ -23,16 +23,17 @@ public class PlayerBodyStructure : MonoBehaviour
     void FixedUpdate() {
     }
 
-    public GameObject addOrganFromMesh(MeshRenderer organMeshRend, Vector3 pos, Quaternion rot, string organName, System.Type organType) {
+    public GameObject addOrganFromMesh(MeshRenderer organMeshRend, Vector3 parentPos, Quaternion parentRot, Quaternion childRot, string organName, System.Type organType) {
         GameObject organCopy = new GameObject();
         organCopy.name = organName;
-        organCopy.transform.localPosition = pos;
+        organCopy.transform.localPosition = parentPos;
+        organCopy.transform.localRotation = parentRot;
         organCopy.transform.SetParent(gameObject.transform);
 
-        MeshRenderer organCopyMeshRend = Instantiate(organMeshRend, pos, rot);
+        MeshRenderer organCopyMeshRend = Instantiate(organMeshRend, parentPos, childRot);
         organCopyMeshRend.name = organName + "Renderer";
         organCopyMeshRend.transform.SetParent(organCopy.transform);
-        organCopyMeshRend.transform.localRotation = rot;
+        organCopyMeshRend.transform.localRotation = childRot;
 
         //Refresh organ component
         Organ organComponent = organCopyMeshRend.GetComponent<Organ>();

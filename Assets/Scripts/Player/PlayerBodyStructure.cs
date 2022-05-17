@@ -58,13 +58,19 @@ public class PlayerBodyStructure : MonoBehaviour
         newOrgan.transform.localRotation = organ.transform.rotation;
         newOrgan.name = organ.name;
         
-        //Add organ component
+        //Add organ component & serializeable organ
         Organ organComponent = newOrgan.transform.GetChild(0).gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = organId;
+        
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
+        organComponent.serialOrgan = serialOrgan;
 
         //Remove clickable organ behaviour
-        Destroy(newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>());
+        if (newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>() != null) {
+            Destroy(newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>());
+        }
 
         playerOrgans.Add(organComponent.id, newOrgan);
 
@@ -75,6 +81,37 @@ public class PlayerBodyStructure : MonoBehaviour
     public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
         playerOrgans[organId].transform.localPosition = localPos;
         playerOrgans[organId].transform.localRotation = rot;
+    }
+
+    public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {
+        Dictionary<System.Guid, SerialOrgan> serialOrgans = new Dictionary<System.Guid, SerialOrgan>();
+        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
+            serialOrgans.Add(entry.Key, entry.Value.transform.GetChild(0).GetComponent<Organ>().serialOrgan);
+        }
+
+        return serialOrgans;
+    }
+
+    public void addAllOrgans(Dictionary<System.Guid, SerialOrgan> organs) {
+        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
+            Destroy(entry.Value);
+        }
+        playerOrgans.Clear();
+
+        foreach (KeyValuePair<System.Guid, SerialOrgan> entry in organs) {
+            GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.prefabName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
+            Vector3 organLocalPos = new Vector3(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ);
+            organ.transform.localRotation = new Quaternion(entry.Value.localRotW, entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ);
+            addOrganWithPosition(entry.Value.organType, organ, organLocalPos, entry.Key);
+            Destroy(organ);
+        }
+    }
+
+    public void removeAllOrgans() {
+        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
+            Destroy(entry.Value);
+        }
+        playerOrgans.Clear();
     }
 
     private void addPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
@@ -88,6 +125,10 @@ public class PlayerBodyStructure : MonoBehaviour
         Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = System.Guid.NewGuid();
+
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        organComponent.serialOrgan = serialOrgan;
 
         playerOrgans.Add(organComponent.id, organ);
     }

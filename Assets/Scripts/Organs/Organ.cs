@@ -6,6 +6,7 @@ public class Organ : MonoBehaviour
 {
     public System.Type organType;
     public System.Guid id;
+    public SerialOrgan serialOrgan;
 
     void Start(){
         

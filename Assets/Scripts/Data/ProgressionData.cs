@@ -6,7 +6,7 @@ public class ProgressionData : MonoBehaviour
 {
     public static int nbEnemiesKilled = 0;
 	public static int nbMeatsEaten = 0;
-	
+	public PlayerBodyStructure playerBodyStructure;
 	public PlayerState playerState;
 
 	public DataPacket buildDatapacketForStoring() {
@@ -14,6 +14,7 @@ public class ProgressionData : MonoBehaviour
 		data.nbEnemiesKilled = nbEnemiesKilled;
 		data.nbMeatsEaten= nbMeatsEaten;
 		data.health = playerState.health;
+		data.playerSerialOrgans = playerBodyStructure.getPlayerSerialOrgans();
 
         return data;
 	}
@@ -22,12 +23,14 @@ public class ProgressionData : MonoBehaviour
         nbEnemiesKilled = data.nbEnemiesKilled;
 		nbMeatsEaten = data.nbMeatsEaten;
 		playerState.sethealth(data.health);
+		playerBodyStructure.addAllOrgans(data.playerSerialOrgans);
     }
 
     public void applyReset() {
 		nbEnemiesKilled = 0;
 		nbMeatsEaten = 0;
 		playerState.sethealth(playerState.maxHealth);
+		playerBodyStructure.removeAllOrgans();
 	}
 
 }

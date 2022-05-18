@@ -99,7 +99,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerTooth);
     }
 
-    private static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
+    public static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         GameObject organModel = organ.transform.GetChild(0).gameObject;
         organ.name = organName;
@@ -111,6 +111,16 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.organType = organType;
         clickableOrgan.parentOrgan = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
+
+        //Add organ component
+        Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = System.Guid.NewGuid();
+        organComponent.name = organName;
+
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        organComponent.serialOrgan = serialOrgan;
 
         return organ;
     }

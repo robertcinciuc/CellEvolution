@@ -57,23 +57,29 @@ public class PlayerBodyStructure : MonoBehaviour
         newOrgan.transform.SetParent(this.gameObject.transform);
         newOrgan.transform.localPosition = posDelta;
         newOrgan.transform.localRotation = organ.transform.rotation;
-        newOrgan.name = organ.name;
-        
-        //Add organ component & serializeable organ
-        Organ organComponent = newOrgan.transform.GetChild(0).gameObject.AddComponent<Organ>();
+
+        //Update organ component
+        Organ organComponent = newOrgan.transform.GetChild(0).GetComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = organId;
-        
+        organComponent.name = organ.transform.GetChild(0).GetComponent<Organ>().name;
+
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
         organComponent.serialOrgan = serialOrgan;
+
+        if (organ.transform.GetChild(0).GetComponent<Organ>() != null) {
+            newOrgan.name = organ.transform.GetChild(0).GetComponent<Organ>().name;
+        } else if (organ.transform.GetChild(0).GetComponent<SerialOrgan>() != null) {
+            newOrgan.name = organ.transform.GetChild(0).GetComponent<SerialOrgan>().prefabName;
+        }
 
         //Remove clickable organ behaviour
         if (newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>() != null) {
             Destroy(newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>());
         }
 
-        playerOrgans.Add(organComponent.id, newOrgan);
+        playerOrgans.Add(newOrgan.transform.GetChild(0).GetComponent<Organ>().id, newOrgan);
 
 
         return newOrgan;
@@ -101,6 +107,17 @@ public class PlayerBodyStructure : MonoBehaviour
 
         foreach (KeyValuePair<System.Guid, SerialOrgan> entry in organs) {
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.prefabName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
+
+            //Add organ component
+            Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+            organComponent.organType = entry.Value.organType;
+            organComponent.id = entry.Key;
+            organComponent.name = entry.Value.prefabName;
+
+            //Add serial organ to organ component
+            SerialOrgan serialOrgan = new SerialOrgan(organ);
+            organComponent.serialOrgan = serialOrgan;
+
             Vector3 organLocalPos = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
             organ.transform.localRotation = new Quaternion(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ, entry.Value.localRotW);
             addOrganWithPosition(entry.Value.organType, organ, organLocalPos, entry.Key);
@@ -126,6 +143,7 @@ public class PlayerBodyStructure : MonoBehaviour
         Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = System.Guid.NewGuid();
+        organComponent.name = name;
 
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(organ);

@@ -62,13 +62,16 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.organType = organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
-            //Reset object and parent to original display position
-            gameObject.transform.parent.transform.position = initialPosition;
-            gameObject.transform.parent.transform.rotation = initialRotation;
+            //Create new organ at the initial spot
+            string organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().name;
+            UpgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
+
 
             endDragable = false;
             clickPressedOnOrgan = false;
             UpgradeMenuLogic.organIsDragged = false;
+
+            Destroy(gameObject);
         }
     }
 

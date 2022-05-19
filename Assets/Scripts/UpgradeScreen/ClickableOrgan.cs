@@ -63,7 +63,7 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
             //Create new organ at the initial spot
-            string organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().name;
+            string organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organName;
             UpgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
 
 

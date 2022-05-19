@@ -14,7 +14,7 @@ public class SerialOrgan
     public float localRotY;
     public float localRotZ;
     public System.Type organType;
-    public string prefabName;
+    public string organName;
     public System.Guid id;
 
     public SerialOrgan(GameObject parentOrgan) {
@@ -26,7 +26,7 @@ public class SerialOrgan
         localRotY = parentOrgan.transform.localRotation.y;
         localRotZ = parentOrgan.transform.localRotation.z;
         organType = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organType;
-        prefabName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().name;
+        organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organName;
         id = parentOrgan.transform.GetChild(0).GetComponent<Organ>().id;
     }
 }

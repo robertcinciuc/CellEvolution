@@ -116,7 +116,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = System.Guid.NewGuid();
-        organComponent.name = organName;
+        organComponent.organName = organName;
 
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(organ);

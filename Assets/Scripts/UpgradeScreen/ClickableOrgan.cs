@@ -46,13 +46,14 @@ public class ClickableOrgan : MonoBehaviour
         if (endDragable) {
             //Put parent where child is, reset child local pos 
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
+            Quaternion deltaRot = parentOrgan.transform.rotation;
             gameObject.transform.parent.transform.position = parentOrgan.transform.position;
             gameObject.transform.localPosition = Vector3.zero;
 
             //Update player structures
             System.Guid organId = System.Guid.NewGuid();
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, organId);
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, organId);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, deltaRot, organId);
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, deltaRot, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();

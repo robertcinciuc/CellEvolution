@@ -46,13 +46,15 @@ public class UpgradeMenuLogic : MonoBehaviour
             playerFigure.name = "PlayerCopy";
             playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
             PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+            
             foreach(Transform child in player.transform) {
-                Vector3 meshPos = upgradeMenuPlane.transform.position + child.transform.localPosition + displayOffset;
+                System.Type organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
+                System.Guid organId = child.GetChild(0).GetComponent<Organ>().id;
+                Vector3 deltaPos = child.transform.localPosition;
+                Quaternion deltaRot = child.transform.localRotation;
+                GameObject newOrgan = playerCopyBodyStructure.addOrganWithPosition(organType, child.gameObject, deltaPos, deltaRot, organId);
 
-                Quaternion childModelRot = child.GetChild(0).transform.localRotation;
-                Quaternion parentRot = child.localRotation;
-                GameObject newOrgan = playerCopyBodyStructure.addOrganFromMesh(child.GetChild(0).GetComponent<MeshRenderer>(), meshPos, parentRot, childModelRot, child.name, child.GetChild(0).gameObject.GetComponent<Organ>().organType);
-                
+
                 //Add attached organ behaviour
                 AttachedOrgan attachedOrgan = newOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
                 attachedOrgan.player = player;

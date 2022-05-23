@@ -100,10 +100,7 @@ public class PlayerBodyStructure : MonoBehaviour
     }
 
     public void addAllOrgans(Dictionary<System.Guid, SerialOrgan> organs) {
-        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
-            Destroy(entry.Value);
-        }
-        playerOrgans.Clear();
+        removeAllOrgans();
 
         foreach (KeyValuePair<System.Guid, SerialOrgan> entry in organs) {
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), Vector3.zero, Quaternion.identity);

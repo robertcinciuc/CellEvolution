@@ -48,19 +48,19 @@ public class UpgradeMenuLogic : MonoBehaviour
             PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
             
             foreach(Transform child in player.transform) {
-                System.Type organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
-                System.Guid organId = child.GetChild(0).GetComponent<Organ>().id;
+                System.Type organType = child.GetComponent<Organ>().organType;
+                System.Guid organId = child.GetComponent<Organ>().id;
                 Vector3 deltaPos = child.transform.localPosition;
                 Quaternion deltaRot = child.transform.localRotation;
                 GameObject newOrgan = playerCopyBodyStructure.addOrganWithPosition(organType, child.gameObject, deltaPos, deltaRot, organId);
 
 
                 //Add attached organ behaviour
-                AttachedOrgan attachedOrgan = newOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
+                AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
                 attachedOrgan.player = player;
                 attachedOrgan.playerFigure = playerFigure;
                 attachedOrgan.parentOrgan = child.gameObject;
-                attachedOrgan.organType = child.GetChild(0).gameObject.GetComponent<Organ>().organType;
+                attachedOrgan.organType = child.GetComponent<Organ>().organType;
                 attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             }
 
@@ -103,7 +103,7 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     public static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
-        GameObject organModel = organ.transform.GetChild(0).gameObject;
+        GameObject organModel = organ;
         organ.name = organName;
 
         //Add clickable organ component
@@ -111,11 +111,11 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.player = player;
         clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;
-        clickableOrgan.parentOrgan = organ;
+        clickableOrgan.organ = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
         //Add organ component
-        Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+        Organ organComponent = organ.gameObject.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = System.Guid.NewGuid();
         organComponent.organName = organName;

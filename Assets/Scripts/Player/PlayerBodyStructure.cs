@@ -38,27 +38,27 @@ public class PlayerBodyStructure : MonoBehaviour
         newOrgan.transform.localRotation = rotDelta;
 
         //Update organ component
-        Organ organComponent = newOrgan.transform.GetChild(0).GetComponent<Organ>();
+        Organ organComponent = newOrgan.GetComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = organId;
-        organComponent.organName = organ.transform.GetChild(0).GetComponent<Organ>().organName;
+        organComponent.organName = organ.GetComponent<Organ>().organName;
 
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
         organComponent.serialOrgan = serialOrgan;
 
-        if (organ.transform.GetChild(0).GetComponent<Organ>() != null) {
-            newOrgan.name = organ.transform.GetChild(0).GetComponent<Organ>().organName;
-        } else if (organ.transform.GetChild(0).GetComponent<SerialOrgan>() != null) {
-            newOrgan.name = organ.transform.GetChild(0).GetComponent<SerialOrgan>().organName;
+        if (organ.GetComponent<Organ>() != null) {
+            newOrgan.name = organ.GetComponent<Organ>().organName;
+        } else if (organ.GetComponent<SerialOrgan>() != null) {
+            newOrgan.name = organ.GetComponent<SerialOrgan>().organName;
         }
 
         //Remove clickable organ behaviour
-        if (newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>() != null) {
-            Destroy(newOrgan.transform.GetChild(0).GetComponent<ClickableOrgan>());
+        if (newOrgan.GetComponent<ClickableOrgan>() != null) {
+            Destroy(newOrgan.GetComponent<ClickableOrgan>());
         }
 
-        playerOrgans.Add(newOrgan.transform.GetChild(0).GetComponent<Organ>().id, newOrgan);
+        playerOrgans.Add(newOrgan.GetComponent<Organ>().id, newOrgan);
 
 
         return newOrgan;
@@ -72,7 +72,7 @@ public class PlayerBodyStructure : MonoBehaviour
     public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {
         Dictionary<System.Guid, SerialOrgan> serialOrgans = new Dictionary<System.Guid, SerialOrgan>();
         foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
-            serialOrgans.Add(entry.Key, entry.Value.transform.GetChild(0).GetComponent<Organ>().getSerialOrgan());
+            serialOrgans.Add(entry.Key, entry.Value.GetComponent<Organ>().getSerialOrgan());
         }
 
         return serialOrgans;
@@ -85,7 +85,7 @@ public class PlayerBodyStructure : MonoBehaviour
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
 
             //Add organ component
-            Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+            Organ organComponent = organ.gameObject.AddComponent<Organ>();
             organComponent.organType = entry.Value.organType;
             organComponent.id = entry.Key;
             organComponent.organName = entry.Value.organName;
@@ -112,11 +112,11 @@ public class PlayerBodyStructure : MonoBehaviour
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         organ.transform.SetParent(this.gameObject.transform);
         organ.transform.localPosition = localPos;
-        organ.transform.localRotation = localRot;
+        //organ.transform.localRotation = localRot;
         organ.name = name;
 
         //Add organ component
-        Organ organComponent = organ.transform.GetChild(0).gameObject.AddComponent<Organ>();
+        Organ organComponent = organ.AddComponent<Organ>();
         organComponent.organType = organType;
         organComponent.id = System.Guid.NewGuid();
         organComponent.organName = name;

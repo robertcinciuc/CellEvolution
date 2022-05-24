@@ -18,6 +18,6 @@ public class Organ : MonoBehaviour
     }
 
     public SerialOrgan getSerialOrgan() {
-        return new SerialOrgan(transform.parent.gameObject);
+        return new SerialOrgan(gameObject);
     }
 }

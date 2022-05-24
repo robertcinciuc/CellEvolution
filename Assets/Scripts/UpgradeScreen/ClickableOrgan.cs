@@ -7,7 +7,7 @@ public class ClickableOrgan : MonoBehaviour
     public GameObject player;
     public GameObject playerFigure;
     public System.Type organType;
-    public GameObject parentOrgan;
+    public GameObject organ;
     public Camera upgradeMenuCamera;
 
     private bool clickPressedOnOrgan = false;
@@ -27,8 +27,8 @@ public class ClickableOrgan : MonoBehaviour
         if (Input.GetMouseButton(0) && !UpgradeMenuLogic.organIsDragged && !UpgradeMenuLogic.attachedOrganIsDragged) {
             if (!clickPressedOnOrgan) {
                 //Save initial pos & rot
-                initialPosition = gameObject.transform.parent.transform.position;
-                initialRotation = gameObject.transform.parent.transform.rotation;
+                initialPosition = transform.position;
+                initialRotation = transform.rotation;
             }
 
             clickPressedOnOrgan = true;
@@ -40,23 +40,21 @@ public class ClickableOrgan : MonoBehaviour
         if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
-            transform.parent.rotation = Quaternion.Slerp(transform.parent.transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
         }
 
         if (endDragable) {
-            //Put parent where child is, reset child local pos 
+            //Get delta pos & rot of clicked organ
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
-            Quaternion deltaRot = parentOrgan.transform.rotation;
-            gameObject.transform.parent.transform.position = parentOrgan.transform.position;
-            gameObject.transform.localPosition = Vector3.zero;
+            Quaternion deltaRot = organ.transform.rotation;
 
             //Update player structures
             System.Guid organId = System.Guid.NewGuid();
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, deltaRot, organId);
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, parentOrgan, deltaPos, deltaRot, organId);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, organ, deltaPos, deltaRot, organId);
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, organ, deltaPos, deltaRot, organId);
 
             //Add attached behaviour to attached organ
-            AttachedOrgan attachedOrgan = playerFigureOrgan.transform.GetChild(0).gameObject.AddComponent<AttachedOrgan>();
+            AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();
             attachedOrgan.playerFigure = playerFigure;
             attachedOrgan.player = player;
             attachedOrgan.parentOrgan = playerFigureOrgan;
@@ -64,7 +62,7 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
             //Create new organ at the initial spot
-            string organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organName;
+            string organName = organ.GetComponent<Organ>().organName;
             UpgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
 
 

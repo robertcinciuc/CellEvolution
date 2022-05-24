@@ -33,11 +33,11 @@ public class PlayerCollision : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other) {
-        other.transform.parent.transform.parent.gameObject.GetComponent<EnemyMovement>().startFollowing(this.transform.position);
+        other.transform.parent.gameObject.GetComponent<EnemyMovement>().startFollowing(this.transform.position);
     }
 
     private void OnTriggerExit(Collider other) {
-        other.transform.parent.transform.parent.gameObject.GetComponent<EnemyMovement>().stopFollowing();
+        other.transform.parent.gameObject.GetComponent<EnemyMovement>().stopFollowing();
     }
 
     private bool enumContainsElem(System.Type enumType, string word){

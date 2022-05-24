@@ -25,8 +25,8 @@ public class SerialOrgan
         localRotX = parentOrgan.transform.localRotation.x;
         localRotY = parentOrgan.transform.localRotation.y;
         localRotZ = parentOrgan.transform.localRotation.z;
-        organType = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organType;
-        organName = parentOrgan.transform.GetChild(0).GetComponent<Organ>().organName;
-        id = parentOrgan.transform.GetChild(0).GetComponent<Organ>().id;
+        organType = parentOrgan.GetComponent<Organ>().organType;
+        organName = parentOrgan.GetComponent<Organ>().organName;
+        id = parentOrgan.GetComponent<Organ>().id;
     }
 }

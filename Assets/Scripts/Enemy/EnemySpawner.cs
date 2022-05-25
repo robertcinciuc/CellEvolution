@@ -102,15 +102,19 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
         GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 1f), Quaternion.identity);
         GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), Quaternion.identity);
-        GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos + 0.2f, zPos + 1.5f), Quaternion.identity);
+        GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos, zPos + 2f), Quaternion.identity);
         GameObject enemyHealthBar = Instantiate((GameObject)Resources.Load("Prefabs/EnemyHealthBar", typeof(GameObject)), enemy.transform.position, Quaternion.identity);
         GameObject enemyVisionCone = Instantiate((GameObject)Resources.Load("Prefabs/EnemyVisionCone", typeof(GameObject)), enemy.transform.position + new Vector3(0, 0, 3), Quaternion.identity);
         enemyVisionCone.GetComponent<MeshRenderer>().enabled = false;
 
         enemyBody.transform.SetParent(enemy.transform);
+        enemyBody.name = Bodies.OriginalEnemyBody.ToString();
         enemyMouth.transform.SetParent(enemy.transform);
+        enemyMouth.name = Mouths.Mouth.ToString();
         enemyFlagella.transform.SetParent(enemy.transform);
+        enemyFlagella.name = LocomotionOrgans.Flagella.ToString();
         enemySpike.transform.SetParent(enemy.transform);
+        enemySpike.name = AttackOrgans.Spike.ToString();
         enemyHealthBar.transform.SetParent(enemy.transform);
         enemyVisionCone.transform.SetParent(enemy.transform);
 

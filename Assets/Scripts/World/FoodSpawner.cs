@@ -11,7 +11,6 @@ public class FoodSpawner : MonoBehaviour {
     private Dictionary<LocalPlanes, List<GameObject>> planeFood;
 
     void Start(){
-        initializeDictionaries();
     }
 
     void Update(){
@@ -58,7 +57,7 @@ public class FoodSpawner : MonoBehaviour {
         planeFood[plane2] = tempFood;
     }
 
-    private void initializeDictionaries() {
+    public void initializeFoodSpawner() {
         planeFedStatus = new Dictionary<LocalPlanes, bool>();
         planeFedStatus.Add(LocalPlanes.CURRENT_PLANE, false);
         planeFedStatus.Add(LocalPlanes.X_PLANE, false);

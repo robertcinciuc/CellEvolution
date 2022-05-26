@@ -13,21 +13,8 @@ public class TerrainRenderer : MonoBehaviour {
     private GameObject player;
     private FoodSpawner foodSpawner;
     private EnemySpawner enemySpawner;
-    private bool startFoodCurrPlane = false;
-    private bool startEnemyCurrPlane = false;
 
     void Start() {
-        foodSpawner = this.gameObject.GetComponent<FoodSpawner>();
-        enemySpawner = this.gameObject.GetComponent<EnemySpawner>();
-        planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
-        player = GameObject.Find("Player");
-
-
-        currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        xPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, 0), Quaternion.identity);
-        zPlane = Instantiate(planePrefab, new Vector3(0, 0, planeSize.z), Quaternion.identity);
-        xzPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, planeSize.z), Quaternion.identity);
-
     }
 
     void Update() {
@@ -35,14 +22,6 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!startFoodCurrPlane) {
-            foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
-        }
-
-        if (!startEnemyCurrPlane) { 
-            enemySpawner.spawnEnemiesOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
-        }
-
         if (player == null) {
             return;
         }

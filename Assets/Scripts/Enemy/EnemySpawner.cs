@@ -16,14 +16,6 @@ public class EnemySpawner : MonoBehaviour {
     private TerrainRenderer terrainRenderer;
 
     void Start() {
-        terrainRenderer = gameObject.GetComponent<TerrainRenderer>();
-
-        enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
-        enemyMouthPrefab = (GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject));
-        enemyFlagellaPrefab = (GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject));
-        enemySpikePrefab = (GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject));
-
-        initializeDictionaries();
     }
 
     void Update() {
@@ -83,7 +75,14 @@ public class EnemySpawner : MonoBehaviour {
         }
     }
 
-    private void initializeDictionaries() {
+    public void initializeEnemySpawner() {
+        terrainRenderer = gameObject.GetComponent<TerrainRenderer>();
+
+        enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
+        enemyMouthPrefab = (GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject));
+        enemyFlagellaPrefab = (GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject));
+        enemySpikePrefab = (GameObject)Resources.Load("Prefabs/Spike", typeof(GameObject));
+
         planeEnemyStatus = new Dictionary<LocalPlanes, bool>();
         planeEnemyStatus.Add(LocalPlanes.CURRENT_PLANE, false);
         planeEnemyStatus.Add(LocalPlanes.X_PLANE, false);

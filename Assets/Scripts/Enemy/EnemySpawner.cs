@@ -14,6 +14,7 @@ public class EnemySpawner : MonoBehaviour {
     private GameObject enemySpikePrefab;
     private Dictionary<LocalPlanes, bool> planeEnemyStatus;
     private TerrainRenderer terrainRenderer;
+    private IslandSpawner islandSpawner;
 
     void Start() {
     }
@@ -35,6 +36,8 @@ public class EnemySpawner : MonoBehaviour {
             float xPos = planeCoord.x + signs[xSign] * Random.Range(0, planeSize.x / 2);
             float yPos = 0.2f;
             float zPos = planeCoord.z + signs[zSign] * Random.Range(0, planeSize.z / 2);
+
+            //TODO: add if checking the state of the grid of island spawner
 
             GameObject enemy = instantiateEnemy(xPos, yPos, zPos, plane, planeCoord);
 
@@ -77,6 +80,7 @@ public class EnemySpawner : MonoBehaviour {
 
     public void initializeEnemySpawner() {
         terrainRenderer = gameObject.GetComponent<TerrainRenderer>();
+        islandSpawner = gameObject.GetComponent<IslandSpawner>();
 
         enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
         enemyMouthPrefab = (GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject));

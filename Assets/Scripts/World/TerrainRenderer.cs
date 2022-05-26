@@ -73,8 +73,8 @@ public class TerrainRenderer : MonoBehaviour {
                 enemySpawner.discardEnemiesOnPlane(LocalPlanes.X_PLANE);
                 xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * planeSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
             }
-        } else {
 
+        } else {
             GameObject tempPlane = currPlane;
             currPlane = xPlane;
             xPlane = tempPlane;
@@ -82,13 +82,8 @@ public class TerrainRenderer : MonoBehaviour {
             zPlane = xzPlane;
             xzPlane = tempPlane;
 
-            //Switch food on planes
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
-            
-            //Switch enemies on planes
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
+            switchElementsOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.X_PLANE);
+            switchElementsOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
         }
 
         //Spawn food
@@ -113,8 +108,8 @@ public class TerrainRenderer : MonoBehaviour {
                 enemySpawner.discardEnemiesOnPlane(LocalPlanes.Z_PLANE);
                 zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * planeSize.z), Quaternion.identity);
             }
-        } else {
 
+        } else {
             GameObject tempPlane = currPlane;
             currPlane = zPlane;
             zPlane = tempPlane;
@@ -122,13 +117,8 @@ public class TerrainRenderer : MonoBehaviour {
             xPlane = xzPlane;
             xzPlane = tempPlane;
 
-            //Switch food on planes
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
-            
-            //Switch enemies on planes
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
+            switchElementsOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.Z_PLANE);
+            switchElementsOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
         }
 
         //Spawn food
@@ -161,6 +151,7 @@ public class TerrainRenderer : MonoBehaviour {
                 enemySpawner.discardEnemiesOnPlane(LocalPlanes.XZ_PLANE);
                 xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * planeSize.x, 0, currPlane.transform.position.z + zSign * planeSize.z), Quaternion.identity);
             }
+
         } else {
             GameObject tempPlane = currPlane;
             currPlane = xzPlane;
@@ -169,20 +160,22 @@ public class TerrainRenderer : MonoBehaviour {
             xPlane = zPlane;
             zPlane = tempPlane;
 
-            //Switch food on planes
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
-            foodSpawner.switchFoodOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
-
-            //Switch food on planes
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
-            enemySpawner.switchEnemiesOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
+            switchElementsOnPlanes(LocalPlanes.CURRENT_PLANE, LocalPlanes.XZ_PLANE);
+            switchElementsOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
         }
-
 
         //Spawn food
         foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
     
         //Spawn enemies
         enemySpawner.spawnEnemiesOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
+    }
+
+    private void switchElementsOnPlanes(LocalPlanes plane1, LocalPlanes plane2){
+        //Switch food on planes
+        foodSpawner.switchFoodOnPlanes(plane1, plane2);
+
+        //Switch enemies on planes
+        enemySpawner.switchEnemiesOnPlanes(plane1, plane2);
     }
 }

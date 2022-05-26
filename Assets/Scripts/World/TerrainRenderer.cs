@@ -69,8 +69,7 @@ public class TerrainRenderer : MonoBehaviour {
             
             if (xPlane.transform.position.x != currPlane.transform.position.x + sign * planeSize.x) {
                 Destroy(xPlane);
-                foodSpawner.discardFoodOnPlane(LocalPlanes.X_PLANE);
-                enemySpawner.discardEnemiesOnPlane(LocalPlanes.X_PLANE);
+                discardElementsOnPlane(LocalPlanes.X_PLANE);
                 xPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + sign * planeSize.x, 0, currPlane.transform.position.z), Quaternion.identity);
             }
 
@@ -86,11 +85,7 @@ public class TerrainRenderer : MonoBehaviour {
             switchElementsOnPlanes(LocalPlanes.Z_PLANE, LocalPlanes.XZ_PLANE);
         }
 
-        //Spawn food
-        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
-
-        //Spawn enemies
-        enemySpawner.spawnEnemiesOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
+        spawnElementsOnPlane(LocalPlanes.X_PLANE, xPlane.transform.position, planeSize);
     }
 
     private void renderZPlane() {
@@ -104,8 +99,7 @@ public class TerrainRenderer : MonoBehaviour {
             
             if (zPlane.transform.position.z != currPlane.transform.position.z + sign * planeSize.z) {
                 Destroy(zPlane);
-                foodSpawner.discardFoodOnPlane(LocalPlanes.Z_PLANE);
-                enemySpawner.discardEnemiesOnPlane(LocalPlanes.Z_PLANE);
+                discardElementsOnPlane(LocalPlanes.Z_PLANE);
                 zPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x, 0, currPlane.transform.position.z + sign * planeSize.z), Quaternion.identity);
             }
 
@@ -121,13 +115,9 @@ public class TerrainRenderer : MonoBehaviour {
             switchElementsOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.XZ_PLANE);
         }
 
-        //Spawn food
-        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
-        
-        //Spawn enemies
-        enemySpawner.spawnEnemiesOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
+        spawnElementsOnPlane(LocalPlanes.Z_PLANE, zPlane.transform.position, planeSize);
     }
-    
+
     private void renderXZPlane() {
         int xSign = 1;
         int zSign = 1;
@@ -147,8 +137,7 @@ public class TerrainRenderer : MonoBehaviour {
             if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * planeSize.z) ||
                 xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * planeSize.x)) {
                 Destroy(xzPlane);
-                foodSpawner.discardFoodOnPlane(LocalPlanes.XZ_PLANE);
-                enemySpawner.discardEnemiesOnPlane(LocalPlanes.XZ_PLANE);
+                discardElementsOnPlane(LocalPlanes.XZ_PLANE);
                 xzPlane = Instantiate(planePrefab, new Vector3(currPlane.transform.position.x + xSign * planeSize.x, 0, currPlane.transform.position.z + zSign * planeSize.z), Quaternion.identity);
             }
 
@@ -164,11 +153,7 @@ public class TerrainRenderer : MonoBehaviour {
             switchElementsOnPlanes(LocalPlanes.X_PLANE, LocalPlanes.Z_PLANE);
         }
 
-        //Spawn food
-        foodSpawner.spawnFoodItemsOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
-    
-        //Spawn enemies
-        enemySpawner.spawnEnemiesOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
+        spawnElementsOnPlane(LocalPlanes.XZ_PLANE, xzPlane.transform.position, planeSize);
     }
 
     private void switchElementsOnPlanes(LocalPlanes plane1, LocalPlanes plane2){
@@ -177,5 +162,21 @@ public class TerrainRenderer : MonoBehaviour {
 
         //Switch enemies on planes
         enemySpawner.switchEnemiesOnPlanes(plane1, plane2);
+    }
+
+    private void spawnElementsOnPlane(LocalPlanes plane, Vector3 planePos, Vector3 planeSize) {
+        //Spawn food
+        foodSpawner.spawnFoodItemsOnPlane(plane, planePos, planeSize);
+
+        //Spawn enemies
+        enemySpawner.spawnEnemiesOnPlane(plane, planePos, planeSize);
+    }
+
+    private void discardElementsOnPlane(LocalPlanes plane) {
+        //Discard food
+        foodSpawner.discardFoodOnPlane(plane);
+        
+        //Discard enemies
+        enemySpawner.discardEnemiesOnPlane(plane);
     }
 }

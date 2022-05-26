@@ -580,7 +580,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 356840619}
+  - component: {fileID: 356840621}
   - component: {fileID: 356840618}
+  - component: {fileID: 356840622}
   - component: {fileID: 356840620}
   m_Layer: 0
   m_Name: World
@@ -602,6 +604,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planePrefab: {fileID: 8527028309366844031, guid: cab9d5c1a5b1ad546adb6ec265507389, type: 3}
+  currPlane: {fileID: 0}
+  zPlane: {fileID: 0}
+  xPlane: {fileID: 0}
+  xzPlane: {fileID: 0}
+  planeSize: {x: 0, y: 0, z: 0}
 --- !u!4 &356840619
 Transform:
   m_ObjectHideFlags: 0
@@ -630,6 +637,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodPrefab: {fileID: 2531610269803719470, guid: 59e8c81697b84804c97c522ec650d262, type: 3}
   nbFoodItemsPerPlane: 50
+--- !u!114 &356840621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356840617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d101d1da0eaf0584d8bb82b0a12b472f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainRenderer: {fileID: 0}
+  enemySpawner: {fileID: 0}
+  foodSpawner: {fileID: 0}
+--- !u!114 &356840622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356840617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54199938e429a74aa98a735ee47c569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nbEnemiesPerPlane: 20
 --- !u!1 &453623734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,6 +1128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54199938e429a74aa98a735ee47c569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nbEnemiesPerPlane: 20
 --- !u!4 &1020124916
 Transform:
   m_ObjectHideFlags: 0

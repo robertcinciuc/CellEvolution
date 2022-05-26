@@ -41,3 +41,7 @@ public enum Bodies {
 public enum Characters {
     Player, OriginalEnemy
 }
+
+public enum Land {
+    Island
+}

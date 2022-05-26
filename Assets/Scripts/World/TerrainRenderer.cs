@@ -11,6 +11,7 @@ public class TerrainRenderer : MonoBehaviour {
     public Vector3 planeSize;
 
     private GameObject player;
+    private IslandSpawner islandSpawner;
     private FoodSpawner foodSpawner;
     private EnemySpawner enemySpawner;
 
@@ -46,8 +47,9 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     public void initializeTerrain() {
-        foodSpawner = this.gameObject.GetComponent<FoodSpawner>();
-        enemySpawner = this.gameObject.GetComponent<EnemySpawner>();
+        islandSpawner = gameObject.GetComponent<IslandSpawner>();
+        foodSpawner = gameObject.GetComponent<FoodSpawner>();
+        enemySpawner = gameObject.GetComponent<EnemySpawner>();
         planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
         player = GameObject.Find("Player");
 
@@ -157,6 +159,9 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void switchElementsOnPlanes(LocalPlanes plane1, LocalPlanes plane2){
+        //Switch islands on planes
+        islandSpawner.switchIslandsOnPlanes(plane1, plane2);
+        
         //Switch food on planes
         foodSpawner.switchFoodOnPlanes(plane1, plane2);
 
@@ -165,6 +170,9 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void spawnElementsOnPlane(LocalPlanes plane, Vector3 planePos, Vector3 planeSize) {
+        //Spawn islands
+        islandSpawner.spawnIslandsOnPlane(plane, planePos, planeSize);
+
         //Spawn food
         foodSpawner.spawnFoodItemsOnPlane(plane, planePos, planeSize);
 
@@ -173,6 +181,9 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void discardElementsOnPlane(LocalPlanes plane) {
+        //Discard islands
+        islandSpawner.discardIslandsOnPlane(plane);
+        
         //Discard food
         foodSpawner.discardFoodOnPlane(plane);
         

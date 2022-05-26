@@ -5,7 +5,9 @@ using UnityEngine;
 public class EnemyState : MonoBehaviour
 {
     public float maxHealth = 100;
+
     private float health = 100;
+    private EnemySpawner enemySpawner;
 
     void Start(){
         
@@ -14,10 +16,15 @@ public class EnemyState : MonoBehaviour
     void Update(){
         
     }
+
+    public void setEnemySpawner(EnemySpawner enemySpawner) {
+        this.enemySpawner = enemySpawner;
+    }
+
     public void takeDamage(float damage, System.Enum source) {
         if (health - damage <= 0) {
             health = 0;
-            EnemySpawner.deleteEnemy(gameObject.GetInstanceID());
+            enemySpawner.deleteEnemy(gameObject.GetInstanceID());
 
             if (Characters.Player.Equals(source)) {
                 ProgressionData.nbEnemiesKilled++;

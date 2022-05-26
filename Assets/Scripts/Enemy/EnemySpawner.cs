@@ -4,16 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour {
-    public static int nbEnemiesPerPlane = 20;
-    public static Dictionary<LocalPlanes, Dictionary<int, GameObject>> planeEnemies;
+    
+    public int nbEnemiesPerPlane = 20;
+    public Dictionary<LocalPlanes, Dictionary<int, GameObject>> planeEnemies;
 
-    private static GameObject enemyBodyPrefab;
-    private static GameObject enemyMouthPrefab;
-    private static GameObject enemyFlagellaPrefab;
-    private static GameObject enemySpikePrefab;
-    private static Dictionary<LocalPlanes, bool> planeEnemyStatus;
+    private GameObject enemyBodyPrefab;
+    private GameObject enemyMouthPrefab; 
+    private GameObject enemyFlagellaPrefab;
+    private GameObject enemySpikePrefab;
+    private Dictionary<LocalPlanes, bool> planeEnemyStatus;
+    private TerrainRenderer terrainRenderer;
 
     void Start() {
+        terrainRenderer = gameObject.GetComponent<TerrainRenderer>();
+
         enemyBodyPrefab = (GameObject)Resources.Load("Prefabs/Body", typeof(GameObject));
         enemyMouthPrefab = (GameObject)Resources.Load("Prefabs/Mouth", typeof(GameObject));
         enemyFlagellaPrefab = (GameObject)Resources.Load("Prefabs/Flagella", typeof(GameObject));
@@ -26,7 +30,7 @@ public class EnemySpawner : MonoBehaviour {
 
     }
 
-    public static void spawnEnemiesOnPlane(LocalPlanes plane, Vector3 planeCoord, Vector3 planeSize) {
+    public void spawnEnemiesOnPlane(LocalPlanes plane, Vector3 planeCoord, Vector3 planeSize) {
         if (planeEnemyStatus[plane] == true) {
             return;
         }
@@ -47,7 +51,7 @@ public class EnemySpawner : MonoBehaviour {
         }
     }
 
-    public static void discardEnemiesOnPlane(LocalPlanes plane) {
+    public void discardEnemiesOnPlane(LocalPlanes plane) {
         planeEnemyStatus[plane] = false;
 
         foreach (KeyValuePair<int, GameObject> enemyEntry in planeEnemies[plane]) {
@@ -57,19 +61,19 @@ public class EnemySpawner : MonoBehaviour {
 
     }
 
-    public static void switchEnemiesOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {
+    public void switchEnemiesOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {
         Dictionary<int, GameObject> tempEnemyEntry = planeEnemies[plane1];
         planeEnemies[plane1] = planeEnemies[plane2];
         planeEnemies[plane2] = tempEnemyEntry;
     }
 
-    public static void moveEnemyToPlane(int enemyID, LocalPlanes sourcePlane, LocalPlanes targetPlane) {
+    public void moveEnemyToPlane(int enemyID, LocalPlanes sourcePlane, LocalPlanes targetPlane) {
         GameObject tempEnemy = planeEnemies[sourcePlane][enemyID];
         planeEnemies[sourcePlane].Remove(enemyID);
         planeEnemies[targetPlane].Add(enemyID, tempEnemy);
     }
 
-    public static void deleteEnemy(int enemyID) {
+    public void deleteEnemy(int enemyID) {
         foreach(KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> enemyEntry in planeEnemies){
             if (enemyEntry.Value.ContainsKey(enemyID)) {
                 GameObject tempObj = planeEnemies[enemyEntry.Key][enemyID];
@@ -79,7 +83,7 @@ public class EnemySpawner : MonoBehaviour {
         }
     }
 
-    private static void initializeDictionaries() {
+    private void initializeDictionaries() {
         planeEnemyStatus = new Dictionary<LocalPlanes, bool>();
         planeEnemyStatus.Add(LocalPlanes.CURRENT_PLANE, false);
         planeEnemyStatus.Add(LocalPlanes.X_PLANE, false);
@@ -93,7 +97,7 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemies.Add(LocalPlanes.XZ_PLANE, new Dictionary<int, GameObject>());
     }
 
-    private static GameObject instantiateEnemy(float xPos, float yPos, float zPos, LocalPlanes localPlane, Vector3 localPlaneCoord) {
+    private GameObject instantiateEnemy(float xPos, float yPos, float zPos, LocalPlanes localPlane, Vector3 localPlaneCoord) {
 
         GameObject enemy = new GameObject();
         enemy.name = Enemies.OG_ENEMY.ToString();
@@ -120,8 +124,15 @@ public class EnemySpawner : MonoBehaviour {
 
         enemy.transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
         enemy.AddComponent<Rigidbody>();
-        enemy.AddComponent<EnemyBoundChecker>().setLocalPlane(localPlane, localPlaneCoord);
-        enemy.AddComponent<EnemyState>();
+
+        EnemyBoundChecker enemyBoundChecker = enemy.AddComponent<EnemyBoundChecker>();
+        enemyBoundChecker.setLocalPlane(localPlane, localPlaneCoord);
+        enemyBoundChecker.setTerrainRenderer(terrainRenderer);
+        enemyBoundChecker.setEnemySpawner(this);
+        
+        EnemyState enemyState = enemy.AddComponent<EnemyState>();
+        enemyState.setEnemySpawner(this);
+
         enemy.AddComponent<EnemyMovement>();
 
         enemyHealthBar.transform.Find("Canvas").Find("EnemyHealthBar").GetComponent<EnemyHealthBar>().setMaxHealth(100f);

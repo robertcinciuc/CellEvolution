@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBoundChecker : MonoBehaviour
-{
+public class EnemyBoundChecker : MonoBehaviour {
 
     private Vector3 planeSize;
     private Dictionary<LocalPlanes, Vector3> planes;
     private GameObject parent;
     private LocalPlanes localPlane;
     private Vector3 localPlaneCoord;
+    private TerrainRenderer terrainRenderer;
+    private EnemySpawner enemySpawner;
 
     void Start(){
         parent = gameObject;
-        planeSize = TerrainRenderer.planeSize;
-        planes = new Dictionary<LocalPlanes, Vector3>();
-        planes.Add(LocalPlanes.CURRENT_PLANE, TerrainRenderer.currPlane.transform.position);
-        planes.Add(LocalPlanes.X_PLANE, TerrainRenderer.xPlane.transform.position);
-        planes.Add(LocalPlanes.Z_PLANE, TerrainRenderer.zPlane.transform.position);
-        planes.Add(LocalPlanes.XZ_PLANE, TerrainRenderer.xzPlane.transform.position);
     }
 
     void Update(){
@@ -29,11 +24,25 @@ public class EnemyBoundChecker : MonoBehaviour
         this.localPlaneCoord = localPlaneCoord;
     }
 
+    public void setTerrainRenderer(TerrainRenderer terrainRenderer) {
+        this.terrainRenderer = terrainRenderer;
+        planeSize = terrainRenderer.planeSize;
+        planes = new Dictionary<LocalPlanes, Vector3>();
+        planes.Add(LocalPlanes.CURRENT_PLANE, terrainRenderer.currPlane.transform.position);
+        planes.Add(LocalPlanes.X_PLANE, terrainRenderer.xPlane.transform.position);
+        planes.Add(LocalPlanes.Z_PLANE, terrainRenderer.zPlane.transform.position);
+        planes.Add(LocalPlanes.XZ_PLANE, terrainRenderer.xzPlane.transform.position);
+    }
+
+    public void setEnemySpawner(EnemySpawner enemySpawner) {
+        this.enemySpawner = enemySpawner;
+    }
+
     private void FixedUpdate() {
-        planes[LocalPlanes.CURRENT_PLANE] = TerrainRenderer.currPlane.transform.position;
-        planes[LocalPlanes.X_PLANE] = TerrainRenderer.xPlane.transform.position;
-        planes[LocalPlanes.Z_PLANE] = TerrainRenderer.zPlane.transform.position;
-        planes[LocalPlanes.XZ_PLANE] = TerrainRenderer.xzPlane.transform.position;
+        planes[LocalPlanes.CURRENT_PLANE] = terrainRenderer.currPlane.transform.position;
+        planes[LocalPlanes.X_PLANE] = terrainRenderer.xPlane.transform.position;
+        planes[LocalPlanes.Z_PLANE] = terrainRenderer.zPlane.transform.position;
+        planes[LocalPlanes.XZ_PLANE] = terrainRenderer.xzPlane.transform.position;
 
         updateLocalPlane();
 
@@ -93,7 +102,7 @@ public class EnemyBoundChecker : MonoBehaviour
 
         //Destroy enemy if outside the total plane or switch enemy between planes when crossing their border
         if (isInsidePlane(parent.transform.position, totalPlaneMidPoint, totalPlaneSize) == Positions.OUTSIDE) {
-            EnemySpawner.deleteEnemy(parent.GetInstanceID());
+            enemySpawner.deleteEnemy(parent.GetInstanceID());
         } else {
             Positions objAgainstLocalPlane = getPosAgainstPlane(parent.transform.position, localPlaneCoord, planeSize);
 
@@ -113,16 +122,16 @@ public class EnemyBoundChecker : MonoBehaviour
                 targetPlane = LocalPlanes.XZ_PLANE;
             }
 
-            EnemySpawner.moveEnemyToPlane(parent.GetInstanceID(), localPlane, targetPlane);
+            enemySpawner.moveEnemyToPlane(parent.GetInstanceID(), localPlane, targetPlane);
             setLocalPlane(targetPlane, planes[targetPlane]);
         }
     }
 
     private void updateLocalPlane() {
-        foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEntry in EnemySpawner.planeEnemies) {
+        foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEntry in enemySpawner.planeEnemies) {
             if (planeEntry.Value.ContainsKey(parent.GetInstanceID())) {
                 localPlane = planeEntry.Key;
-                localPlaneCoord = TerrainRenderer.getPlaneObject(localPlane).transform.position;
+                localPlaneCoord = terrainRenderer.getPlaneObject(localPlane).transform.position;
             }
         }
     }

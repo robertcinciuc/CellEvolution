@@ -13,12 +13,12 @@ public class EnemyBoundChecker : MonoBehaviour
 
     void Start(){
         parent = gameObject;
-        planeSize = WorldPlaneRenderer.planeSize;
+        planeSize = TerrainRenderer.planeSize;
         planes = new Dictionary<LocalPlanes, Vector3>();
-        planes.Add(LocalPlanes.CURRENT_PLANE, WorldPlaneRenderer.currPlane.transform.position);
-        planes.Add(LocalPlanes.X_PLANE, WorldPlaneRenderer.xPlane.transform.position);
-        planes.Add(LocalPlanes.Z_PLANE, WorldPlaneRenderer.zPlane.transform.position);
-        planes.Add(LocalPlanes.XZ_PLANE, WorldPlaneRenderer.xzPlane.transform.position);
+        planes.Add(LocalPlanes.CURRENT_PLANE, TerrainRenderer.currPlane.transform.position);
+        planes.Add(LocalPlanes.X_PLANE, TerrainRenderer.xPlane.transform.position);
+        planes.Add(LocalPlanes.Z_PLANE, TerrainRenderer.zPlane.transform.position);
+        planes.Add(LocalPlanes.XZ_PLANE, TerrainRenderer.xzPlane.transform.position);
     }
 
     void Update(){
@@ -30,10 +30,10 @@ public class EnemyBoundChecker : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        planes[LocalPlanes.CURRENT_PLANE] = WorldPlaneRenderer.currPlane.transform.position;
-        planes[LocalPlanes.X_PLANE] = WorldPlaneRenderer.xPlane.transform.position;
-        planes[LocalPlanes.Z_PLANE] = WorldPlaneRenderer.zPlane.transform.position;
-        planes[LocalPlanes.XZ_PLANE] = WorldPlaneRenderer.xzPlane.transform.position;
+        planes[LocalPlanes.CURRENT_PLANE] = TerrainRenderer.currPlane.transform.position;
+        planes[LocalPlanes.X_PLANE] = TerrainRenderer.xPlane.transform.position;
+        planes[LocalPlanes.Z_PLANE] = TerrainRenderer.zPlane.transform.position;
+        planes[LocalPlanes.XZ_PLANE] = TerrainRenderer.xzPlane.transform.position;
 
         updateLocalPlane();
 
@@ -122,7 +122,7 @@ public class EnemyBoundChecker : MonoBehaviour
         foreach (KeyValuePair<LocalPlanes, Dictionary<int, GameObject>> planeEntry in EnemySpawner.planeEnemies) {
             if (planeEntry.Value.ContainsKey(parent.GetInstanceID())) {
                 localPlane = planeEntry.Key;
-                localPlaneCoord = WorldPlaneRenderer.getPlaneObject(localPlane).transform.position;
+                localPlaneCoord = TerrainRenderer.getPlaneObject(localPlane).transform.position;
             }
         }
     }

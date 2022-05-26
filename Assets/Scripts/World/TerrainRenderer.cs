@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldPlaneRenderer : MonoBehaviour
+public class TerrainRenderer : MonoBehaviour
 {
 
     public GameObject planePrefab;

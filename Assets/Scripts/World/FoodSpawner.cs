@@ -7,12 +7,10 @@ public class FoodSpawner : MonoBehaviour
     public GameObject foodPrefab;
     public int nbFoodItemsPerPlane = 50;
 
-    //private WorldPlaneRenderer worldPlaneRenderer;
     private Dictionary<LocalPlanes, bool> planeFedStatus;
     private Dictionary<LocalPlanes, List<GameObject>> planeFood;
 
     void Start(){
-        //worldPlaneRenderer = gameObject.GetComponent<WorldPlaneRenderer>();
         initializeDictionaries();
     }
 

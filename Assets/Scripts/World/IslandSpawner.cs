@@ -9,8 +9,8 @@ public class IslandSpawner : MonoBehaviour {
 
     private Dictionary<LocalPlanes, bool> islandsSpawned;
     private Dictionary<LocalPlanes, List<GameObject>> planeIslands;
-    private float creationThreshold = 2 * 0.92f;
-    private int scaleRange = 20;
+    private float creationThreshold = 2 * 0.94f;
+    private int scaleMax = 20;
     private TerrainRenderer terrainRenderer;
 
     void Start(){
@@ -115,7 +115,7 @@ public class IslandSpawner : MonoBehaviour {
                     //Add new island on this condition + generate rest of its data
                     if (randomI + randomJ > creationThreshold) {
                         Random.InitState(2 * i + 2 * j);
-                        int scale = Random.Range(1, scaleRange);
+                        int scale = Random.Range(5, scaleMax);
                         System.Guid islandId = System.Guid.NewGuid();
                         SerialIsland serialIsland = new SerialIsland(new Vector3(i, 0, j), scale, islandId);
 

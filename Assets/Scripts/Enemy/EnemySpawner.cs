@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour {
                 Debug.Log("s");
             }
 
-            if(!islandSpawner.planeGridsWithLand[plane][xPosInGrid, zPosInGrid]) {
+            if(!islandSpawner.planeLandGrid[plane][xPosInGrid, zPosInGrid]) {
                 GameObject enemy = instantiateEnemy(xPos, yPos, zPos, plane, planeCoord);
                 planeEnemies[plane].Add(enemy.GetInstanceID(), enemy);
             }

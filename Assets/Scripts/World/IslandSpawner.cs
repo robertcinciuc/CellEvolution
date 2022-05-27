@@ -5,7 +5,7 @@ using UnityEngine;
 public class IslandSpawner : MonoBehaviour {
 
     public int gridPrecision = 2;
-    public Dictionary<LocalPlanes, bool[,]> planeGridsWithLand;
+    public Dictionary<LocalPlanes, bool[,]> planeLandGrid;
 
     private Dictionary<LocalPlanes, bool> islandsSpawned;
     private Dictionary<LocalPlanes, List<GameObject>> planeIslands;
@@ -39,13 +39,13 @@ public class IslandSpawner : MonoBehaviour {
         //Initialize grid with no land on plane
         int gridSizeX = Mathf.FloorToInt(terrainRenderer.planeSize.x) / gridPrecision;
         int gridSizeZ = Mathf.FloorToInt(terrainRenderer.planeSize.z) / gridPrecision;
-        planeGridsWithLand = new Dictionary<LocalPlanes, bool[,]>();
-        planeGridsWithLand.Add(LocalPlanes.CURRENT_PLANE, new bool[gridSizeX, gridSizeZ]);
-        planeGridsWithLand.Add(LocalPlanes.X_PLANE, new bool[gridSizeX, gridSizeZ]);
-        planeGridsWithLand.Add(LocalPlanes.Z_PLANE, new bool[gridSizeX, gridSizeZ]);
-        planeGridsWithLand.Add(LocalPlanes.XZ_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeLandGrid = new Dictionary<LocalPlanes, bool[,]>();
+        planeLandGrid.Add(LocalPlanes.CURRENT_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeLandGrid.Add(LocalPlanes.X_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeLandGrid.Add(LocalPlanes.Z_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeLandGrid.Add(LocalPlanes.XZ_PLANE, new bool[gridSizeX, gridSizeZ]);
         
-        foreach(KeyValuePair<LocalPlanes, bool[,]> entry in planeGridsWithLand) {
+        foreach(KeyValuePair<LocalPlanes, bool[,]> entry in planeLandGrid) {
             for (int i = 0; i < entry.Value.GetLength(0); ++i) {
                 for (int j = 0; j < entry.Value.GetLength(1); ++j) {
                     entry.Value[i, j] = false;
@@ -77,12 +77,24 @@ public class IslandSpawner : MonoBehaviour {
         foreach (GameObject island in planeIslands[plane]) {
             Destroy(island);
         }
+        planeIslands[plane].Clear();
+
+        //Clear plane land grid
+        for (int i = 0; i < planeLandGrid[plane].GetLength(0); ++i) {
+            for (int j = 0; j < planeLandGrid[plane].GetLength(1); ++j) {
+                planeLandGrid[plane][i, j] = false;
+            }
+        }
     }
 
     public void switchIslandsOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {
         List<GameObject> tempFood = planeIslands[plane1];
         planeIslands[plane1] = planeIslands[plane2];
         planeIslands[plane2] = tempFood;
+
+        bool[,] tempLandGrid = planeLandGrid[plane1];
+        planeLandGrid[plane1] = planeLandGrid[plane2];
+        planeLandGrid[plane2] = tempLandGrid;
     }
 
     private List<SerialIsland> computeIslandData(Vector3 planeCoord, Vector3 planeSize) {
@@ -121,14 +133,15 @@ public class IslandSpawner : MonoBehaviour {
         int planeSizeZInGrid = (int)planeSize.z / gridPrecision;
         int centerXInGrid = (int)(islandCenter.x - Mathf.CeilToInt(planeCoord.x - planeSize.x / 2))/gridPrecision;
         int centerZInGrid = (int)(islandCenter.z - Mathf.CeilToInt(planeCoord.z - planeSize.z / 2))/gridPrecision;
-        int leftXInGrid = Mathf.Max(centerXInGrid - scale / 2, 0);
-        int rightXInGrid = Mathf.Min(centerXInGrid + scale / 2, planeSizeXInGrid);
-        int botZInGrid = Mathf.Max(centerZInGrid - scale / 2, 0);
-        int topZInGrid = Mathf.Min(centerZInGrid + scale / 2, planeSizeZInGrid);
+        float subjectiveScaleFactor = 1.5f;
+        int leftXInGrid = Mathf.Max(centerXInGrid - scale / (int)(2 * subjectiveScaleFactor) , 0);
+        int rightXInGrid = Mathf.Min(centerXInGrid + scale / (int)(2 * subjectiveScaleFactor), planeSizeXInGrid);
+        int botZInGrid = Mathf.Max(centerZInGrid - scale / (int)(2 * subjectiveScaleFactor), 0);
+        int topZInGrid = Mathf.Min(centerZInGrid + scale / (int)(2 * subjectiveScaleFactor), planeSizeZInGrid);
 
         for (int i = leftXInGrid; i < rightXInGrid; ++i) {
             for (int j = botZInGrid; j < topZInGrid; ++j) {
-                planeGridsWithLand[plane][i, j] = true;
+                planeLandGrid[plane][i, j] = true;
             }
         }
     }

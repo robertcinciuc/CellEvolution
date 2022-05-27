@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class IslandSpawner : MonoBehaviour {
 
-    public bool[,] gridWithLand; 
+    public int gridPrecision = 2;
+    public Dictionary<LocalPlanes, bool[,]> planeGridsWithLand;
 
     private Dictionary<LocalPlanes, bool> islandsSpawned;
     private Dictionary<LocalPlanes, List<GameObject>> planeIslands;
     private float creationThreshold = 2 * 0.92f;
     private int scaleRange = 20;
-    private int gridPrecision = 2;
     private TerrainRenderer terrainRenderer;
 
     void Start(){
@@ -37,12 +37,22 @@ public class IslandSpawner : MonoBehaviour {
         planeIslands.Add(LocalPlanes.XZ_PLANE, new List<GameObject>());
 
         //Initialize grid with no land on plane
-        gridWithLand = new bool[Mathf.FloorToInt(terrainRenderer.planeSize.x) / gridPrecision, Mathf.FloorToInt(terrainRenderer.planeSize.z) / gridPrecision];
-        for (int i = 0; i < gridWithLand.GetLength(0); ++i) {
-            for (int j = 0; j < gridWithLand.GetLength(1); ++j) {
-                gridWithLand[i, j] = false;
+        int gridSizeX = Mathf.FloorToInt(terrainRenderer.planeSize.x) / gridPrecision;
+        int gridSizeZ = Mathf.FloorToInt(terrainRenderer.planeSize.z) / gridPrecision;
+        planeGridsWithLand = new Dictionary<LocalPlanes, bool[,]>();
+        planeGridsWithLand.Add(LocalPlanes.CURRENT_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeGridsWithLand.Add(LocalPlanes.X_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeGridsWithLand.Add(LocalPlanes.Z_PLANE, new bool[gridSizeX, gridSizeZ]);
+        planeGridsWithLand.Add(LocalPlanes.XZ_PLANE, new bool[gridSizeX, gridSizeZ]);
+        
+        foreach(KeyValuePair<LocalPlanes, bool[,]> entry in planeGridsWithLand) {
+            for (int i = 0; i < entry.Value.GetLength(0); ++i) {
+                for (int j = 0; j < entry.Value.GetLength(1); ++j) {
+                    entry.Value[i, j] = false;
+                }
             }
-        }
+        }        
+
     }
 
     public void spawnIslandsOnPlane(LocalPlanes plane, Vector3 planeCoord, Vector3 planeSize) {
@@ -56,7 +66,7 @@ public class IslandSpawner : MonoBehaviour {
             island.transform.localScale = new Vector3(serialIsland.scale, island.transform.localScale.y, serialIsland.scale);
 
             planeIslands[plane].Add(island);
-            markGridSpaceTakenByIsland(serialIsland.pos, serialIsland.scale, planeCoord, planeSize);
+            markGridSpaceTakenByIsland(serialIsland.pos, serialIsland.scale, plane, planeCoord, planeSize);
         }
         islandsSpawned[plane] = true;
     }
@@ -68,6 +78,7 @@ public class IslandSpawner : MonoBehaviour {
             Destroy(island);
         }
     }
+
     public void switchIslandsOnPlanes(LocalPlanes plane1, LocalPlanes plane2) {
         List<GameObject> tempFood = planeIslands[plane1];
         planeIslands[plane1] = planeIslands[plane2];
@@ -105,7 +116,7 @@ public class IslandSpawner : MonoBehaviour {
         return serialIslands;
     }
 
-    private void markGridSpaceTakenByIsland(Vector3 islandCenter, int scale, Vector3 planeCoord, Vector3 planeSize) {
+    private void markGridSpaceTakenByIsland(Vector3 islandCenter, int scale, LocalPlanes plane, Vector3 planeCoord, Vector3 planeSize) {
         int planeSizeXInGrid = (int)planeSize.x / gridPrecision;
         int planeSizeZInGrid = (int)planeSize.z / gridPrecision;
         int centerXInGrid = (int)(islandCenter.x - Mathf.CeilToInt(planeCoord.x - planeSize.x / 2))/gridPrecision;
@@ -117,7 +128,7 @@ public class IslandSpawner : MonoBehaviour {
 
         for (int i = leftXInGrid; i < rightXInGrid; ++i) {
             for (int j = botZInGrid; j < topZInGrid; ++j) {
-                gridWithLand[i, j] = true;
+                planeGridsWithLand[plane][i, j] = true;
             }
         }
     }

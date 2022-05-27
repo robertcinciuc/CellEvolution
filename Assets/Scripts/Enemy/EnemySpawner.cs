@@ -37,13 +37,22 @@ public class EnemySpawner : MonoBehaviour {
             float yPos = 0.2f;
             float zPos = planeCoord.z + signs[zSign] * Random.Range(0, planeSize.z / 2);
 
-            //TODO: add if checking the state of the grid of island spawner
+            //Checking if spawn position is not occupied by land
+            int xPosInt = Mathf.FloorToInt(xPos);
+            int zPosInt = Mathf.FloorToInt(zPos);
+            int xPosInGrid = (int)(xPosInt - Mathf.CeilToInt(planeCoord.x - planeSize.x / 2)) / islandSpawner.gridPrecision;
+            int zPosInGrid = (int)(zPosInt - Mathf.CeilToInt(planeCoord.z - planeSize.z / 2)) / islandSpawner.gridPrecision;
 
-            GameObject enemy = instantiateEnemy(xPos, yPos, zPos, plane, planeCoord);
+            if (xPosInGrid < 0 || xPosInGrid >= 50 || zPosInGrid < 0 || zPosInGrid >= 50) {
+                Debug.Log("s");
+            }
 
-            planeEnemies[plane].Add(enemy.GetInstanceID(), enemy);
-            planeEnemyStatus[plane] = true;
+            if(!islandSpawner.planeGridsWithLand[plane][xPosInGrid, zPosInGrid]) {
+                GameObject enemy = instantiateEnemy(xPos, yPos, zPos, plane, planeCoord);
+                planeEnemies[plane].Add(enemy.GetInstanceID(), enemy);
+            }
         }
+        planeEnemyStatus[plane] = true;
     }
 
     public void discardEnemiesOnPlane(LocalPlanes plane) {

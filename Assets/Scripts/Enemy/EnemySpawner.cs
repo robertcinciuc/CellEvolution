@@ -115,7 +115,7 @@ public class EnemySpawner : MonoBehaviour {
         enemy.name = Enemies.OG_ENEMY.ToString();
         enemy.transform.position = new Vector3(xPos, yPos, zPos);
 
-        GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), new Quaternion(0.71f, 0, 0.71f, 0));
+        GameObject enemyBody = Instantiate(enemyBodyPrefab, new Vector3(xPos, yPos, zPos), Quaternion.identity);
         GameObject enemyMouth = Instantiate(enemyMouthPrefab, new Vector3(xPos, yPos, zPos + 1f), Quaternion.identity);
         GameObject enemyFlagella = Instantiate(enemyFlagellaPrefab, new Vector3(xPos, yPos, zPos - 0.7f), Quaternion.identity);
         GameObject enemySpike = Instantiate(enemySpikePrefab, new Vector3(xPos, yPos, zPos + 2f), Quaternion.identity);

@@ -31,9 +31,6 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveVector = this.transform.TransformDirection(movement) * playerSpeed;
         rigidBody.velocity = new Vector3(moveVector.x, rigidBody.velocity.y, moveVector.z);
-
-        //rb.MovePosition(this.transform.position + movement * Time.deltaTime * 10);
-
     }
 
     private void rotatePlayer() {

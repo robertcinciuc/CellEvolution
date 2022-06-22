@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         translatePlayerToMouse();
-        rotatePlayer();
+        rotateOnForwardMovement();
     }
 
     private void translatePlayerToMouse() {
@@ -40,6 +40,12 @@ public class PlayerMovement : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
 
         rigidBody.rotation = Quaternion.Slerp(rigidBody.transform.rotation, rotation, 7 * Time.deltaTime);
+    }
+
+    private void rotateOnForwardMovement(){
+        if (Input.GetKey(KeyCode.W)) {
+            rotatePlayer();
+        }
     }
 
     private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {

@@ -52,7 +52,6 @@ public class IslandSpawner : MonoBehaviour {
                 }
             }
         }        
-
     }
 
     public void spawnIslandsOnPlane(LocalPlanes plane, Vector3 planeCoord, Vector3 planeSize) {
@@ -95,6 +94,21 @@ public class IslandSpawner : MonoBehaviour {
         bool[,] tempLandGrid = planeLandGrid[plane1];
         planeLandGrid[plane1] = planeLandGrid[plane2];
         planeLandGrid[plane2] = tempLandGrid;
+    }
+
+    public void resetGridsOnPlanes() {
+        islandsSpawned[LocalPlanes.CURRENT_PLANE] = false;
+        islandsSpawned[LocalPlanes.X_PLANE] = false;
+        islandsSpawned[LocalPlanes.Z_PLANE] = false;
+        islandsSpawned[LocalPlanes.XZ_PLANE] = false;
+
+        foreach (KeyValuePair<LocalPlanes, bool[,]> entry in planeLandGrid) {
+            for (int i = 0; i < entry.Value.GetLength(0); ++i) {
+                for (int j = 0; j < entry.Value.GetLength(1); ++j) {
+                    entry.Value[i, j] = false;
+                }
+            }
+        }
     }
 
     private List<SerialIsland> computeIslandData(Vector3 planeCoord, Vector3 planeSize) {

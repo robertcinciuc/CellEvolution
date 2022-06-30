@@ -711,6 +711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionData: {fileID: 453623737}
+  terrainRenderer: {fileID: 356840618}
 --- !u!4 &453623736
 Transform:
   m_ObjectHideFlags: 0
@@ -739,6 +740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBodyStructure: {fileID: 1887967016}
   playerState: {fileID: 1887967015}
+  player: {fileID: 0}
 --- !u!1 &602796631
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using System.IO;
 public class DataSerializer : MonoBehaviour
 {
 	public ProgressionData progressionData;
+	public TerrainRenderer terrainRenderer;
 
 	public void SaveGame() {
         BinaryFormatter bf = new BinaryFormatter();
@@ -25,7 +26,11 @@ public class DataSerializer : MonoBehaviour
 			FileStream file = File.Open(Application.persistentDataPath + "/MySaveData.dat", FileMode.Open);
 			DataPacket data = (DataPacket)bf.Deserialize(file);
 			file.Close();
+
+			Vector3 playerPos = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
+			terrainRenderer.renderCurrentPlane(playerPos);
 			progressionData.loadFromDataPacket(data);
+
 			Debug.Log("Game data loaded!");
 		} else {
 			Debug.LogError("There is no save data!");

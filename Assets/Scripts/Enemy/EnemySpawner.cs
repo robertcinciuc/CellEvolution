@@ -109,6 +109,13 @@ public class EnemySpawner : MonoBehaviour {
         planeEnemies.Add(LocalPlanes.XZ_PLANE, new Dictionary<int, GameObject>());
     }
 
+    public void resetPlaneEnemyStatus() {
+        planeEnemyStatus[LocalPlanes.CURRENT_PLANE] = false;
+        planeEnemyStatus[LocalPlanes.X_PLANE] = false;
+        planeEnemyStatus[LocalPlanes.Z_PLANE] = false;
+        planeEnemyStatus[LocalPlanes.XZ_PLANE] = false;
+    }
+
     private GameObject instantiateEnemy(float xPos, float yPos, float zPos, LocalPlanes localPlane, Vector3 localPlaneCoord) {
 
         GameObject enemy = new GameObject();

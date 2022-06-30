@@ -53,11 +53,21 @@ public class TerrainRenderer : MonoBehaviour {
         planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
         player = GameObject.Find("Player");
 
-
         currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
         xPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, 0), Quaternion.identity);
         zPlane = Instantiate(planePrefab, new Vector3(0, 0, planeSize.z), Quaternion.identity);
         xzPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, planeSize.z), Quaternion.identity);
+    }
+
+    public void renderCurrentPlane(Vector3 playerPos) {
+        float currXFactor = Mathf.Ceil(playerPos.x / (planeSize.x / 2));
+        float currZFactor = Mathf.Ceil(playerPos.z / (planeSize.z / 2));
+
+        currPlane.transform.position = new Vector3(currXFactor * planeSize.x/2, 0, currZFactor * planeSize.z/2);
+        islandSpawner.resetGridsOnPlanes();
+        enemySpawner.resetPlaneEnemyStatus();
+        foodSpawner.resetFedStatus();
+        spawnElementsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
     }
 
     private void renderXPlane() {

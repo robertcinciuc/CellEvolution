@@ -70,4 +70,11 @@ public class FoodSpawner : MonoBehaviour {
         planeFood.Add(LocalPlanes.Z_PLANE, new List<GameObject>());
         planeFood.Add(LocalPlanes.XZ_PLANE, new List<GameObject>());
     }
+
+    public void resetFedStatus() {
+        planeFedStatus[LocalPlanes.CURRENT_PLANE] = false;
+        planeFedStatus[LocalPlanes.X_PLANE] = false;
+        planeFedStatus[LocalPlanes.Z_PLANE] = false;
+        planeFedStatus[LocalPlanes.XZ_PLANE] = false;
+    }
 }

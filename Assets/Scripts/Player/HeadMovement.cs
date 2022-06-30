@@ -40,12 +40,6 @@ public class HeadMovement : MonoBehaviour {
     }
 
     private void rotateToMouse2() {
-        mouseOnScreen = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        //Vector3 targetDirection = mouseOnScreen - transform.position;
-        //rigidBody.rotation = Quaternion.LookRotation(targetDirection);
-    }
-
-    private void rotateToMouse3() {
         Vector2 posOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
         Vector2 targetDirection = mouseOnScreen - posOnScreen;
@@ -55,7 +49,7 @@ public class HeadMovement : MonoBehaviour {
 
     private void rotateOnForwardMovement() {
         if (Input.GetKey(KeyCode.W)) {
-            rotateToMouse3();
+            rotateToMouse();
         }
     }
 

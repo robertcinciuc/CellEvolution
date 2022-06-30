@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75e396c51b457e438814e54c3a91a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nbSegments: 4
+  nbSegments: 1
 --- !u!4 &1446483851
 Transform:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047857240}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c7389ff28b685b44d9d241c063424b68, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4

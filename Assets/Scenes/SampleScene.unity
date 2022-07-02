@@ -650,10 +650,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d101d1da0eaf0584d8bb82b0a12b472f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainRenderer: {fileID: 0}
-  enemySpawner: {fileID: 0}
-  foodSpawner: {fileID: 0}
-  islandSpawner: {fileID: 0}
+  terrainRenderer: {fileID: 356840618}
+  enemySpawner: {fileID: 356840622}
+  foodSpawner: {fileID: 356840620}
+  islandSpawner: {fileID: 356840623}
+  playerBodyStructure: {fileID: 1887967016}
+  upgradeMenuLogic: {fileID: 1840963401}
 --- !u!114 &356840622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,7 +742,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBodyStructure: {fileID: 1887967016}
   playerState: {fileID: 1887967015}
-  player: {fileID: 0}
+  player: {fileID: 1887967008}
+  upgradeMenuLogic: {fileID: 1840963401}
 --- !u!1 &602796631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,6 +1522,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740613917b1f81340a2c151f4c9f6fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1887967008}
+  upgradeMenuCamera: {fileID: 602796634}
+  upgradeMenuPlane: {fileID: 316695760}
 --- !u!1 &1853383287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1634,6 +1640,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b7976e810479e43ab5cf6161409006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeMenuLogic: {fileID: 1840963401}
+  upgradeMenuCameraState: {fileID: 602796635}
 --- !u!1 &1887967008
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class UpgradeMenuCameraState : MonoBehaviour
     public float cameraYOffset = 30; 
 
     private Vector3 cameraPosition;
-    private static Camera thisCamera;
+    private Camera thisCamera;
 
     void Start() {
         thisCamera = GetComponent<Camera>();
@@ -19,12 +19,12 @@ public class UpgradeMenuCameraState : MonoBehaviour
         transform.position = cameraPosition;
     }
 
-    public static void setActive() {
+    public void setActive() {
         thisCamera.GetComponent<AudioListener>().enabled = true;
         thisCamera.enabled = true;
     }
 
-    public static void setInactive() {
+    public void setInactive() {
         thisCamera.GetComponent<AudioListener>().enabled = false;
         thisCamera.enabled = false;
     }

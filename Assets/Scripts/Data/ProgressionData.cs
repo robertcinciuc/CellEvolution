@@ -9,9 +9,9 @@ public class ProgressionData : MonoBehaviour
 	public PlayerBodyStructure playerBodyStructure;
 	public PlayerState playerState;
 	public GameObject player;
+	public UpgradeMenuLogic upgradeMenuLogic;
 
     private void Start() {
-        player = playerBodyStructure.gameObject;
     }
 
     public DataPacket buildDatapacketForStoring() {
@@ -37,7 +37,7 @@ public class ProgressionData : MonoBehaviour
 		nbMeatsEaten = data.nbMeatsEaten;
 		playerState.sethealth(data.health);
 		playerBodyStructure.addAllOrgans(data.playerSerialOrgans);
-		UpgradeMenuLogic.playerFigureInstantiated = false;
+		upgradeMenuLogic.renderPlayerFigure();
 
 		player.transform.position = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
 		player.transform.rotation = Quaternion.Slerp(

@@ -9,6 +9,7 @@ public class ClickableOrgan : MonoBehaviour
     public System.Type organType;
     public GameObject organ;
     public Camera upgradeMenuCamera;
+    public UpgradeMenuLogic upgradeMenuLogic;
 
     private bool clickPressedOnOrgan = false;
     private bool endDragable = false;
@@ -63,7 +64,7 @@ public class ClickableOrgan : MonoBehaviour
 
             //Create new organ at the initial spot
             string organName = organ.GetComponent<Organ>().organName;
-            UpgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
+            upgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
 
 
             endDragable = false;

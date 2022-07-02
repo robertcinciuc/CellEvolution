@@ -8,17 +8,16 @@ public class WorldGenerator : MonoBehaviour {
     public EnemySpawner enemySpawner;
     public FoodSpawner foodSpawner;
     public IslandSpawner islandSpawner;
+    public PlayerBodyStructure playerBodyStructure;
+    public UpgradeMenuLogic upgradeMenuLogic;
 
     void Start(){
-        terrainRenderer = gameObject.GetComponent<TerrainRenderer>();
-        islandSpawner = gameObject.GetComponent<IslandSpawner>();
-        enemySpawner = gameObject.GetComponent<EnemySpawner>();
-        foodSpawner = gameObject.GetComponent<FoodSpawner>();
-
         terrainRenderer.initializeTerrain();
         islandSpawner.initializeIslandSpawner();
         enemySpawner.initializeEnemySpawner();
         foodSpawner.initializeFoodSpawner();
+        playerBodyStructure.initPlayerStructure();
+        upgradeMenuLogic.renderPlayerFigure();
 
         //Spawn elements on initial current plane
         islandSpawner.spawnIslandsOnPlane(LocalPlanes.CURRENT_PLANE, terrainRenderer.currPlane.transform.position, terrainRenderer.planeSize);

@@ -7,24 +7,21 @@ public class UpgradeMenuLogic : MonoBehaviour
     public static bool organIsDragged = false;
     public static bool attachedOrganIsDragged = false;
     public static bool playerFigureInstantiated = false;
+    public GameObject player;
+    public Camera upgradeMenuCamera;
+    public GameObject upgradeMenuPlane;
 
-    private static GameObject player;
-    private static GameObject playerFigure;
-    private static GameObject upgradeMenuPlane;
-    private static Vector3 safetyOffset = new Vector3(0, 5, 0);
-    private static GameObject playerMouth;
-    private static GameObject playerMouthClaw;
-    private static GameObject playerFlagella;
-    private static GameObject playerTwinFlagella;
-    private static GameObject playerSpike;
-    private static GameObject playerTooth;
-    private static Vector3 displayOffset = new Vector3(0, 0.5f, 0);
-    private static Camera upgradeMenuCamera;
+    private GameObject playerFigure;
+    private Vector3 safetyOffset = new Vector3(0, 5, 0);
+    private GameObject playerMouth;
+    private GameObject playerMouthClaw;
+    private GameObject playerFlagella;
+    private GameObject playerTwinFlagella;
+    private GameObject playerSpike;
+    private GameObject playerTooth;
+    private Vector3 displayOffset = new Vector3(0, 0.5f, 0);
 
     void Start(){
-        player = GameObject.Find("Player");
-        upgradeMenuCamera = GameObject.Find("UpgradeMenuCamera").GetComponent<Camera>();
-        upgradeMenuPlane = this.gameObject.transform.parent.gameObject.transform.Find("UpgradeMenuPlane").gameObject;
     }
 
     void Update(){
@@ -34,41 +31,36 @@ public class UpgradeMenuLogic : MonoBehaviour
     private void FixedUpdate() {
         
     }
-    public static void renderPlayerFigure() {
-        if (!playerFigureInstantiated) {
+    public void renderPlayerFigure() {
+        if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
+            playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
+            Destroy(playerFigure);
+        }
 
-            if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
-                playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
-            }
-
-            //Render organs
-            playerFigure = new GameObject();
-            playerFigure.name = "PlayerCopy";
-            playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-            PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+        //Render organs
+        playerFigure = new GameObject();
+        playerFigure.name = "PlayerCopy";
+        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
             
-            foreach(Transform child in player.transform) {
-                System.Type organType = child.GetComponent<Organ>().organType;
-                System.Guid organId = child.GetComponent<Organ>().id;
-                Vector3 deltaPos = child.transform.localPosition;
-                Quaternion deltaRot = child.transform.localRotation;
-                GameObject newOrgan = playerCopyBodyStructure.addOrganWithPosition(organType, child.gameObject, deltaPos, deltaRot, organId);
+        foreach(Transform child in player.transform) {
+            System.Type organType = child.GetComponent<Organ>().organType;
+            System.Guid organId = child.GetComponent<Organ>().id;
+            Vector3 deltaPos = child.transform.localPosition;
+            Quaternion deltaRot = child.transform.localRotation;
+            GameObject newOrgan = playerCopyBodyStructure.addOrganWithPosition(organType, child.gameObject, deltaPos, deltaRot, organId);
 
-
-                //Add attached organ behaviour
-                AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
-                attachedOrgan.player = player;
-                attachedOrgan.playerFigure = playerFigure;
-                attachedOrgan.parentOrgan = child.gameObject;
-                attachedOrgan.organType = child.GetComponent<Organ>().organType;
-                attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-            }
-
-            playerFigureInstantiated = true;
+            //Add attached organ behaviour
+            AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
+            attachedOrgan.player = player;
+            attachedOrgan.playerFigure = playerFigure;
+            attachedOrgan.parentOrgan = child.gameObject;
+            attachedOrgan.organType = child.GetComponent<Organ>().organType;
+            attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
         }
     }
 
-    public static void protectPlayer() {
+    public void protectPlayer() {
         //Protect original player with offsetting and immobilizing
         player.transform.position += safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = false;
@@ -76,12 +68,12 @@ public class UpgradeMenuLogic : MonoBehaviour
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
-    public static void uprotectPlayer() {
+    public void uprotectPlayer() {
         player.transform.position -= safetyOffset;
         player.GetComponent<Rigidbody>().useGravity = true;
     }
 
-    public static void instMenuOrgans() {
+    public void instMenuOrgans() {
         Vector3 displayPosition = upgradeMenuPlane.transform.position + displayOffset;
 
         playerMouth = instMenuOrgan("Prefabs/Mouth", displayPosition + new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
@@ -92,7 +84,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
     }
 
-    public static void destroyMenuBodyParts() {
+    public void destroyMenuBodyParts() {
         Destroy(playerMouth);
         Destroy(playerMouthClaw);
         Destroy(playerFlagella);
@@ -101,7 +93,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         Destroy(playerTooth);
     }
 
-    public static GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
+    public GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         GameObject organModel = organ;
         organ.name = organName;
@@ -113,6 +105,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.organType = organType;
         clickableOrgan.organ = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
+        clickableOrgan.upgradeMenuLogic = this;
 
         //Add organ component
         Organ organComponent = organ.gameObject.AddComponent<Organ>();

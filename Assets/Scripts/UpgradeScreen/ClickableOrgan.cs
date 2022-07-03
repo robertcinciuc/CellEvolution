@@ -45,14 +45,12 @@ public class ClickableOrgan : MonoBehaviour
         }
 
         if (endDragable) {
-            //Get delta pos & rot of clicked organ
-            Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
-            Quaternion deltaRot = organ.transform.rotation;
+            organ.transform.SetParent(playerFigure.transform);
 
             //Update player structures
             System.Guid organId = System.Guid.NewGuid();
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, organ, deltaPos, deltaRot, organId);
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPosition(organType, organ, deltaPos, deltaRot, organId);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, organId);
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();

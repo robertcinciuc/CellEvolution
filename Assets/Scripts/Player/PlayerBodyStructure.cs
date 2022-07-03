@@ -23,12 +23,12 @@ public class PlayerBodyStructure : MonoBehaviour
             Destroy(organToRemove);
         }
     }
-
-    public GameObject addOrganWithPosition(System.Type organType, GameObject organ, Vector3 posDelta, Quaternion rotDelta, System.Guid organId) {
+    
+    public GameObject addOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
         newOrgan.transform.SetParent(this.gameObject.transform);
-        newOrgan.transform.localPosition = posDelta;
-        newOrgan.transform.localRotation = rotDelta;
+        newOrgan.transform.localPosition = organ.transform.localPosition;
+        newOrgan.transform.localRotation = organ.transform.localRotation;
 
         //Update organ component
         Organ organComponent = newOrgan.GetComponent<Organ>();
@@ -87,9 +87,9 @@ public class PlayerBodyStructure : MonoBehaviour
             SerialOrgan serialOrgan = new SerialOrgan(organ);
             organComponent.serialOrgan = serialOrgan;
 
-            Vector3 organLocalPos = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
+            organ.transform.localPosition = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
             organ.transform.localRotation = new Quaternion(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ, entry.Value.localRotW);
-            addOrganWithPosition(entry.Value.organType, organ, organLocalPos, organ.transform.rotation, entry.Key);
+            addOrganWithPos(entry.Value.organType, organ, entry.Key);
             Destroy(organ);
         }
     }

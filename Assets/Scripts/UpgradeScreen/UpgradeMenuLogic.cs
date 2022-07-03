@@ -46,9 +46,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         foreach(Transform child in player.transform) {
             System.Type organType = child.GetComponent<Organ>().organType;
             System.Guid organId = child.GetComponent<Organ>().id;
-            Vector3 deltaPos = child.transform.localPosition;
-            Quaternion deltaRot = child.transform.localRotation;
-            GameObject newOrgan = playerCopyBodyStructure.addOrganWithPosition(organType, child.gameObject, deltaPos, deltaRot, organId);
+            GameObject newOrgan = playerCopyBodyStructure.addOrganWithPos(organType, child.gameObject, organId);
 
             //Add attached organ behaviour
             AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
@@ -95,11 +93,10 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     public GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
-        GameObject organModel = organ;
         organ.name = organName;
 
         //Add clickable organ component
-        ClickableOrgan clickableOrgan = organModel.AddComponent<ClickableOrgan>();
+        ClickableOrgan clickableOrgan = organ.AddComponent<ClickableOrgan>();
         clickableOrgan.player = player;
         clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;

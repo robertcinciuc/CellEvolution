@@ -62,12 +62,15 @@ public class TerrainRenderer : MonoBehaviour {
     public void renderCurrentPlane(Vector3 playerPos) {
         float currXFactor = Mathf.Ceil(playerPos.x / (planeSize.x / 2));
         float currZFactor = Mathf.Ceil(playerPos.z / (planeSize.z / 2));
+        Vector3 newCurrPlanePos = new Vector3(currXFactor * planeSize.x / 2, 0, currZFactor * planeSize.z / 2);
 
-        currPlane.transform.position = new Vector3(currXFactor * planeSize.x/2, 0, currZFactor * planeSize.z/2);
-        islandSpawner.resetGridsOnPlanes();
-        enemySpawner.resetPlaneEnemyStatus();
-        foodSpawner.resetFedStatus();
-        spawnElementsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
+        if (newCurrPlanePos != currPlane.transform.position) {
+            currPlane.transform.position = newCurrPlanePos;
+            islandSpawner.resetGridsOnPlanes();
+            enemySpawner.resetPlaneEnemyStatus();
+            foodSpawner.resetFedStatus();
+            spawnElementsOnPlane(LocalPlanes.CURRENT_PLANE, currPlane.transform.position, planeSize);
+        }
     }
 
     private void renderXPlane() {

@@ -43,7 +43,7 @@ public class AttachedOrgan : MonoBehaviour
         }
 
         if (endMoveable) {
-            player.GetComponent<PlayerBodyStructure>().moveOrgan(gameObject.GetComponent<Organ>().id, transform.localPosition, transform.rotation);
+            upgradeMenuLogic.putMovedOrgan(GetComponent<Organ>().id, gameObject);
             endMoveable = false;
             clickPressedOnOrgan = false;
             UpgradeMenuLogic.attachedOrganIsDragged = false;

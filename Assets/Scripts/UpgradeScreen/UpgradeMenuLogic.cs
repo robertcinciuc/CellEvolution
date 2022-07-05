@@ -125,6 +125,15 @@ public class UpgradeMenuLogic : MonoBehaviour
             player.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
         }
 
+        //Apply moved organs
+        foreach (KeyValuePair<System.Guid, GameObject> entry in movedOrgans) {
+            GameObject organ = entry.Value;
+            System.Guid organId = organ.GetComponent<Organ>().id;
+            Vector3 localPos = organ.transform.localPosition;
+            Quaternion localRot = organ.transform.localRotation;
+            player.GetComponent<PlayerBodyStructure>().moveOrgan(organId, localPos, localRot);
+        }
+
         //Apply added organs
         foreach (KeyValuePair<System.Guid, GameObject> entry in addedOrgans) {
             GameObject organ = entry.Value;
@@ -139,6 +148,14 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     public void putRemovedOrgan(System.Guid organId) {
         removedOrgans.Add(organId);
+    }
+
+    public void putMovedOrgan(System.Guid organId, GameObject organ) {
+        if (!movedOrgans.ContainsKey(organId)) {
+            movedOrgans.Add(organId, organ);
+        } else {
+            movedOrgans[organId] = organ;
+        }
     }
 
     public void resetMovedAndAddedOrgans() {

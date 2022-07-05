@@ -56,7 +56,28 @@ public class PlayerBodyStructure : MonoBehaviour
 
         return newOrgan;
     }
-    
+
+    public GameObject simpleAddOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
+        //Update organ component
+        Organ organComponent = organ.GetComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = organId;
+        organComponent.organName = organ.GetComponent<Organ>().organName;
+
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        organComponent.serialOrgan = serialOrgan;
+
+        //Remove clickable organ behaviour
+        if (organ.GetComponent<ClickableOrgan>() != null) {
+            Destroy(organ.GetComponent<ClickableOrgan>());
+        }
+
+        playerOrgans.Add(organ.GetComponent<Organ>().id, organ);
+
+        return organ;
+    }
+
     public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
         playerOrgans[organId].transform.localPosition = localPos;
         playerOrgans[organId].transform.localRotation = rot;

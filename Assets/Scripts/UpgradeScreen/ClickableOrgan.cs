@@ -10,6 +10,7 @@ public class ClickableOrgan : MonoBehaviour
     public GameObject organ;
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
+    public Organ organComponent;
 
     private bool clickPressedOnOrgan = false;
     private bool endDragable = false;
@@ -48,9 +49,8 @@ public class ClickableOrgan : MonoBehaviour
             organ.transform.SetParent(playerFigure.transform);
 
             //Update player structures
-            System.Guid organId = System.Guid.NewGuid();
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, organId);
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, organId);
+            System.Guid organId = organComponent.id;
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().simpleAddOrganWithPos(organType, organ, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();
@@ -60,16 +60,17 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.organType = organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
 
-            //Create new organ at the initial spot
-            string organName = organ.GetComponent<Organ>().organName;
-            upgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
+            //Update upgradeMenu with new organ state
+            upgradeMenuLogic.putAddedOrgan(organId, organ);
+            upgradeMenuLogic.removeFromDisplayMap(organId);
 
+            //Create new organ at the initial spot
+            string organName = organComponent.organName;
+            upgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
 
             endDragable = false;
             clickPressedOnOrgan = false;
             UpgradeMenuLogic.organIsDragged = false;
-
-            Destroy(gameObject);
         }
     }
 

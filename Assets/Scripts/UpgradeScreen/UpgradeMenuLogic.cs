@@ -13,15 +13,15 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     private GameObject playerFigure;
     private Vector3 safetyOffset = new Vector3(0, 5, 0);
-    private GameObject playerMouth;
-    private GameObject playerMouthClaw;
-    private GameObject playerFlagella;
-    private GameObject playerTwinFlagella;
-    private GameObject playerSpike;
-    private GameObject playerTooth;
     private Vector3 displayOffset = new Vector3(0, 0.5f, 0);
+    private Dictionary<System.Guid, GameObject> organsOnDisplay;
+    private Dictionary<System.Guid, GameObject> movedOrgans;
+    private Dictionary<System.Guid, GameObject> addedOrgans;
 
     void Start(){
+        organsOnDisplay = new Dictionary<System.Guid, GameObject>();
+        movedOrgans = new Dictionary<System.Guid, GameObject>();
+        addedOrgans = new Dictionary<System.Guid, GameObject>();
     }
 
     void Update(){
@@ -74,26 +74,27 @@ public class UpgradeMenuLogic : MonoBehaviour
     public void instMenuOrgans() {
         Vector3 displayPosition = upgradeMenuPlane.transform.position + displayOffset;
 
-        playerMouth = instMenuOrgan("Prefabs/Mouth", displayPosition + new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
-        playerMouthClaw = instMenuOrgan("Prefabs/MouthClaw", displayPosition + new Vector3(4, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.MouthClaw.ToString());
-        playerFlagella = instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
-        playerTwinFlagella = instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
-        playerSpike = instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Spike.ToString());
-        playerTooth = instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
+        instMenuOrgan("Prefabs/Mouth", displayPosition + new Vector3(2, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.Mouth.ToString());
+        instMenuOrgan("Prefabs/MouthClaw", displayPosition + new Vector3(4, 0, 2), Quaternion.identity, typeof(Mouths), Mouths.MouthClaw.ToString());
+        instMenuOrgan("Prefabs/Flagella", displayPosition + new Vector3(2, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.Flagella.ToString());
+        instMenuOrgan("Prefabs/TwinFlagella", displayPosition + new Vector3(4, 0, 0), Quaternion.identity, typeof(LocomotionOrgans), LocomotionOrgans.TwinFlagella.ToString());
+        instMenuOrgan("Prefabs/Spike", displayPosition + new Vector3(2, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Spike.ToString());
+        instMenuOrgan("Prefabs/Tooth", displayPosition + new Vector3(4, 0, -2), Quaternion.identity, typeof(AttackOrgans), AttackOrgans.Tooth.ToString());
     }
 
     public void destroyMenuBodyParts() {
-        Destroy(playerMouth);
-        Destroy(playerMouthClaw);
-        Destroy(playerFlagella);
-        Destroy(playerTwinFlagella);
-        Destroy(playerSpike);
-        Destroy(playerTooth);
+        organsOnDisplay.Clear();
     }
 
     public GameObject instMenuOrgan(string prefabPath, Vector3 pos, Quaternion rot, System.Type organType, string organName) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         organ.name = organName;
+
+        //Add organ component
+        Organ organComponent = organ.gameObject.AddComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = System.Guid.NewGuid();
+        organComponent.organName = organName;
 
         //Add clickable organ component
         ClickableOrgan clickableOrgan = organ.AddComponent<ClickableOrgan>();
@@ -103,18 +104,36 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.organ = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
         clickableOrgan.upgradeMenuLogic = this;
-
-        //Add organ component
-        Organ organComponent = organ.gameObject.AddComponent<Organ>();
-        organComponent.organType = organType;
-        organComponent.id = System.Guid.NewGuid();
-        organComponent.organName = organName;
+        clickableOrgan.organComponent = organComponent;
 
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(organ);
         organComponent.serialOrgan = serialOrgan;
 
+        //Add organ to display organs
+        organsOnDisplay.Add(organComponent.id, organ);
+
         return organ;
     }
 
+    public void applyUpgrade() {
+        foreach(KeyValuePair<System.Guid, GameObject> entry in addedOrgans) {
+            GameObject organ = entry.Value;
+            System.Type organType = organ.GetComponent<Organ>().organType;
+            player.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, entry.Key);
+        }
+    }
+
+    public void putAddedOrgan(System.Guid organId, GameObject organ) {
+        addedOrgans.Add(organId, organ);
+    }
+
+    public void resetMovedAndAddedOrgans() {
+        addedOrgans.Clear();
+        movedOrgans.Clear();
+    }
+
+    public void removeFromDisplayMap(System.Guid organId) {
+        organsOnDisplay.Remove(organId);
+    }
 }

@@ -52,10 +52,8 @@ public class UpgradeMenuLogic : MonoBehaviour
 
             //Add attached organ behaviour
             AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
-            attachedOrgan.player = player;
             attachedOrgan.playerFigure = playerFigure;
             attachedOrgan.parentOrgan = child.gameObject;
-            attachedOrgan.organType = child.GetComponent<Organ>().organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             attachedOrgan.upgradeMenuLogic = this;
         }
@@ -101,7 +99,6 @@ public class UpgradeMenuLogic : MonoBehaviour
 
         //Add clickable organ component
         ClickableOrgan clickableOrgan = organ.AddComponent<ClickableOrgan>();
-        clickableOrgan.player = player;
         clickableOrgan.playerFigure = playerFigure;
         clickableOrgan.organType = organType;
         clickableOrgan.organ = organ;

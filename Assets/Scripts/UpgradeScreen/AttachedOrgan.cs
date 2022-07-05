@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class AttachedOrgan : MonoBehaviour
 {
-    public GameObject player;
     public GameObject playerFigure;
     public GameObject parentOrgan;
-    public System.Type organType;
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
 

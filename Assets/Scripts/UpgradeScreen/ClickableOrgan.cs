@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ClickableOrgan : MonoBehaviour
 {
-    public GameObject player;
     public GameObject playerFigure;
     public System.Type organType;
     public GameObject organ;
@@ -55,9 +54,7 @@ public class ClickableOrgan : MonoBehaviour
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();
             attachedOrgan.playerFigure = playerFigure;
-            attachedOrgan.player = player;
             attachedOrgan.parentOrgan = playerFigureOrgan;
-            attachedOrgan.organType = organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;
 

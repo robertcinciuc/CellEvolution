@@ -59,6 +59,7 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.parentOrgan = playerFigureOrgan;
             attachedOrgan.organType = organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+            attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;
 
             //Update upgradeMenu with new organ state
             upgradeMenuLogic.putAddedOrgan(organId, organ);

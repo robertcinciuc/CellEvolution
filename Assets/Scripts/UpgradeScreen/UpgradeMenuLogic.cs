@@ -17,11 +17,13 @@ public class UpgradeMenuLogic : MonoBehaviour
     private Dictionary<System.Guid, GameObject> organsOnDisplay;
     private Dictionary<System.Guid, GameObject> movedOrgans;
     private Dictionary<System.Guid, GameObject> addedOrgans;
+    private List<System.Guid> removedOrgans;
 
     void Start(){
         organsOnDisplay = new Dictionary<System.Guid, GameObject>();
         movedOrgans = new Dictionary<System.Guid, GameObject>();
         addedOrgans = new Dictionary<System.Guid, GameObject>();
+        removedOrgans = new List<System.Guid>();
     }
 
     void Update(){
@@ -55,6 +57,7 @@ public class UpgradeMenuLogic : MonoBehaviour
             attachedOrgan.parentOrgan = child.gameObject;
             attachedOrgan.organType = child.GetComponent<Organ>().organType;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+            attachedOrgan.upgradeMenuLogic = this;
         }
     }
 
@@ -117,7 +120,13 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     public void applyUpgrade() {
-        foreach(KeyValuePair<System.Guid, GameObject> entry in addedOrgans) {
+        //Apply removed organs
+        foreach (System.Guid organId in removedOrgans) {
+            player.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
+        }
+
+        //Apply added organs
+        foreach (KeyValuePair<System.Guid, GameObject> entry in addedOrgans) {
             GameObject organ = entry.Value;
             System.Type organType = organ.GetComponent<Organ>().organType;
             player.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, entry.Key);
@@ -126,6 +135,10 @@ public class UpgradeMenuLogic : MonoBehaviour
 
     public void putAddedOrgan(System.Guid organId, GameObject organ) {
         addedOrgans.Add(organId, organ);
+    }
+
+    public void putRemovedOrgan(System.Guid organId) {
+        removedOrgans.Add(organId);
     }
 
     public void resetMovedAndAddedOrgans() {

@@ -9,6 +9,7 @@ public class AttachedOrgan : MonoBehaviour
     public GameObject parentOrgan;
     public System.Type organType;
     public Camera upgradeMenuCamera;
+    public UpgradeMenuLogic upgradeMenuLogic;
 
     private bool clickPressedOnOrgan = false;
     private bool endMoveable = false;
@@ -24,8 +25,9 @@ public class AttachedOrgan : MonoBehaviour
 
     private void OnMouseOver() {
         if (Input.GetKeyDown(KeyCode.R)) {
-            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
-            player.GetComponent<PlayerBodyStructure>().removeOrgan(gameObject.GetComponent<Organ>().id);
+            System.Guid organId = gameObject.GetComponent<Organ>().id;
+            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
+            upgradeMenuLogic.putRemovedOrgan(organId);
         
         } else if(Input.GetMouseButton(0) && !UpgradeMenuLogic.attachedOrganIsDragged && !UpgradeMenuLogic.organIsDragged) {
             clickPressedOnOrgan = true;

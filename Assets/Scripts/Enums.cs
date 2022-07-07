@@ -35,7 +35,7 @@ public enum AttackOrgans {
 }
 
 public enum Bodies {
-    PlayerBody, OriginalEnemyBody
+    PlayerBody, OriginalEnemyBody, PlayerHead
 }
 
 public enum Characters {

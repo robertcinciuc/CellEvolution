@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerBodyStructure : MonoBehaviour
 {
+    public SegmentedBody segmentedBody;
+
+    private GameObject playerHead;
     private Dictionary<System.Guid, GameObject> playerOrgans;
 
     void Awake(){
@@ -123,13 +126,20 @@ public class PlayerBodyStructure : MonoBehaviour
     }
 
     public void initPlayerStructure() {
-        initPlayerOrgan(Bodies.PlayerBody.ToString(), "Prefabs/PlayerBody", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 0), Quaternion.identity, typeof(Bodies));
+        playerHead = initPlayerOrgan(Bodies.PlayerHead.ToString(), "Prefabs/PlayerBody", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 0), Quaternion.identity, typeof(Bodies));
+        playerHead.AddComponent<Rigidbody>();
         initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths));
         initPlayerOrgan(LocomotionOrgans.Flagella.ToString(), "Prefabs/Flagella", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, -1f), Quaternion.identity, typeof(LocomotionOrgans));
         initPlayerOrgan(AttackOrgans.Spike.ToString(), "Prefabs/Spike", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(-0.7f, 0.3f, 0.5f), Quaternion.identity, typeof(AttackOrgans));
+
+        segmentedBody.initSegmentedBody();
     }
 
-    private void initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
+    public GameObject getHead() {
+        return playerHead;
+    }
+
+    private GameObject initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
         organ.transform.SetParent(this.gameObject.transform);
         organ.transform.localPosition = localPos;
@@ -147,6 +157,8 @@ public class PlayerBodyStructure : MonoBehaviour
         organComponent.serialOrgan = serialOrgan;
 
         playerOrgans.Add(organComponent.id, organ);
+
+        return organ;
     }
 
 }

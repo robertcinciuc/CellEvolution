@@ -33,19 +33,37 @@ public class UpgradeMenuLogic : MonoBehaviour
     private void FixedUpdate() {
         
     }
-    public void renderPlayerFigure() {
-        //if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
-        //    playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
-        //    Destroy(playerFigure);
-        //}
 
-        ////Render organs
-        //playerFigure = new GameObject();
-        //playerFigure.name = "PlayerCopy";
-        //playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-        //PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
-            
-        //foreach(Transform child in player.transform) {
+    public void renderPlayerFigure() {
+        if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
+            playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
+            Destroy(playerFigure);
+        }
+
+        //Render organs
+        playerFigure = new GameObject();
+        playerFigure.name = "PlayerCopy";
+        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+
+        int i = 0;
+        foreach (Transform segment in player.transform) {
+            System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
+            Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i*2);
+            GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segment.gameObject, segmentId, segmentPos);
+
+            //Add attached organ behaviour
+            AttachedOrgan attachedOrgan = newSegment.gameObject.AddComponent<AttachedOrgan>();
+            attachedOrgan.playerFigure = playerFigure;
+            attachedOrgan.parentOrgan = segment.gameObject;
+            attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+            attachedOrgan.upgradeMenuLogic = this;
+            attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
+
+            i++;
+        }
+
+        //foreach (Transform child in player.transform) {
         //    System.Type organType = child.GetComponent<Organ>().organType;
         //    System.Guid organId = child.GetComponent<Organ>().id;
         //    GameObject newOrgan = playerCopyBodyStructure.addOrganWithPos(organType, child.gameObject, organId);
@@ -105,6 +123,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
         clickableOrgan.upgradeMenuLogic = this;
         clickableOrgan.organComponent = organComponent;
+        clickableOrgan.upgradeMenuPlane = upgradeMenuPlane;
 
         //Add serial organ to organ component
         SerialOrgan serialOrgan = new SerialOrgan(organ);

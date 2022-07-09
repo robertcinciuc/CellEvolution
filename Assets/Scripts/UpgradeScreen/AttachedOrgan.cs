@@ -8,6 +8,7 @@ public class AttachedOrgan : MonoBehaviour
     public GameObject parentOrgan;
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
+    public GameObject upgradeMenuPlane;
 
     private bool clickPressedOnOrgan = false;
     private bool endMoveable = false;
@@ -35,7 +36,8 @@ public class AttachedOrgan : MonoBehaviour
 
     private void moveOrgan() {
         if (clickPressedOnOrgan && Input.GetMouseButton(0)) {
-            transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
+            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
+            transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distCameraPlane));
             Vector3 deltaPos = transform.position - playerFigure.transform.position;
             transform.localRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
         }

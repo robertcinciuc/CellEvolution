@@ -10,6 +10,7 @@ public class ClickableOrgan : MonoBehaviour
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
     public Organ organComponent;
+    public GameObject upgradeMenuPlane;
 
     private bool clickPressedOnOrgan = false;
     private bool endDragable = false;
@@ -39,7 +40,8 @@ public class ClickableOrgan : MonoBehaviour
 
     private void moveOrganToMouse() {
         if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
-            transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9.5f));
+            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
+            transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distCameraPlane));
             Vector3 deltaPos = gameObject.transform.position - playerFigure.transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
         }
@@ -57,6 +59,7 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.parentOrgan = playerFigureOrgan;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;
+            attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
 
             //Update upgradeMenu with new organ state
             upgradeMenuLogic.putAddedOrgan(organId, organ);

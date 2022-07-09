@@ -8,9 +8,13 @@ public class PlayerBodyStructure : MonoBehaviour
     public GameObject playerHead;
 
     private Dictionary<System.Guid, GameObject> playerOrgans;
+    private Dictionary<System.Guid, GameObject> playerSegments;
+    private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> segmentOrgans;
+    private int nbFollowers = 4;
 
     void Awake(){
         playerOrgans = new Dictionary<System.Guid, GameObject>();
+        playerSegments = new Dictionary<System.Guid, GameObject>();
     }
 
     void Update(){
@@ -58,6 +62,22 @@ public class PlayerBodyStructure : MonoBehaviour
 
 
         return newOrgan;
+    }
+    
+    public GameObject addSegmentWithPos(GameObject segment, System.Guid segmentId, Vector3 segmentPos) {
+        string segmentName = segment.GetComponent<Segment>().segmentName;
+        GameObject newSegment = Instantiate((GameObject)Resources.Load("Prefabs/" + segmentName, typeof(GameObject)), segmentPos, Quaternion.identity);
+        newSegment.transform.SetParent(this.gameObject.transform);
+        newSegment.transform.position = segmentPos;
+
+        //Add segment component
+        Segment segmentComponent = newSegment.AddComponent<Segment>();
+        segmentComponent.segmentId = segmentId;
+        segmentComponent.segmentName = segmentName;
+
+        playerSegments.Add(segmentComponent.segmentId, newSegment);
+
+        return newSegment;
     }
 
     public GameObject simpleAddOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
@@ -131,7 +151,13 @@ public class PlayerBodyStructure : MonoBehaviour
         //initPlayerOrgan(LocomotionOrgans.Flagella.ToString(), "Prefabs/Flagella", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, -1f), Quaternion.identity, typeof(LocomotionOrgans));
         //initPlayerOrgan(AttackOrgans.Spike.ToString(), "Prefabs/Spike", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(-0.7f, 0.3f, 0.5f), Quaternion.identity, typeof(AttackOrgans));
 
-        segmentedBody.initSegmentedBody();
+
+        //Add segment component
+        Segment segmentComponent = playerHead.AddComponent<Segment>();
+        segmentComponent.segmentId = System.Guid.NewGuid();
+        segmentComponent.segmentName = "PlayerBody";
+
+        segmentedBody.initSegmentedBody(nbFollowers);
     }
 
     public GameObject getHead() {

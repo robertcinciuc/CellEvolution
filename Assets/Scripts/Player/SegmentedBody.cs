@@ -5,34 +5,33 @@ using UnityEngine;
 public class SegmentedBody : MonoBehaviour{
 
     public PlayerBodyStructure playerBodyStructure;
-    public List<GameObject> followers;
-    private int nbFollowers = 4;
+    public List<GameObject> segments;
 
     void Start(){
-        followers = new List<GameObject>();
+        segments = new List<GameObject>();
     }
 
     void Update(){
         
     }
 
-    public void initSegmentedBody() {
+    public void initSegmentedBody(int nbFollowers) {
         GameObject playerHead = playerBodyStructure.getHead();
 
         for (int i = 0; i < nbFollowers; i++) {
-            Vector3 followerPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * 2);
-            GameObject follower = Instantiate((GameObject)Resources.Load("Prefabs/PlayerBody", typeof(GameObject)), followerPos, transform.rotation);
-            follower.transform.parent = transform;
-            Rigidbody rigidbody = follower.AddComponent<Rigidbody>();
+            Vector3 segmentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * 2);
+            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/PlayerBody", typeof(GameObject)), segmentPos, transform.rotation);
+            segment.transform.parent = transform;
+            Rigidbody rigidbody = segment.AddComponent<Rigidbody>();
 
             rigidbody.drag = 10;
             rigidbody.mass = 0;
 
-            HingeJoint hingeJoint = follower.AddComponent<HingeJoint>();
+            HingeJoint hingeJoint = segment.AddComponent<HingeJoint>();
             if (i == 0) {
                 hingeJoint.connectedBody = playerHead.GetComponent<Rigidbody>();
             } else {
-                hingeJoint.connectedBody = ((GameObject)followers[i - 1]).GetComponent<Rigidbody>();
+                hingeJoint.connectedBody = ((GameObject)segments[i - 1]).GetComponent<Rigidbody>();
 
             }
             hingeJoint.axis = Vector3.up;
@@ -45,7 +44,12 @@ public class SegmentedBody : MonoBehaviour{
 
             hingeJoint.limits = limits;
 
-            followers.Add(follower);
+            //Add segment component
+            Segment segmentComponent = segment.AddComponent<Segment>();
+            segmentComponent.segmentId = System.Guid.NewGuid();
+            segmentComponent.segmentName = "PlayerBody";
+
+            segments.Add(segment);
         }
     }
 }

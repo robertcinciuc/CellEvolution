@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UpgradeMenuCameraState : MonoBehaviour
 {
-    public float cameraYOffset = 30; 
+    public float cameraYOffset = 70; 
 
     private Vector3 cameraPosition;
     private Camera thisCamera;

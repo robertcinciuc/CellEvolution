@@ -9,8 +9,8 @@ public class TerrainRenderer : MonoBehaviour {
     public GameObject xPlane;
     public GameObject xzPlane;
     public Vector3 planeSize;
+    public GameObject playerHead;
 
-    private GameObject player;
     private IslandSpawner islandSpawner;
     private FoodSpawner foodSpawner;
     private EnemySpawner enemySpawner;
@@ -23,10 +23,6 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (player == null) {
-            return;
-        }
-
         renderXPlane();
         renderZPlane();
         renderXZPlane();
@@ -51,7 +47,6 @@ public class TerrainRenderer : MonoBehaviour {
         foodSpawner = gameObject.GetComponent<FoodSpawner>();
         enemySpawner = gameObject.GetComponent<EnemySpawner>();
         planeSize = planePrefab.GetComponent<Renderer>().bounds.size;
-        player = GameObject.Find("Player");
 
         currPlane = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
         xPlane = Instantiate(planePrefab, new Vector3(planeSize.x, 0, 0), Quaternion.identity);
@@ -75,12 +70,12 @@ public class TerrainRenderer : MonoBehaviour {
 
     private void renderXPlane() {
         int sign = 1;
-        if (player.transform.position.x < currPlane.transform.position.x) {
+        if (playerHead.transform.position.x < currPlane.transform.position.x) {
             sign = -1;
         }
 
-        if(player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 && 
-           player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
+        if(playerHead.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 && 
+           playerHead.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
             if (xPlane.transform.position.x != currPlane.transform.position.x + sign * planeSize.x) {
                 Destroy(xPlane);
@@ -105,12 +100,12 @@ public class TerrainRenderer : MonoBehaviour {
 
     private void renderZPlane() {
         int sign = 1;
-        if (player.transform.position.z < currPlane.transform.position.z) {
+        if (playerHead.transform.position.z < currPlane.transform.position.z) {
             sign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2) {
+        if (playerHead.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            playerHead.transform.position.z > currPlane.transform.position.z - planeSize.z / 2) {
             
             if (zPlane.transform.position.z != currPlane.transform.position.z + sign * planeSize.z) {
                 Destroy(zPlane);
@@ -137,17 +132,17 @@ public class TerrainRenderer : MonoBehaviour {
         int xSign = 1;
         int zSign = 1;
 
-        if (player.transform.position.z < currPlane.transform.position.z) {
+        if (playerHead.transform.position.z < currPlane.transform.position.z) {
             zSign = -1;
         }
-        if (player.transform.position.x < currPlane.transform.position.x) {
+        if (playerHead.transform.position.x < currPlane.transform.position.x) {
             xSign = -1;
         }
 
-        if (player.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
-            player.transform.position.z > currPlane.transform.position.z - planeSize.z / 2 &&
-            player.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 &&
-            player.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
+        if (playerHead.transform.position.z < currPlane.transform.position.z + planeSize.z / 2 &&
+            playerHead.transform.position.z > currPlane.transform.position.z - planeSize.z / 2 &&
+            playerHead.transform.position.x < currPlane.transform.position.x + planeSize.x / 2 &&
+            playerHead.transform.position.x > currPlane.transform.position.x - planeSize.x / 2) {
             
             if (xzPlane.transform.position.z != (currPlane.transform.position.z + zSign * planeSize.z) ||
                 xzPlane.transform.position.x != (currPlane.transform.position.x + xSign * planeSize.x)) {

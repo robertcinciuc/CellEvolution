@@ -34,29 +34,29 @@ public class UpgradeMenuLogic : MonoBehaviour
         
     }
     public void renderPlayerFigure() {
-        if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
-            playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
-            Destroy(playerFigure);
-        }
+        //if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
+        //    playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
+        //    Destroy(playerFigure);
+        //}
 
-        //Render organs
-        playerFigure = new GameObject();
-        playerFigure.name = "PlayerCopy";
-        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+        ////Render organs
+        //playerFigure = new GameObject();
+        //playerFigure.name = "PlayerCopy";
+        //playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+        //PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
             
-        foreach(Transform child in player.transform) {
-            System.Type organType = child.GetComponent<Organ>().organType;
-            System.Guid organId = child.GetComponent<Organ>().id;
-            GameObject newOrgan = playerCopyBodyStructure.addOrganWithPos(organType, child.gameObject, organId);
+        //foreach(Transform child in player.transform) {
+        //    System.Type organType = child.GetComponent<Organ>().organType;
+        //    System.Guid organId = child.GetComponent<Organ>().id;
+        //    GameObject newOrgan = playerCopyBodyStructure.addOrganWithPos(organType, child.gameObject, organId);
 
-            //Add attached organ behaviour
-            AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
-            attachedOrgan.playerFigure = playerFigure;
-            attachedOrgan.parentOrgan = child.gameObject;
-            attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-            attachedOrgan.upgradeMenuLogic = this;
-        }
+        //    //Add attached organ behaviour
+        //    AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
+        //    attachedOrgan.playerFigure = playerFigure;
+        //    attachedOrgan.parentOrgan = child.gameObject;
+        //    attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+        //    attachedOrgan.upgradeMenuLogic = this;
+        //}
     }
 
     public void protectPlayer() {

@@ -144,9 +144,9 @@ public class PlayerBodyStructure : MonoBehaviour
         return organ;
     }
     
-    public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
-        playerOrgans[organId].transform.localPosition = localPos;
-        playerOrgans[organId].transform.localRotation = rot;
+    public void moveOrgan(System.Guid segmentId, System.Guid organId, Vector3 localPos, Quaternion rot) {
+        segmentOrgans[segmentId][organId].transform.localPosition = localPos;
+        segmentOrgans[segmentId][organId].transform.localRotation = rot;
     }
 
     public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {

@@ -38,15 +38,20 @@ public class AttachedOrgan : MonoBehaviour
     }
 
     private void moveOrgan() {
+        GameObject closestSegment = getClosestSegment(playerFigure.GetComponent<PlayerBodyStructure>().getSegments());
+
         if (clickPressedOnOrgan && Input.GetMouseButton(0)) {
             float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distCameraPlane));
-            Vector3 deltaPos = transform.position - playerFigure.transform.position;
+            Vector3 deltaPos = transform.position - closestSegment.transform.position;
             transform.localRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);
         }
 
         if (endMoveable) {
-            upgradeMenuLogic.putMovedOrgan(GetComponent<Organ>().id, gameObject);
+            System.Guid newSegmentId = closestSegment.GetComponent<Segment>().segmentId;
+
+            System.Guid oldSegmentId = parentSegment.GetComponent<Segment>().segmentId;
+            upgradeMenuLogic.putMovedOrgan(oldSegmentId, newSegmentId, GetComponent<Organ>().id, gameObject);
             endMoveable = false;
             clickPressedOnOrgan = false;
             UpgradeMenuLogic.attachedOrganIsDragged = false;
@@ -57,6 +62,20 @@ public class AttachedOrgan : MonoBehaviour
         if (clickPressedOnOrgan && !Input.GetMouseButton(0)) {
             endMoveable = true;
         }
+    }
+
+    private GameObject getClosestSegment(Dictionary<System.Guid, GameObject> segments) {
+        float minDelta = 1000f;
+        GameObject closestSegment = null;
+        foreach (KeyValuePair<System.Guid, GameObject> entry in segments) {
+            float deltaMagnitude = Mathf.Abs((entry.Value.transform.position - transform.position).magnitude);
+            if (deltaMagnitude < minDelta) {
+                minDelta = deltaMagnitude;
+                closestSegment = entry.Value;
+            }
+        }
+
+        return closestSegment;
     }
 
 }

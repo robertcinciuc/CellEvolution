@@ -5,7 +5,7 @@ using UnityEngine;
 public class AttachedOrgan : MonoBehaviour
 {
     public GameObject playerFigure;
-    public GameObject parentOrgan;
+    public GameObject parentSegment;
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
     public GameObject upgradeMenuPlane;
@@ -23,10 +23,13 @@ public class AttachedOrgan : MonoBehaviour
     }
 
     private void OnMouseOver() {
+
         if (Input.GetKeyDown(KeyCode.R)) {
+            System.Guid segmentId = parentSegment.GetComponent<Segment>().segmentId;
             System.Guid organId = gameObject.GetComponent<Organ>().id;
-            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
-            upgradeMenuLogic.putRemovedOrgan(organId);
+
+            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(segmentId, organId);
+            upgradeMenuLogic.putRemovedOrgan(segmentId, organId);
         
         } else if(Input.GetMouseButton(0) && !UpgradeMenuLogic.attachedOrganIsDragged && !UpgradeMenuLogic.organIsDragged) {
             clickPressedOnOrgan = true;

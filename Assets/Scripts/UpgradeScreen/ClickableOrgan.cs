@@ -41,8 +41,8 @@ public class ClickableOrgan : MonoBehaviour
     }
 
     private void moveOrganToMouse() {
-        PlayerBodyStructure bodyStructure = playerFigure.GetComponent<PlayerBodyStructure>();
-        segments = bodyStructure.getSegments();
+        PlayerBodyStructure figureBodyStructure = playerFigure.GetComponent<PlayerBodyStructure>();
+        segments = figureBodyStructure.getSegments();
         GameObject closestSegment = getClosestSegment(segments);
 
         if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
@@ -57,12 +57,12 @@ public class ClickableOrgan : MonoBehaviour
 
             //Update player structures
             System.Guid organId = organComponent.id;
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().simpleAddOrganWithPos(organType, organ, organId);
+            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().simpleAddOrganOnSegmentWithPos(closestSegment, organType, organ, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();
             attachedOrgan.playerFigure = playerFigure;
-            attachedOrgan.parentOrgan = playerFigureOrgan;
+            attachedOrgan.parentSegment = closestSegment;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;
             attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;

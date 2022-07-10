@@ -24,10 +24,10 @@ public class PlayerBodyStructure : MonoBehaviour
     void FixedUpdate() {
     }
 
-    public void removeOrgan(System.Guid organId) {
-        if (playerOrgans.ContainsKey(organId)) {
-            GameObject organToRemove = playerOrgans[organId];
-            playerOrgans.Remove(organId);
+    public void removeOrgan(System.Guid segmentId, System.Guid organId) {
+        if (playerSegments.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
+            GameObject organToRemove = segmentOrgans[segmentId][organId];
+            segmentOrgans[segmentId].Remove(organId);
             Destroy(organToRemove);
         }
     }
@@ -118,28 +118,7 @@ public class PlayerBodyStructure : MonoBehaviour
         return newSegment;
     }
 
-    public GameObject simpleAddOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
-        //Update organ component
-        Organ organComponent = organ.GetComponent<Organ>();
-        organComponent.organType = organType;
-        organComponent.id = organId;
-        organComponent.organName = organ.GetComponent<Organ>().organName;
-
-        //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(organ);
-        organComponent.serialOrgan = serialOrgan;
-
-        //Remove clickable organ behaviour
-        if (organ.GetComponent<ClickableOrgan>() != null) {
-            Destroy(organ.GetComponent<ClickableOrgan>());
-        }
-
-        playerOrgans.Add(organ.GetComponent<Organ>().id, organ);
-
-        return organ;
-    }
-    
-    public GameObject simpleAddOrganOneSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
+    public GameObject simpleAddOrganOnSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
         //Update organ component
         Organ organComponent = organ.GetComponent<Organ>();
         organComponent.organType = organType;
@@ -156,6 +135,10 @@ public class PlayerBodyStructure : MonoBehaviour
         }
 
         System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
+
+        if (!segmentOrgans.ContainsKey(segmentId)) {
+            segmentOrgans.Add(segmentId, new Dictionary<System.Guid, GameObject>());
+        }
         segmentOrgans[segmentId].Add(organId, organ);
 
         return organ;
@@ -216,6 +199,7 @@ public class PlayerBodyStructure : MonoBehaviour
         segmentComponent.segmentName = "PlayerBody";
 
         playerSegments.Add(segmentComponent.segmentId, playerHead);
+        segmentOrgans.Add(segmentComponent.segmentId, new Dictionary<System.Guid, GameObject>());
 
         segmentedBody.initSegmentedBody(nbSegments);
 
@@ -257,6 +241,8 @@ public class PlayerBodyStructure : MonoBehaviour
         organComponent.serialOrgan = serialOrgan;
 
         playerOrgans.Add(organComponent.id, organ);
+        System.Guid segmentId = parent.GetComponent<Segment>().segmentId;
+        segmentOrgans[segmentId].Add(organComponent.id, organ);
 
         return organ;
     }

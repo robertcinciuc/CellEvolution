@@ -68,19 +68,6 @@ public class UpgradeMenuLogic : MonoBehaviour
 
             i++;
         }
-
-        //foreach (Transform child in player.transform) {
-        //    System.Type organType = child.GetComponent<Organ>().organType;
-        //    System.Guid organId = child.GetComponent<Organ>().id;
-        //    GameObject newOrgan = playerCopyBodyStructure.addOrganWithPos(organType, child.gameObject, organId);
-
-        //    //Add attached organ behaviour
-        //    AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
-        //    attachedOrgan.playerFigure = playerFigure;
-        //    attachedOrgan.parentOrgan = child.gameObject;
-        //    attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-        //    attachedOrgan.upgradeMenuLogic = this;
-        //}
     }
 
     public void protectPlayer() {

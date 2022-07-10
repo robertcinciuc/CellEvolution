@@ -10,7 +10,7 @@ public class PlayerBodyStructure : MonoBehaviour
     private Dictionary<System.Guid, GameObject> playerOrgans;
     private Dictionary<System.Guid, GameObject> playerSegments;
     private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> segmentOrgans;
-    private int nbFollowers = 4;
+    private int nbSegments = 4;
 
     void Awake(){
         playerOrgans = new Dictionary<System.Guid, GameObject>();
@@ -139,6 +139,28 @@ public class PlayerBodyStructure : MonoBehaviour
         return organ;
     }
     
+    public GameObject simpleAddOrganOneSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
+        //Update organ component
+        Organ organComponent = organ.GetComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = organId;
+        organComponent.organName = organ.GetComponent<Organ>().organName;
+
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        organComponent.serialOrgan = serialOrgan;
+
+        //Remove clickable organ behaviour
+        if (organ.GetComponent<ClickableOrgan>() != null) {
+            Destroy(organ.GetComponent<ClickableOrgan>());
+        }
+
+        System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
+        segmentOrgans[segmentId].Add(organId, organ);
+
+        return organ;
+    }
+    
     public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
         playerOrgans[organId].transform.localPosition = localPos;
         playerOrgans[organId].transform.localRotation = rot;
@@ -193,7 +215,7 @@ public class PlayerBodyStructure : MonoBehaviour
         segmentComponent.segmentId = System.Guid.NewGuid();
         segmentComponent.segmentName = "PlayerBody";
 
-        segmentedBody.initSegmentedBody(nbFollowers);
+        segmentedBody.initSegmentedBody(nbSegments);
 
         initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths), playerHead);
 
@@ -201,6 +223,10 @@ public class PlayerBodyStructure : MonoBehaviour
 
     public GameObject getHead() {
         return playerHead;
+    }
+
+    public Dictionary<System.Guid, GameObject> getSegments() {
+        return playerSegments;
     }
 
     private GameObject initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType, GameObject parent) {

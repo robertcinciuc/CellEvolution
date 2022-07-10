@@ -15,6 +15,7 @@ public class PlayerBodyStructure : MonoBehaviour
     void Awake(){
         playerOrgans = new Dictionary<System.Guid, GameObject>();
         playerSegments = new Dictionary<System.Guid, GameObject>();
+        segmentOrgans = new Dictionary<System.Guid, Dictionary<System.Guid, GameObject>>();
     }
 
     void Update(){
@@ -64,6 +65,43 @@ public class PlayerBodyStructure : MonoBehaviour
         return newOrgan;
     }
     
+    public GameObject addOrganOneSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
+        GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
+        newOrgan.transform.SetParent(segment.transform);
+        newOrgan.transform.localPosition = organ.transform.localPosition;
+        newOrgan.transform.localRotation = organ.transform.localRotation;
+
+        //Update organ component
+        Organ organComponent = newOrgan.GetComponent<Organ>();
+        organComponent.organType = organType;
+        organComponent.id = organId;
+        organComponent.organName = organ.GetComponent<Organ>().organName;
+
+        //Add serial organ to organ component
+        SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
+        organComponent.serialOrgan = serialOrgan;
+
+        if (organ.GetComponent<Organ>() != null) {
+            newOrgan.name = organ.GetComponent<Organ>().organName;
+        } else if (organ.GetComponent<SerialOrgan>() != null) {
+            newOrgan.name = organ.GetComponent<SerialOrgan>().organName;
+        }
+
+        //Remove clickable organ behaviour
+        if (newOrgan.GetComponent<ClickableOrgan>() != null) {
+            Destroy(newOrgan.GetComponent<ClickableOrgan>());
+        }
+
+        System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
+        if (!segmentOrgans.ContainsKey(segmentId)) {
+            segmentOrgans.Add(segmentId, new Dictionary<System.Guid, GameObject>());
+        }
+
+        segmentOrgans[segmentId].Add(organId, newOrgan);
+
+        return newOrgan;
+    }
+    
     public GameObject addSegmentWithPos(GameObject segment, System.Guid segmentId, Vector3 segmentPos) {
         string segmentName = segment.GetComponent<Segment>().segmentName;
         GameObject newSegment = Instantiate((GameObject)Resources.Load("Prefabs/" + segmentName, typeof(GameObject)), segmentPos, Quaternion.identity);
@@ -100,7 +138,7 @@ public class PlayerBodyStructure : MonoBehaviour
 
         return organ;
     }
-
+    
     public void moveOrgan(System.Guid organId, Vector3 localPos, Quaternion rot) {
         playerOrgans[organId].transform.localPosition = localPos;
         playerOrgans[organId].transform.localRotation = rot;
@@ -147,10 +185,8 @@ public class PlayerBodyStructure : MonoBehaviour
 
     public void initPlayerStructure() {
         //playerHead = initPlayerOrgan(Bodies.PlayerHead.ToString(), "Prefabs/PlayerBody", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 0), Quaternion.identity, typeof(Bodies));
-        //initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths));
         //initPlayerOrgan(LocomotionOrgans.Flagella.ToString(), "Prefabs/Flagella", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, -1f), Quaternion.identity, typeof(LocomotionOrgans));
         //initPlayerOrgan(AttackOrgans.Spike.ToString(), "Prefabs/Spike", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(-0.7f, 0.3f, 0.5f), Quaternion.identity, typeof(AttackOrgans));
-
 
         //Add segment component
         Segment segmentComponent = playerHead.AddComponent<Segment>();
@@ -158,15 +194,18 @@ public class PlayerBodyStructure : MonoBehaviour
         segmentComponent.segmentName = "PlayerBody";
 
         segmentedBody.initSegmentedBody(nbFollowers);
+
+        initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths), playerHead);
+
     }
 
     public GameObject getHead() {
         return playerHead;
     }
 
-    private GameObject initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType) {
+    private GameObject initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType, GameObject parent) {
         GameObject organ = Instantiate((GameObject)Resources.Load(prefabPath, typeof(GameObject)), pos, rot);
-        organ.transform.SetParent(this.gameObject.transform);
+        organ.transform.SetParent(parent.transform);
         organ.transform.localPosition = localPos;
         //organ.transform.localRotation = localRot;
         organ.name = name;

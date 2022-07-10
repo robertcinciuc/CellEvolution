@@ -40,7 +40,7 @@ public class UpgradeMenuLogic : MonoBehaviour
             Destroy(playerFigure);
         }
 
-        //Render organs
+        
         playerFigure = new GameObject();
         playerFigure.name = "PlayerCopy";
         playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
@@ -52,13 +52,19 @@ public class UpgradeMenuLogic : MonoBehaviour
             Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i*2);
             GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segment.gameObject, segmentId, segmentPos);
 
-            //Add attached organ behaviour
-            AttachedOrgan attachedOrgan = newSegment.gameObject.AddComponent<AttachedOrgan>();
-            attachedOrgan.playerFigure = playerFigure;
-            attachedOrgan.parentOrgan = segment.gameObject;
-            attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-            attachedOrgan.upgradeMenuLogic = this;
-            attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
+            //Render organs
+            foreach (Transform organ in segment.transform) {
+                System.Type organType = organ.GetComponent<Organ>().organType;
+                System.Guid organId = organ.GetComponent<Organ>().id;
+                GameObject newOrgan = playerCopyBodyStructure.addOrganOneSegmentWithPos(newSegment.gameObject, organType, organ.gameObject, organId);
+
+                //Add attached organ behaviour
+                AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
+                attachedOrgan.playerFigure = playerFigure;
+                attachedOrgan.parentOrgan = organ.gameObject;
+                attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
+                attachedOrgan.upgradeMenuLogic = this;
+            }
 
             i++;
         }

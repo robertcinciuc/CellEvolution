@@ -17,6 +17,7 @@ public class ClickableOrgan : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private Dictionary<System.Guid, GameObject> segments;
+    private float displayOffsetY = 0.5f;
 
     void Start(){
     }
@@ -45,7 +46,7 @@ public class ClickableOrgan : MonoBehaviour
         GameObject closestSegment = getClosestSegment(segments);
 
         if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
-            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
+            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y - displayOffsetY;
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distCameraPlane));
             Vector3 deltaPos = gameObject.transform.position - closestSegment.transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);

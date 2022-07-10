@@ -16,13 +16,13 @@ public class UpgradeMenuLogic : MonoBehaviour
     private Vector3 displayOffset = new Vector3(0, 0.5f, 0);
     private Dictionary<System.Guid, GameObject> organsOnDisplay;
     private Dictionary<System.Guid, GameObject> movedOrgans;
-    private Dictionary<System.Guid, GameObject> addedOrgans;
+    private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> addedOrgans;
     private List<System.Guid> removedOrgans;
 
     void Start(){
         organsOnDisplay = new Dictionary<System.Guid, GameObject>();
         movedOrgans = new Dictionary<System.Guid, GameObject>();
-        addedOrgans = new Dictionary<System.Guid, GameObject>();
+        addedOrgans = new Dictionary<System.Guid, Dictionary<System.Guid, GameObject>>();
         removedOrgans = new List<System.Guid>();
     }
 
@@ -39,24 +39,24 @@ public class UpgradeMenuLogic : MonoBehaviour
             playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
             Destroy(playerFigure);
         }
-
         
         playerFigure = new GameObject();
         playerFigure.name = "PlayerCopy";
         playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
         PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
+        PlayerBodyStructure playerBodyStructure = player.GetComponent<PlayerBodyStructure>();
 
         int i = 0;
-        foreach (Transform segment in player.transform) {
-            System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
+        foreach (KeyValuePair<System.Guid, GameObject> segmentEntry in playerBodyStructure.getSegments()) {
+            System.Guid segmentId = segmentEntry.Value.GetComponent<Segment>().segmentId;
             Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i*2);
-            GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segment.gameObject, segmentId, segmentPos);
+            GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segmentEntry.Value, segmentId, segmentPos);
 
             //Render organs
-            foreach (Transform organ in segment.transform) {
+            foreach (Transform organ in segmentEntry.Value.transform) {
                 System.Type organType = organ.GetComponent<Organ>().organType;
                 System.Guid organId = organ.GetComponent<Organ>().id;
-                GameObject newOrgan = playerCopyBodyStructure.addOrganOneSegmentWithPos(newSegment.gameObject, organType, organ.gameObject, organId);
+                GameObject newOrgan = playerCopyBodyStructure.addOrganOnSegmentWithPos(newSegment.gameObject, organType, organ.gameObject, organId);
 
                 //Add attached organ behaviour
                 AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
@@ -129,30 +129,37 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     public void applyUpgrade() {
-        //Apply removed organs
-        foreach (System.Guid organId in removedOrgans) {
-            player.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
-        }
+        ////Apply removed organs
+        //foreach (System.Guid organId in removedOrgans) {
+        //    player.GetComponent<PlayerBodyStructure>().removeOrgan(organId);
+        //}
 
-        //Apply moved organs
-        foreach (KeyValuePair<System.Guid, GameObject> entry in movedOrgans) {
-            GameObject organ = entry.Value;
-            System.Guid organId = organ.GetComponent<Organ>().id;
-            Vector3 localPos = organ.transform.localPosition;
-            Quaternion localRot = organ.transform.localRotation;
-            player.GetComponent<PlayerBodyStructure>().moveOrgan(organId, localPos, localRot);
-        }
+        ////Apply moved organs
+        //foreach (KeyValuePair<System.Guid, GameObject> entry in movedOrgans) {
+        //    GameObject organ = entry.Value;
+        //    System.Guid organId = organ.GetComponent<Organ>().id;
+        //    Vector3 localPos = organ.transform.localPosition;
+        //    Quaternion localRot = organ.transform.localRotation;
+        //    player.GetComponent<PlayerBodyStructure>().moveOrgan(organId, localPos, localRot);
+        //}
 
         //Apply added organs
-        foreach (KeyValuePair<System.Guid, GameObject> entry in addedOrgans) {
-            GameObject organ = entry.Value;
-            System.Type organType = organ.GetComponent<Organ>().organType;
-            player.GetComponent<PlayerBodyStructure>().addOrganWithPos(organType, organ, entry.Key);
+        foreach (KeyValuePair<System.Guid, Dictionary<System.Guid, GameObject>> segmentEntry in addedOrgans) {
+            foreach (KeyValuePair<System.Guid, GameObject> organEntry in segmentEntry.Value) {
+                PlayerBodyStructure playerBodyStructure = player.GetComponent<PlayerBodyStructure>();
+                GameObject playerSegment = playerBodyStructure.getSegment(segmentEntry.Key);
+                GameObject organ = organEntry.Value;
+                System.Type organType = organ.GetComponent<Organ>().organType;
+                playerBodyStructure.addOrganOnSegmentWithPos(playerSegment, organType, organ, organEntry.Key);
+            }
         }
     }
 
-    public void putAddedOrgan(System.Guid organId, GameObject organ) {
-        addedOrgans.Add(organId, organ);
+    public void putAddedOrgan(System.Guid segmentId, System.Guid organId, GameObject organ) {
+        if (!addedOrgans.ContainsKey(segmentId)) {
+            addedOrgans.Add(segmentId, new Dictionary<System.Guid, GameObject>());
+        }
+        addedOrgans[segmentId].Add(organId, organ);
     }
 
     public void putRemovedOrgan(System.Guid organId) {

@@ -36,7 +36,7 @@ public class LoadUpgradeMenu : MonoBehaviour
             MainCameraState.setActive();
             upgradeMenuCameraState.setInactive();
             //upgradeMenuLogic.uprotectPlayer();
-            //upgradeMenuLogic.applyUpgrade();
+            upgradeMenuLogic.applyUpgrade();
             upgradeMenuLogic.destroyMenuBodyParts();
             upgradeMenuLogic.resetMovedAndAddedOrgans();
         }

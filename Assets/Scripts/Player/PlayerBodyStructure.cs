@@ -65,7 +65,7 @@ public class PlayerBodyStructure : MonoBehaviour
         return newOrgan;
     }
     
-    public GameObject addOrganOneSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
+    public GameObject addOrganOnSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
         newOrgan.transform.SetParent(segment.transform);
         newOrgan.transform.localPosition = organ.transform.localPosition;
@@ -215,6 +215,8 @@ public class PlayerBodyStructure : MonoBehaviour
         segmentComponent.segmentId = System.Guid.NewGuid();
         segmentComponent.segmentName = "PlayerBody";
 
+        playerSegments.Add(segmentComponent.segmentId, playerHead);
+
         segmentedBody.initSegmentedBody(nbSegments);
 
         initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths), playerHead);
@@ -227,6 +229,14 @@ public class PlayerBodyStructure : MonoBehaviour
 
     public Dictionary<System.Guid, GameObject> getSegments() {
         return playerSegments;
+    }
+
+    public GameObject getSegment(System.Guid segmentId) { 
+        return playerSegments[segmentId];
+    }
+
+    public void addSegmentToList(System.Guid segmentId, GameObject segment) {
+        playerSegments.Add(segmentId, segment);
     }
 
     private GameObject initPlayerOrgan(string name, string prefabPath, Vector3 pos, Quaternion rot, Vector3 localPos, Quaternion localRot, System.Type organType, GameObject parent) {

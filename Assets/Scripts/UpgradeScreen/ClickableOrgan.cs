@@ -67,7 +67,8 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
 
             //Update upgradeMenu with new organ state
-            upgradeMenuLogic.putAddedOrgan(organId, organ);
+            System.Guid segmentId = closestSegment.GetComponent<Segment>().segmentId;
+            upgradeMenuLogic.putAddedOrgan(segmentId, organId, organ);
             upgradeMenuLogic.removeFromDisplayMap(organId);
 
             //Create new organ at the initial spot

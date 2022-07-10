@@ -49,6 +49,8 @@ public class SegmentedBody : MonoBehaviour{
             segmentComponent.segmentId = System.Guid.NewGuid();
             segmentComponent.segmentName = "PlayerBody";
 
+            playerBodyStructure.addSegmentToList(segmentComponent.segmentId, segment);
+
             segments.Add(segment);
         }
     }

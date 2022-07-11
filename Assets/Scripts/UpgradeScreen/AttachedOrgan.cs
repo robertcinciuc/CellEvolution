@@ -38,7 +38,8 @@ public class AttachedOrgan : MonoBehaviour
     }
 
     private void moveOrgan() {
-        GameObject closestSegment = getClosestSegment(playerFigure.GetComponent<PlayerBodyStructure>().getSegments());
+        PlayerBodyStructure figureBodyStructure = playerFigure.GetComponent<PlayerBodyStructure>();
+        GameObject closestSegment = getClosestSegment(figureBodyStructure.getSegments());
 
         if (clickPressedOnOrgan && Input.GetMouseButton(0)) {
             float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
@@ -51,7 +52,15 @@ public class AttachedOrgan : MonoBehaviour
             System.Guid newSegmentId = closestSegment.GetComponent<Segment>().segmentId;
 
             System.Guid oldSegmentId = parentSegment.GetComponent<Segment>().segmentId;
-            upgradeMenuLogic.putMovedOrgan(oldSegmentId, newSegmentId, GetComponent<Organ>().id, gameObject);
+            gameObject.transform.SetParent(closestSegment.transform);
+            parentSegment = closestSegment;
+            System.Guid organId = GetComponent<Organ>().id;
+            System.Type organType = GetComponent<Organ>().organType;
+            figureBodyStructure.removeOrganFromMapping(oldSegmentId, organId);
+            figureBodyStructure.simpleAddOrganOnSegmentWithPos(closestSegment, organType, gameObject, organId);
+
+
+            upgradeMenuLogic.putMovedOrgan(oldSegmentId, newSegmentId, organId, gameObject);
             endMoveable = false;
             clickPressedOnOrgan = false;
             UpgradeMenuLogic.attachedOrganIsDragged = false;

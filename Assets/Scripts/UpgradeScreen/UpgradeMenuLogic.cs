@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeMenuLogic : MonoBehaviour
-{
+public class UpgradeMenuLogic : MonoBehaviour {
+
     public static bool organIsDragged = false;
     public static bool attachedOrganIsDragged = false;
     public static bool playerFigureInstantiated = false;
@@ -17,21 +17,19 @@ public class UpgradeMenuLogic : MonoBehaviour
     private Dictionary<System.Guid, GameObject> organsOnDisplay;
     private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> movedOrgans;
     private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> addedOrgans;
-    private Dictionary<System.Guid, System.Guid> removedOrgans;
+    private Dictionary<System.Guid, HashSet<System.Guid>> removedOrgans;
 
-    void Start(){
+    void Start() {
         organsOnDisplay = new Dictionary<System.Guid, GameObject>();
         movedOrgans = new Dictionary<System.Guid, Dictionary<System.Guid, GameObject>>();
         addedOrgans = new Dictionary<System.Guid, Dictionary<System.Guid, GameObject>>();
-        removedOrgans = new Dictionary<System.Guid, System.Guid>();
+        removedOrgans = new Dictionary<System.Guid, HashSet<System.Guid>>();
     }
 
-    void Update(){
-        
+    void Update() {
     }
 
     private void FixedUpdate() {
-        
     }
 
     public void renderPlayerFigure() {
@@ -39,7 +37,7 @@ public class UpgradeMenuLogic : MonoBehaviour
             playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
             Destroy(playerFigure);
         }
-        
+
         playerFigure = new GameObject();
         playerFigure.name = "PlayerCopy";
         playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
@@ -49,7 +47,7 @@ public class UpgradeMenuLogic : MonoBehaviour
         int i = 0;
         foreach (KeyValuePair<System.Guid, GameObject> segmentEntry in playerBodyStructure.getSegments()) {
             System.Guid segmentId = segmentEntry.Value.GetComponent<Segment>().segmentId;
-            Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i*2);
+            Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i * 2);
             GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segmentEntry.Value, segmentId, segmentPos);
 
             //Render organs
@@ -133,18 +131,9 @@ public class UpgradeMenuLogic : MonoBehaviour
         PlayerBodyStructure playerBodyStructure = player.GetComponent<PlayerBodyStructure>();
 
         //Apply removed organs
-        foreach (KeyValuePair<System.Guid, System.Guid> segmentEntry in removedOrgans) {
-            playerBodyStructure.removeOrgan(segmentEntry.Key, segmentEntry.Value);
-        }
-
-        //Apply moved organs
-        foreach (KeyValuePair<System.Guid, Dictionary<System.Guid, GameObject>> segmentEntry in movedOrgans) {
-            foreach (KeyValuePair<System.Guid, GameObject> organEntry in segmentEntry.Value) {
-                GameObject organ = organEntry.Value;
-                System.Guid organId = organ.GetComponent<Organ>().id;
-                Vector3 localPos = organ.transform.localPosition;
-                Quaternion localRot = organ.transform.localRotation;
-                player.GetComponent<PlayerBodyStructure>().moveOrgan(segmentEntry.Key, organId, localPos, localRot);
+        foreach (KeyValuePair<System.Guid, HashSet<System.Guid>> segmentEntry in removedOrgans) {
+            foreach (System.Guid organ in removedOrgans[segmentEntry.Key]) {
+                playerBodyStructure.removeOrgan(segmentEntry.Key, organ);
             }
         }
 
@@ -167,14 +156,25 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     public void putRemovedOrgan(System.Guid segmentId, System.Guid organId) {
-        removedOrgans.Add(segmentId, organId);
+        if (!removedOrgans.ContainsKey(segmentId)) {
+            removedOrgans.Add(segmentId, new HashSet<System.Guid>());
+        }
+        removedOrgans[segmentId].Add(organId);
     }
 
     public void putMovedOrgan(System.Guid oldSegmentId, System.Guid newSegmentId, System.Guid organId, GameObject organ) {
-        removedOrgans.Add(oldSegmentId, organId);
+        if (!removedOrgans.ContainsKey(oldSegmentId)) {
+            removedOrgans.Add(oldSegmentId, new HashSet<System.Guid>());
+        }
+        if ((addedOrgans.ContainsKey(oldSegmentId) && !addedOrgans[oldSegmentId].ContainsKey(organId)) || !addedOrgans.ContainsKey(oldSegmentId)) {
+            removedOrgans[oldSegmentId].Add(organId);
+        }
 
         if (!addedOrgans.ContainsKey(newSegmentId)) {
             addedOrgans.Add(newSegmentId, new Dictionary<System.Guid, GameObject>());
+        }
+        if (addedOrgans.ContainsKey(oldSegmentId) && addedOrgans[oldSegmentId].ContainsKey(organId)) {
+            addedOrgans[oldSegmentId].Remove(organId);
         }
         if (!addedOrgans[newSegmentId].ContainsKey(organId)) {
             addedOrgans[newSegmentId].Add(organId, organ);
@@ -184,6 +184,7 @@ public class UpgradeMenuLogic : MonoBehaviour
     }
 
     public void resetMovedAndAddedOrgans() {
+        removedOrgans.Clear();
         addedOrgans.Clear();
         movedOrgans.Clear();
     }

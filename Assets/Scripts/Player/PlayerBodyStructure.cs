@@ -25,13 +25,19 @@ public class PlayerBodyStructure : MonoBehaviour
     }
 
     public void removeOrgan(System.Guid segmentId, System.Guid organId) {
-        if (playerSegments.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
+        if (playerSegments.ContainsKey(segmentId) && segmentOrgans.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
             GameObject organToRemove = segmentOrgans[segmentId][organId];
             segmentOrgans[segmentId].Remove(organId);
             Destroy(organToRemove);
         }
     }
-    
+
+    public void removeOrganFromMapping(System.Guid segmentId, System.Guid organId) {
+        if (playerSegments.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
+            segmentOrgans[segmentId].Remove(organId);
+        }
+    }
+
     public GameObject addOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
         newOrgan.transform.SetParent(this.gameObject.transform);

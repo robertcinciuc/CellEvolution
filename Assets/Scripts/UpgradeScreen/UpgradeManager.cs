@@ -160,6 +160,10 @@ public class UpgradeManager : MonoBehaviour {
             removedOrgans.Add(segmentId, new HashSet<System.Guid>());
         }
         removedOrgans[segmentId].Add(organId);
+
+        if (addedOrgans.ContainsKey(segmentId) && addedOrgans[segmentId].ContainsKey(organId)) {
+            addedOrgans[segmentId].Remove(organId);
+        }
     }
 
     public void putMovedOrgan(System.Guid oldSegmentId, System.Guid newSegmentId, System.Guid organId, GameObject organ) {

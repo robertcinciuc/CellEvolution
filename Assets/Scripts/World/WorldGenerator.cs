@@ -9,7 +9,7 @@ public class WorldGenerator : MonoBehaviour {
     public FoodSpawner foodSpawner;
     public IslandSpawner islandSpawner;
     public Morphology playerBodyStructure;
-    public UpgradeMenuLogic upgradeMenuLogic;
+    public UpgradeManager upgradeManager;
 
     void Start(){
         terrainRenderer.initializeTerrain();
@@ -17,7 +17,7 @@ public class WorldGenerator : MonoBehaviour {
         enemySpawner.initializeEnemySpawner();
         foodSpawner.initializeFoodSpawner();
         playerBodyStructure.initPlayerStructure();
-        upgradeMenuLogic.renderFigure();
+        upgradeManager.renderFigure();
 
         //Spawn elements on initial current plane
         islandSpawner.spawnIslandsOnPlane(LocalPlanes.CURRENT_PLANE, terrainRenderer.currPlane.transform.position, terrainRenderer.planeSize);

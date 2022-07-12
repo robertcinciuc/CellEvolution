@@ -8,7 +8,7 @@ public class ClickableOrgan : MonoBehaviour
     public System.Type organType;
     public GameObject organ;
     public Camera upgradeMenuCamera;
-    public UpgradeMenuLogic upgradeMenuLogic;
+    public UpgradeManager upgradeManager;
     public Organ organComponent;
     public GameObject upgradeMenuPlane;
 
@@ -28,7 +28,7 @@ public class ClickableOrgan : MonoBehaviour
     }
 
     void OnMouseOver() {
-        if (Input.GetMouseButton(0) && !UpgradeMenuLogic.organIsDragged && !UpgradeMenuLogic.attachedOrganIsDragged) {
+        if (Input.GetMouseButton(0) && !UpgradeManager.organIsDragged && !UpgradeManager.attachedOrganIsDragged) {
             if (!clickPressedOnOrgan) {
                 //Save initial pos & rot
                 initialPosition = transform.position;
@@ -36,7 +36,7 @@ public class ClickableOrgan : MonoBehaviour
             }
 
             clickPressedOnOrgan = true;
-            UpgradeMenuLogic.organIsDragged = true;
+            UpgradeManager.organIsDragged = true;
         }
     }
 
@@ -64,21 +64,21 @@ public class ClickableOrgan : MonoBehaviour
             attachedOrgan.figure = figure;
             attachedOrgan.parentSegment = closestSegment;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-            attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;
+            attachedOrgan.upgradeManager = upgradeManager;
             attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
 
             //Update upgradeMenu with new organ state
             System.Guid segmentId = closestSegment.GetComponent<Segment>().segmentId;
-            upgradeMenuLogic.putAddedOrgan(segmentId, organId, organ);
-            upgradeMenuLogic.removeFromDisplayMap(organId);
+            upgradeManager.putAddedOrgan(segmentId, organId, organ);
+            upgradeManager.removeFromDisplayMap(organId);
 
             //Create new organ at the initial spot
             string organName = organComponent.organName;
-            upgradeMenuLogic.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
+            upgradeManager.instMenuOrgan("Prefabs/" + organName, initialPosition, initialRotation, organType, organName);
 
             endDragable = false;
             clickPressedOnOrgan = false;
-            UpgradeMenuLogic.organIsDragged = false;
+            UpgradeManager.organIsDragged = false;
         }
     }
 

@@ -7,7 +7,7 @@ public class AttachedOrgan : MonoBehaviour
     public GameObject figure;
     public GameObject parentSegment;
     public Camera upgradeMenuCamera;
-    public UpgradeMenuLogic upgradeMenuLogic;
+    public UpgradeManager upgradeManager;
     public GameObject upgradeMenuPlane;
 
     private bool clickPressedOnOrgan = false;
@@ -29,11 +29,11 @@ public class AttachedOrgan : MonoBehaviour
             System.Guid organId = gameObject.GetComponent<Organ>().id;
 
             figure.GetComponent<Morphology>().removeOrgan(segmentId, organId);
-            upgradeMenuLogic.putRemovedOrgan(segmentId, organId);
+            upgradeManager.putRemovedOrgan(segmentId, organId);
         
-        } else if(Input.GetMouseButton(0) && !UpgradeMenuLogic.attachedOrganIsDragged && !UpgradeMenuLogic.organIsDragged) {
+        } else if(Input.GetMouseButton(0) && !UpgradeManager.attachedOrganIsDragged && !UpgradeManager.organIsDragged) {
             clickPressedOnOrgan = true;
-            UpgradeMenuLogic.attachedOrganIsDragged = true;
+            UpgradeManager.attachedOrganIsDragged = true;
         }
     }
 
@@ -60,10 +60,10 @@ public class AttachedOrgan : MonoBehaviour
             figureMorphology.simpleAddOrganOnSegmentWithPos(closestSegment, organType, gameObject, organId);
 
 
-            upgradeMenuLogic.putMovedOrgan(oldSegmentId, newSegmentId, organId, gameObject);
+            upgradeManager.putMovedOrgan(oldSegmentId, newSegmentId, organId, gameObject);
             endMoveable = false;
             clickPressedOnOrgan = false;
-            UpgradeMenuLogic.attachedOrganIsDragged = false;
+            UpgradeManager.attachedOrganIsDragged = false;
         }
     }
 

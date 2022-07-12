@@ -9,7 +9,7 @@ public class ProgressionData : MonoBehaviour
 	public Morphology playerMorphology;
 	public PlayerState playerState;
 	public GameObject player;
-	public UpgradeMenuLogic upgradeMenuLogic;
+	public UpgradeManager upgradeManager;
 
     private void Start() {
     }
@@ -37,7 +37,7 @@ public class ProgressionData : MonoBehaviour
 		nbMeatsEaten = data.nbMeatsEaten;
 		playerState.sethealth(data.health);
 		playerMorphology.addAllOrgans(data.playerSerialOrgans);
-		upgradeMenuLogic.renderFigure();
+		upgradeManager.renderFigure();
 
 		player.transform.position = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
 		player.transform.rotation = Quaternion.Slerp(

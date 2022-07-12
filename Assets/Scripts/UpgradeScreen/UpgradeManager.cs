@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeMenuLogic : MonoBehaviour {
+public class UpgradeManager : MonoBehaviour {
 
     public static bool organIsDragged = false;
     public static bool attachedOrganIsDragged = false;
@@ -61,7 +61,7 @@ public class UpgradeMenuLogic : MonoBehaviour {
                 attachedOrgan.figure = figure;
                 attachedOrgan.parentSegment = segmentEntry.Value;
                 attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
-                attachedOrgan.upgradeMenuLogic = this;
+                attachedOrgan.upgradeManager = this;
                 attachedOrgan.upgradeMenuPlane = upgradeMenuPlane;
             }
 
@@ -113,7 +113,7 @@ public class UpgradeMenuLogic : MonoBehaviour {
         clickableOrgan.organType = organType;
         clickableOrgan.organ = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
-        clickableOrgan.upgradeMenuLogic = this;
+        clickableOrgan.upgradeManager = this;
         clickableOrgan.organComponent = organComponent;
         clickableOrgan.upgradeMenuPlane = upgradeMenuPlane;
 

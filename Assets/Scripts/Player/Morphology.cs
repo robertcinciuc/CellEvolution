@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBodyStructure : MonoBehaviour
+public class Morphology : MonoBehaviour
 {
     public SegmentedBody segmentedBody;
     public GameObject playerHead;
@@ -150,11 +150,6 @@ public class PlayerBodyStructure : MonoBehaviour
         return organ;
     }
     
-    public void moveOrgan(System.Guid segmentId, System.Guid organId, Vector3 localPos, Quaternion rot) {
-        segmentOrgans[segmentId][organId].transform.localPosition = localPos;
-        segmentOrgans[segmentId][organId].transform.localRotation = rot;
-    }
-
     public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {
         Dictionary<System.Guid, SerialOrgan> serialOrgans = new Dictionary<System.Guid, SerialOrgan>();
         foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttachedOrgan : MonoBehaviour
 {
-    public GameObject playerFigure;
+    public GameObject figure;
     public GameObject parentSegment;
     public Camera upgradeMenuCamera;
     public UpgradeMenuLogic upgradeMenuLogic;
@@ -28,7 +28,7 @@ public class AttachedOrgan : MonoBehaviour
             System.Guid segmentId = parentSegment.GetComponent<Segment>().segmentId;
             System.Guid organId = gameObject.GetComponent<Organ>().id;
 
-            playerFigure.GetComponent<PlayerBodyStructure>().removeOrgan(segmentId, organId);
+            figure.GetComponent<Morphology>().removeOrgan(segmentId, organId);
             upgradeMenuLogic.putRemovedOrgan(segmentId, organId);
         
         } else if(Input.GetMouseButton(0) && !UpgradeMenuLogic.attachedOrganIsDragged && !UpgradeMenuLogic.organIsDragged) {
@@ -38,8 +38,8 @@ public class AttachedOrgan : MonoBehaviour
     }
 
     private void moveOrgan() {
-        PlayerBodyStructure figureBodyStructure = playerFigure.GetComponent<PlayerBodyStructure>();
-        GameObject closestSegment = getClosestSegment(figureBodyStructure.getSegments());
+        Morphology figureMorphology = figure.GetComponent<Morphology>();
+        GameObject closestSegment = getClosestSegment(figureMorphology.getSegments());
 
         if (clickPressedOnOrgan && Input.GetMouseButton(0)) {
             float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
@@ -56,8 +56,8 @@ public class AttachedOrgan : MonoBehaviour
             parentSegment = closestSegment;
             System.Guid organId = GetComponent<Organ>().id;
             System.Type organType = GetComponent<Organ>().organType;
-            figureBodyStructure.removeOrganFromMapping(oldSegmentId, organId);
-            figureBodyStructure.simpleAddOrganOnSegmentWithPos(closestSegment, organType, gameObject, organId);
+            figureMorphology.removeOrganFromMapping(oldSegmentId, organId);
+            figureMorphology.simpleAddOrganOnSegmentWithPos(closestSegment, organType, gameObject, organId);
 
 
             upgradeMenuLogic.putMovedOrgan(oldSegmentId, newSegmentId, organId, gameObject);

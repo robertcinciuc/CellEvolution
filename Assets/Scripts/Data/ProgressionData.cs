@@ -6,7 +6,7 @@ public class ProgressionData : MonoBehaviour
 {
     public static int nbEnemiesKilled = 0;
 	public static int nbMeatsEaten = 0;
-	public PlayerBodyStructure playerBodyStructure;
+	public Morphology playerMorphology;
 	public PlayerState playerState;
 	public GameObject player;
 	public UpgradeMenuLogic upgradeMenuLogic;
@@ -19,7 +19,7 @@ public class ProgressionData : MonoBehaviour
 		data.nbEnemiesKilled = nbEnemiesKilled;
 		data.nbMeatsEaten= nbMeatsEaten;
 		data.health = playerState.health;
-		data.playerSerialOrgans = playerBodyStructure.getPlayerSerialOrgans();
+		data.playerSerialOrgans = playerMorphology.getPlayerSerialOrgans();
 
 		data.playerPosX = player.transform.position.x;
 		data.playerPosY = player.transform.position.y;
@@ -36,8 +36,8 @@ public class ProgressionData : MonoBehaviour
         nbEnemiesKilled = data.nbEnemiesKilled;
 		nbMeatsEaten = data.nbMeatsEaten;
 		playerState.sethealth(data.health);
-		playerBodyStructure.addAllOrgans(data.playerSerialOrgans);
-		upgradeMenuLogic.renderPlayerFigure();
+		playerMorphology.addAllOrgans(data.playerSerialOrgans);
+		upgradeMenuLogic.renderFigure();
 
 		player.transform.position = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
 		player.transform.rotation = Quaternion.Slerp(
@@ -50,9 +50,9 @@ public class ProgressionData : MonoBehaviour
 		nbEnemiesKilled = 0;
 		nbMeatsEaten = 0;
 		playerState.sethealth(playerState.maxHealth);
-		playerBodyStructure.removeAllOrgans();
-		playerBodyStructure.transform.position = Vector3.zero;
-		playerBodyStructure.transform.rotation = Quaternion.identity;
+		playerMorphology.removeAllOrgans();
+		playerMorphology.transform.position = Vector3.zero;
+		playerMorphology.transform.rotation = Quaternion.identity;
 	}
 
 }

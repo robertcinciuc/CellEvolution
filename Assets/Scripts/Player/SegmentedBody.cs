@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SegmentedBody : MonoBehaviour{
 
-    public PlayerBodyStructure playerBodyStructure;
+    public Morphology playerMorphology;
     public List<GameObject> segments;
 
     void Start(){
@@ -16,7 +16,7 @@ public class SegmentedBody : MonoBehaviour{
     }
 
     public void initSegmentedBody(int nbFollowers) {
-        GameObject playerHead = playerBodyStructure.getHead();
+        GameObject playerHead = playerMorphology.getHead();
 
         for (int i = 0; i < nbFollowers; i++) {
             Vector3 segmentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * 2);
@@ -49,7 +49,7 @@ public class SegmentedBody : MonoBehaviour{
             segmentComponent.segmentId = System.Guid.NewGuid();
             segmentComponent.segmentName = "PlayerBody";
 
-            playerBodyStructure.addSegmentToList(segmentComponent.segmentId, segment);
+            playerMorphology.addSegmentToList(segmentComponent.segmentId, segment);
 
             segments.Add(segment);
         }

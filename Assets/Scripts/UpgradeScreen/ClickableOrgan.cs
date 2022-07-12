@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClickableOrgan : MonoBehaviour
 {
-    public GameObject playerFigure;
+    public GameObject figure;
     public System.Type organType;
     public GameObject organ;
     public Camera upgradeMenuCamera;
@@ -41,8 +41,8 @@ public class ClickableOrgan : MonoBehaviour
     }
 
     private void moveOrganToMouse() {
-        PlayerBodyStructure figureBodyStructure = playerFigure.GetComponent<PlayerBodyStructure>();
-        segments = figureBodyStructure.getSegments();
+        Morphology figureMorphology = figure.GetComponent<Morphology>();
+        segments = figureMorphology.getSegments();
         GameObject closestSegment = getClosestSegment(segments);
 
         if (clickPressedOnOrgan & Input.GetMouseButton(0)) {
@@ -57,11 +57,11 @@ public class ClickableOrgan : MonoBehaviour
 
             //Update player structures
             System.Guid organId = organComponent.id;
-            GameObject playerFigureOrgan = playerFigure.GetComponent<PlayerBodyStructure>().simpleAddOrganOnSegmentWithPos(closestSegment, organType, organ, organId);
+            GameObject playerFigureOrgan = figure.GetComponent<Morphology>().simpleAddOrganOnSegmentWithPos(closestSegment, organType, organ, organId);
 
             //Add attached behaviour to attached organ
             AttachedOrgan attachedOrgan = playerFigureOrgan.AddComponent<AttachedOrgan>();
-            attachedOrgan.playerFigure = playerFigure;
+            attachedOrgan.figure = figure;
             attachedOrgan.parentSegment = closestSegment;
             attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
             attachedOrgan.upgradeMenuLogic = upgradeMenuLogic;

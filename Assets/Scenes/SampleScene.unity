@@ -741,7 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e46a4dc6e969a74d81ad5bd5ee89c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBodyStructure: {fileID: 1887967016}
+  playerMorphology: {fileID: 0}
   playerState: {fileID: 1887967015}
   player: {fileID: 1887967008}
   upgradeMenuLogic: {fileID: 1840963401}
@@ -1426,7 +1426,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-146272
+  m_Name: pb_Mesh17828
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1988,7 +1988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75e396c51b457e438814e54c3a91a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBodyStructure: {fileID: 1887967016}
+  playerMorphology: {fileID: 1887967016}
   segments: []
 --- !u!114 &1887967015
 MonoBehaviour:

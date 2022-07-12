@@ -9,7 +9,7 @@ public class MainCameraMovement : MonoBehaviour
     public int cameraYOffset;
 
     void Start(){
-        playerHead = player.GetComponent<PlayerBodyStructure>().getHead();
+        playerHead = player.GetComponent<Morphology>().getHead();
     }
 
     void Update(){

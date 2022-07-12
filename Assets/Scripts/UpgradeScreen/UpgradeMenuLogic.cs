@@ -6,12 +6,12 @@ public class UpgradeMenuLogic : MonoBehaviour {
 
     public static bool organIsDragged = false;
     public static bool attachedOrganIsDragged = false;
-    public static bool playerFigureInstantiated = false;
+    public static bool figureInstantiated = false;
     public GameObject player;
     public Camera upgradeMenuCamera;
     public GameObject upgradeMenuPlane;
 
-    private GameObject playerFigure;
+    private GameObject figure;
     private Vector3 safetyOffset = new Vector3(0, 5, 0);
     private Vector3 displayOffset = new Vector3(0, 0.5f, 0);
     private Dictionary<System.Guid, GameObject> organsOnDisplay;
@@ -32,33 +32,33 @@ public class UpgradeMenuLogic : MonoBehaviour {
     private void FixedUpdate() {
     }
 
-    public void renderPlayerFigure() {
-        if (playerFigure != null && playerFigure.GetComponent<PlayerBodyStructure>() != null) {
-            playerFigure.GetComponent<PlayerBodyStructure>().removeAllOrgans();
-            Destroy(playerFigure);
+    public void renderFigure() {
+        if (figure != null && figure.GetComponent<Morphology>() != null) {
+            figure.GetComponent<Morphology>().removeAllOrgans();
+            Destroy(figure);
         }
 
-        playerFigure = new GameObject();
-        playerFigure.name = "PlayerCopy";
-        playerFigure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
-        PlayerBodyStructure playerCopyBodyStructure = playerFigure.AddComponent<PlayerBodyStructure>();
-        PlayerBodyStructure playerBodyStructure = player.GetComponent<PlayerBodyStructure>();
+        figure = new GameObject();
+        figure.name = "PlayerCopy";
+        figure.transform.position = upgradeMenuPlane.transform.position + displayOffset;
+        Morphology figureMorphology = figure.AddComponent<Morphology>();
+        Morphology playerMorphology = player.GetComponent<Morphology>();
 
         int i = 0;
-        foreach (KeyValuePair<System.Guid, GameObject> segmentEntry in playerBodyStructure.getSegments()) {
+        foreach (KeyValuePair<System.Guid, GameObject> segmentEntry in playerMorphology.getSegments()) {
             System.Guid segmentId = segmentEntry.Value.GetComponent<Segment>().segmentId;
-            Vector3 segmentPos = playerFigure.transform.position + new Vector3(0, 0, -i * 2);
-            GameObject newSegment = playerCopyBodyStructure.addSegmentWithPos(segmentEntry.Value, segmentId, segmentPos);
+            Vector3 segmentPos = figure.transform.position + new Vector3(0, 0, -i * 2);
+            GameObject newSegment = figureMorphology.addSegmentWithPos(segmentEntry.Value, segmentId, segmentPos);
 
             //Render organs
             foreach (Transform organ in segmentEntry.Value.transform) {
                 System.Type organType = organ.GetComponent<Organ>().organType;
                 System.Guid organId = organ.GetComponent<Organ>().id;
-                GameObject newOrgan = playerCopyBodyStructure.addOrganOnSegmentWithPos(newSegment.gameObject, organType, organ.gameObject, organId);
+                GameObject newOrgan = figureMorphology.addOrganOnSegmentWithPos(newSegment.gameObject, organType, organ.gameObject, organId);
 
                 //Add attached organ behaviour
                 AttachedOrgan attachedOrgan = newOrgan.gameObject.AddComponent<AttachedOrgan>();
-                attachedOrgan.playerFigure = playerFigure;
+                attachedOrgan.figure = figure;
                 attachedOrgan.parentSegment = segmentEntry.Value;
                 attachedOrgan.upgradeMenuCamera = upgradeMenuCamera;
                 attachedOrgan.upgradeMenuLogic = this;
@@ -109,7 +109,7 @@ public class UpgradeMenuLogic : MonoBehaviour {
 
         //Add clickable organ component
         ClickableOrgan clickableOrgan = organ.AddComponent<ClickableOrgan>();
-        clickableOrgan.playerFigure = playerFigure;
+        clickableOrgan.figure = figure;
         clickableOrgan.organType = organType;
         clickableOrgan.organ = organ;
         clickableOrgan.upgradeMenuCamera = upgradeMenuCamera;
@@ -128,22 +128,22 @@ public class UpgradeMenuLogic : MonoBehaviour {
     }
 
     public void applyUpgrade() {
-        PlayerBodyStructure playerBodyStructure = player.GetComponent<PlayerBodyStructure>();
+        Morphology playerMorphology = player.GetComponent<Morphology>();
 
         //Apply removed organs
         foreach (KeyValuePair<System.Guid, HashSet<System.Guid>> segmentEntry in removedOrgans) {
             foreach (System.Guid organ in removedOrgans[segmentEntry.Key]) {
-                playerBodyStructure.removeOrgan(segmentEntry.Key, organ);
+                playerMorphology.removeOrgan(segmentEntry.Key, organ);
             }
         }
 
         //Apply added organs
         foreach (KeyValuePair<System.Guid, Dictionary<System.Guid, GameObject>> segmentEntry in addedOrgans) {
             foreach (KeyValuePair<System.Guid, GameObject> organEntry in segmentEntry.Value) {
-                GameObject playerSegment = playerBodyStructure.getSegment(segmentEntry.Key);
+                GameObject playerSegment = playerMorphology.getSegment(segmentEntry.Key);
                 GameObject organ = organEntry.Value;
                 System.Type organType = organ.GetComponent<Organ>().organType;
-                playerBodyStructure.addOrganOnSegmentWithPos(playerSegment, organType, organ, organEntry.Key);
+                playerMorphology.addOrganOnSegmentWithPos(playerSegment, organType, organ, organEntry.Key);
             }
         }
     }

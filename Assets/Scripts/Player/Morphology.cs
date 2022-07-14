@@ -8,13 +8,11 @@ public class Morphology : MonoBehaviour
 
     private Dictionary<System.Guid, GameObject> playerOrgans;
     private Dictionary<System.Guid, GameObject> playerSegments;
-    private Dictionary<System.Guid, Dictionary<System.Guid, GameObject>> segmentOrgans;
     private int nbSegments = 4;
 
     void Awake(){
         playerOrgans = new Dictionary<System.Guid, GameObject>();
         playerSegments = new Dictionary<System.Guid, GameObject>();
-        segmentOrgans = new Dictionary<System.Guid, Dictionary<System.Guid, GameObject>>();
     }
 
     void Update(){
@@ -24,16 +22,14 @@ public class Morphology : MonoBehaviour
     }
 
     public void removeOrgan(System.Guid segmentId, System.Guid organId) {
-        if (playerSegments.ContainsKey(segmentId) && segmentOrgans.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
-            GameObject organToRemove = segmentOrgans[segmentId][organId];
-            segmentOrgans[segmentId].Remove(organId);
-            Destroy(organToRemove);
+        if (playerSegments.ContainsKey(segmentId)) {
+            playerSegments[segmentId].GetComponent<Segment>().removeOrgan(organId);
         }
     }
 
     public void removeOrganFromMapping(System.Guid segmentId, System.Guid organId) {
-        if (playerSegments.ContainsKey(segmentId) && segmentOrgans[segmentId].ContainsKey(organId)) {
-            segmentOrgans[segmentId].Remove(organId);
+        if (playerSegments.ContainsKey(segmentId)) {
+            playerSegments[segmentId].GetComponent<Segment>().removeOrganFromMapping(organId);
         }
     }
 
@@ -97,12 +93,7 @@ public class Morphology : MonoBehaviour
             Destroy(newOrgan.GetComponent<ClickableOrgan>());
         }
 
-        System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
-        if (!segmentOrgans.ContainsKey(segmentId)) {
-            segmentOrgans.Add(segmentId, new Dictionary<System.Guid, GameObject>());
-        }
-
-        segmentOrgans[segmentId].Add(organId, newOrgan);
+        segment.GetComponent<Segment>().addOrganToMapping(organId, newOrgan);
 
         return newOrgan;
     }
@@ -139,12 +130,7 @@ public class Morphology : MonoBehaviour
             Destroy(organ.GetComponent<ClickableOrgan>());
         }
 
-        System.Guid segmentId = segment.GetComponent<Segment>().segmentId;
-
-        if (!segmentOrgans.ContainsKey(segmentId)) {
-            segmentOrgans.Add(segmentId, new Dictionary<System.Guid, GameObject>());
-        }
-        segmentOrgans[segmentId].Add(organId, organ);
+        segment.GetComponent<Segment>().addOrganToMapping(organId, organ);
 
         return organ;
     }
@@ -199,7 +185,6 @@ public class Morphology : MonoBehaviour
         segmentComponent.segmentName = "PlayerBody";
 
         playerSegments.Add(segmentComponent.segmentId, playerHead);
-        segmentOrgans.Add(segmentComponent.segmentId, new Dictionary<System.Guid, GameObject>());
 
         initSegmentedBody();
 
@@ -241,8 +226,7 @@ public class Morphology : MonoBehaviour
         organComponent.serialOrgan = serialOrgan;
 
         playerOrgans.Add(organComponent.id, organ);
-        System.Guid segmentId = parent.GetComponent<Segment>().segmentId;
-        segmentOrgans[segmentId].Add(organComponent.id, organ);
+        parent.GetComponent<Segment>().addOrganToMapping(organComponent.id, organ);
 
         return organ;
     }

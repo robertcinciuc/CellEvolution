@@ -118,7 +118,7 @@ public class UpgradeManager : MonoBehaviour {
         clickableOrgan.upgradeMenuPlane = upgradeMenuPlane;
 
         //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        OrganSerial serialOrgan = new OrganSerial(organ);
         organComponent.serialOrgan = serialOrgan;
 
         //Add organ to display organs

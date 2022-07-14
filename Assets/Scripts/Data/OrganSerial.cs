@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SerialOrgan
+public class OrganSerial
 {
     public float localPosX;
     public float localPosY;
@@ -17,7 +17,7 @@ public class SerialOrgan
     public string organName;
     public System.Guid id;
 
-    public SerialOrgan(GameObject parentOrgan) {
+    public OrganSerial(GameObject parentOrgan) {
         localPosX = parentOrgan.transform.localPosition.x;
         localPosY = parentOrgan.transform.localPosition.y;
         localPosZ = parentOrgan.transform.localPosition.z;

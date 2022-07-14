@@ -50,13 +50,13 @@ public class Morphology : MonoBehaviour
         organComponent.organName = organ.GetComponent<Organ>().organName;
 
         //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
+        OrganSerial serialOrgan = new OrganSerial(newOrgan);
         organComponent.serialOrgan = serialOrgan;
 
         if (organ.GetComponent<Organ>() != null) {
             newOrgan.name = organ.GetComponent<Organ>().organName;
-        } else if (organ.GetComponent<SerialOrgan>() != null) {
-            newOrgan.name = organ.GetComponent<SerialOrgan>().organName;
+        } else if (organ.GetComponent<OrganSerial>() != null) {
+            newOrgan.name = organ.GetComponent<OrganSerial>().organName;
         }
 
         //Remove clickable organ behaviour
@@ -83,13 +83,13 @@ public class Morphology : MonoBehaviour
         organComponent.organName = organ.GetComponent<Organ>().organName;
 
         //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(newOrgan);
+        OrganSerial serialOrgan = new OrganSerial(newOrgan);
         organComponent.serialOrgan = serialOrgan;
 
         if (organ.GetComponent<Organ>() != null) {
             newOrgan.name = organ.GetComponent<Organ>().organName;
-        } else if (organ.GetComponent<SerialOrgan>() != null) {
-            newOrgan.name = organ.GetComponent<SerialOrgan>().organName;
+        } else if (organ.GetComponent<OrganSerial>() != null) {
+            newOrgan.name = organ.GetComponent<OrganSerial>().organName;
         }
 
         //Remove clickable organ behaviour
@@ -131,7 +131,7 @@ public class Morphology : MonoBehaviour
         organComponent.organName = organ.GetComponent<Organ>().organName;
 
         //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        OrganSerial serialOrgan = new OrganSerial(organ);
         organComponent.serialOrgan = serialOrgan;
 
         //Remove clickable organ behaviour
@@ -149,8 +149,8 @@ public class Morphology : MonoBehaviour
         return organ;
     }
     
-    public Dictionary<System.Guid, SerialOrgan> getPlayerSerialOrgans() {
-        Dictionary<System.Guid, SerialOrgan> serialOrgans = new Dictionary<System.Guid, SerialOrgan>();
+    public Dictionary<System.Guid, OrganSerial> getPlayerSerialOrgans() {
+        Dictionary<System.Guid, OrganSerial> serialOrgans = new Dictionary<System.Guid, OrganSerial>();
         foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
             serialOrgans.Add(entry.Key, entry.Value.GetComponent<Organ>().getSerialOrgan());
         }
@@ -158,10 +158,10 @@ public class Morphology : MonoBehaviour
         return serialOrgans;
     }
 
-    public void addAllOrgans(Dictionary<System.Guid, SerialOrgan> organs) {
+    public void addAllOrgans(Dictionary<System.Guid, OrganSerial> organs) {
         removeAllOrgans();
 
-        foreach (KeyValuePair<System.Guid, SerialOrgan> entry in organs) {
+        foreach (KeyValuePair<System.Guid, OrganSerial> entry in organs) {
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
 
             //Add organ component
@@ -171,7 +171,7 @@ public class Morphology : MonoBehaviour
             organComponent.organName = entry.Value.organName;
 
             //Add serial organ to organ component
-            SerialOrgan serialOrgan = new SerialOrgan(organ);
+            OrganSerial serialOrgan = new OrganSerial(organ);
             organComponent.serialOrgan = serialOrgan;
 
             organ.transform.localPosition = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
@@ -237,7 +237,7 @@ public class Morphology : MonoBehaviour
         organComponent.organName = name;
 
         //Add serial organ to organ component
-        SerialOrgan serialOrgan = new SerialOrgan(organ);
+        OrganSerial serialOrgan = new OrganSerial(organ);
         organComponent.serialOrgan = serialOrgan;
 
         playerOrgans.Add(organComponent.id, organ);

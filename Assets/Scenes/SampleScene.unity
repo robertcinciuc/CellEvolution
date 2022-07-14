@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 316695763}
   - component: {fileID: 316695762}
   m_Layer: 0
-  m_Name: UpgradeMenuPlane
+  m_Name: UpgradePlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 602796633}
   - component: {fileID: 602796635}
   m_Layer: 0
-  m_Name: UpgradeMenuCamera
+  m_Name: UpgradeCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -838,7 +838,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 602796631}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 889485a45ff7a6049b2bd7cc14abb6ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 23b965c91a25b614c88b81f01feb4d4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cameraYOffset: 70
@@ -2013,7 +2013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1984966088}
   m_Layer: 0
-  m_Name: UpgradeMenu
+  m_Name: Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

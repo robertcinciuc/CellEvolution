@@ -7,7 +7,7 @@ using UnityEngine;
 public class LoadUpgradeMenu : MonoBehaviour
 {
     public UpgradeManager upgradeManager;
-    public UpgradeMenuCameraState upgradeMenuCameraState;
+    public UpgradeCameraState upgradeMenuCameraState;
 
     private Button upgradeButton;
 

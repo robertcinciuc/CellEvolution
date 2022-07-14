@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeMenuCameraState : MonoBehaviour
-{
+public class UpgradeCameraState : MonoBehaviour {
     public float cameraYOffset = 70; 
 
     private Vector3 cameraPosition;

@@ -15,9 +15,12 @@ public class SegmentSerial{
     public float rotZ;
     public System.Guid segmentId;
     public string segmentName;
-    Dictionary<System.Guid, OrganSerial> organs;
+    public Dictionary<System.Guid, OrganSerial> organs;
 
     public SegmentSerial(GameObject parentSegment) {
+        organs = new Dictionary<System.Guid, OrganSerial>();
+        Segment segmentComponent = parentSegment.GetComponent<Segment>();
+
         posX = parentSegment.transform.localPosition.x;
         posY = parentSegment.transform.localPosition.y;
         posZ = parentSegment.transform.localPosition.z;
@@ -25,10 +28,12 @@ public class SegmentSerial{
         rotX = parentSegment.transform.localRotation.x;
         rotY = parentSegment.transform.localRotation.y;
         rotZ = parentSegment.transform.localRotation.z;
-        segmentName = parentSegment.GetComponent<Organ>().organName;
-        segmentId = parentSegment.GetComponent<Organ>().id;
+        segmentName = segmentComponent.segmentName;
+        segmentId = segmentComponent.segmentId;
 
-        //Morphology morphology = parentSegment.transform.parent.GetComponent<Morphology>();
-        //TODO: get all organs
+        foreach(KeyValuePair<System.Guid, GameObject> entry in segmentComponent.getOrgans()) {
+            OrganSerial organSerial = new OrganSerial(entry.Value);
+            organs.Add(entry.Key, organSerial);
+        }
     }
 }

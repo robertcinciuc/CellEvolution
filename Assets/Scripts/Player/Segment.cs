@@ -6,7 +6,8 @@ public class Segment : MonoBehaviour
 {
     public System.Guid segmentId;
     public string segmentName;
-    Dictionary<System.Guid, GameObject> organs;
+    
+    private Dictionary<System.Guid, GameObject> organs;
 
     void Awake(){
         organs = new Dictionary<System.Guid, GameObject>();
@@ -32,5 +33,9 @@ public class Segment : MonoBehaviour
 
     public void addOrganToMapping(System.Guid organId, GameObject organ) {
         organs.Add(organId, organ);
+    }
+
+    public Dictionary<System.Guid, GameObject> getOrgans() {
+        return organs;
     }
 }

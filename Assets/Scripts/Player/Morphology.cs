@@ -5,10 +5,10 @@ using UnityEngine;
 public class Morphology : MonoBehaviour
 {
     public GameObject playerHead;
+    public int nbSegments = 4;
 
     private Dictionary<System.Guid, GameObject> playerOrgans;
     private Dictionary<System.Guid, GameObject> playerSegments;
-    private int nbSegments = 4;
 
     void Awake(){
         playerOrgans = new Dictionary<System.Guid, GameObject>();

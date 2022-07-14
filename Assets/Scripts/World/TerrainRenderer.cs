@@ -23,9 +23,11 @@ public class TerrainRenderer : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        renderXPlane();
-        renderZPlane();
-        renderXZPlane();
+        if (playerHead != null) {
+            renderXPlane();
+            renderZPlane();
+            renderXZPlane();
+        }
     }
 
     public GameObject getPlaneObject(LocalPlanes planeName) {

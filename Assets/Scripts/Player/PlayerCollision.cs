@@ -9,7 +9,7 @@ public class PlayerCollision : MonoBehaviour
 
     void Start(){
         thisCollider = GetComponent<Collider>();
-        playerState = GetComponent<PlayerState>();
+        playerState = transform.parent.GetComponent<PlayerState>();
     }
 
     void Update(){

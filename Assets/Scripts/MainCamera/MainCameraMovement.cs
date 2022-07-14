@@ -13,8 +13,10 @@ public class MainCameraMovement : MonoBehaviour
     }
 
     void Update(){
-        cameraPosition = playerHead.transform.position;
-        cameraPosition.y += cameraYOffset;
-        transform.position = cameraPosition;
+        if (playerHead != null) {
+            cameraPosition = playerHead.transform.position;
+            cameraPosition.y += cameraYOffset;
+            transform.position = cameraPosition;
+        }
     }
 }

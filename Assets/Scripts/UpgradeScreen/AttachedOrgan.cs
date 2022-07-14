@@ -12,6 +12,7 @@ public class AttachedOrgan : MonoBehaviour
 
     private bool clickPressedOnOrgan = false;
     private bool endMoveable = false;
+    private float displayYOffset = 0.5f;
 
     void Start(){
         
@@ -42,7 +43,7 @@ public class AttachedOrgan : MonoBehaviour
         GameObject closestSegment = getClosestSegment(figureMorphology.getSegments());
 
         if (clickPressedOnOrgan && Input.GetMouseButton(0)) {
-            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y;
+            float distCameraPlane = upgradeMenuCamera.transform.position.y - upgradeMenuPlane.transform.position.y - displayYOffset;
             transform.position = upgradeMenuCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distCameraPlane));
             Vector3 deltaPos = transform.position - closestSegment.transform.position;
             transform.localRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 50 * Time.deltaTime);

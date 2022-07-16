@@ -144,6 +144,32 @@ public class Morphology : MonoBehaviour
         return serialOrgans;
     }
 
+    public void updateMorphology(MorphologySerial morphologySerial) {
+        //Removing the old segments
+        foreach (KeyValuePair<System.Guid, GameObject> entry in playerSegments) {
+            DestroyImmediate(entry.Value);
+        }
+        playerSegments.Clear();
+
+        nbSegments = morphologySerial.nbSegments;
+        foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
+            Vector3 segmentPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
+            Quaternion segmentRot = new Quaternion(entry.Value.rotW, entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ);
+            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.segmentName, typeof(GameObject)), segmentPos, segmentRot);
+
+            //Temporary workaround
+            Segment oldSegmentComponent = segment.AddComponent<Segment>();
+            oldSegmentComponent.segmentName = entry.Value.segmentName;
+
+            GameObject newSegment = addSegmentWithPos(segment, entry.Value.segmentId, segmentPos);
+            newSegment.GetComponent<Segment>().updateSegment(entry.Value);
+        }
+    }
+
+    public void resetMorphology() {
+
+    }
+
     public void addAllOrgans(Dictionary<System.Guid, OrganSerial> organs) {
         removeAllOrgans();
 
@@ -160,8 +186,8 @@ public class Morphology : MonoBehaviour
             OrganSerial serialOrgan = new OrganSerial(organ);
             organComponent.serialOrgan = serialOrgan;
 
-            organ.transform.localPosition = new Vector3(entry.Value.localPosX, entry.Value.localPosY, entry.Value.localPosZ);
-            organ.transform.localRotation = new Quaternion(entry.Value.localRotX, entry.Value.localRotY, entry.Value.localRotZ, entry.Value.localRotW);
+            organ.transform.localPosition = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
+            organ.transform.localRotation = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
             addOrganWithPos(entry.Value.organType, organ, entry.Key);
             Destroy(organ);
         }

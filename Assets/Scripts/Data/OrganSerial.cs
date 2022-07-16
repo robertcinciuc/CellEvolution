@@ -6,25 +6,25 @@ using System;
 [Serializable]
 public class OrganSerial
 {
-    public float localPosX;
-    public float localPosY;
-    public float localPosZ;
-    public float localRotW;
-    public float localRotX;
-    public float localRotY;
-    public float localRotZ;
+    public float posX;
+    public float posY;
+    public float posZ;
+    public float rotW;
+    public float rotX;
+    public float rotY;
+    public float rotZ;
     public System.Type organType;
     public string organName;
     public System.Guid id;
 
     public OrganSerial(GameObject organ) {
-        localPosX = organ.transform.localPosition.x;
-        localPosY = organ.transform.localPosition.y;
-        localPosZ = organ.transform.localPosition.z;
-        localRotW = organ.transform.localRotation.w;
-        localRotX = organ.transform.localRotation.x;
-        localRotY = organ.transform.localRotation.y;
-        localRotZ = organ.transform.localRotation.z;
+        posX = organ.transform.localPosition.x;
+        posY = organ.transform.localPosition.y;
+        posZ = organ.transform.localPosition.z;
+        rotW = organ.transform.localRotation.w;
+        rotX = organ.transform.localRotation.x;
+        rotY = organ.transform.localRotation.y;
+        rotZ = organ.transform.localRotation.z;
         organType = organ.GetComponent<Organ>().organType;
         organName = organ.GetComponent<Organ>().organName;
         id = organ.GetComponent<Organ>().id;

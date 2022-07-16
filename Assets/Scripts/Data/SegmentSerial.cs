@@ -15,13 +15,13 @@ public class SegmentSerial{
     public float rotZ;
     public System.Guid segmentId;
     public string segmentName;
-    public Dictionary<System.Guid, OrganSerial> organs;
+    public Dictionary<System.Guid, OrganSerial> organsSerial;
     public List<System.Type> classicComponents;
     public PlayerMovementSerial playerMovementSerial;
     public PlayerCollisionSerial playerCollisionSerial;
 
     public SegmentSerial(GameObject parentSegment) {
-        organs = new Dictionary<System.Guid, OrganSerial>();
+        organsSerial = new Dictionary<System.Guid, OrganSerial>();
         classicComponents = new List<System.Type>();
         Segment segmentComponent = parentSegment.GetComponent<Segment>();
 
@@ -38,7 +38,7 @@ public class SegmentSerial{
 
         foreach(KeyValuePair<System.Guid, GameObject> entry in segmentComponent.getOrgans()) {
             OrganSerial organSerial = new OrganSerial(entry.Value);
-            organs.Add(entry.Key, organSerial);
+            organsSerial.Add(entry.Key, organSerial);
         }
 
         //Player movement component if head segment

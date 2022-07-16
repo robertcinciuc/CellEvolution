@@ -713,8 +713,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4995869b656ee4744b0935f22ba98de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1887967008}
   progressionData: {fileID: 453623737}
   terrainRenderer: {fileID: 356840618}
+  upgradeManager: {fileID: 1840963401}
 --- !u!4 &453623736
 Transform:
   m_ObjectHideFlags: 0
@@ -741,7 +743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e46a4dc6e969a74d81ad5bd5ee89c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMorphology: {fileID: 1887967016}
   playerState: {fileID: 1887967015}
   player: {fileID: 1887967008}
   upgradeManager: {fileID: 1840963401}
@@ -1426,7 +1427,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17824
+  m_Name: pb_Mesh17740
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1989,6 +1990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHead: {fileID: 1782061228}
+  nbSegments: 4
 --- !u!1 &1984966087
 GameObject:
   m_ObjectHideFlags: 0

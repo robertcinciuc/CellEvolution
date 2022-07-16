@@ -7,11 +7,9 @@ using System;
 public class PlayerMovementSerial {
 
     public float playerSpeed;
-    public System.Type playerMovementType;
 
     public PlayerMovementSerial(PlayerMovement playerMovement) {
         this.playerSpeed = playerMovement.playerSpeed;
-        this.playerMovementType = typeof(PlayerMovement);
     }
 
 }

@@ -10,6 +10,7 @@ public class DataSerializer : MonoBehaviour
 	public GameObject player;
 	public ProgressionData progressionData;
 	public TerrainRenderer terrainRenderer;
+	public UpgradeManager upgradeManager;
 
 	public void SaveGame() {
         BinaryFormatter bf = new BinaryFormatter();
@@ -50,25 +51,20 @@ public class DataSerializer : MonoBehaviour
 	}
 
 	private void loadFromDataPacket(DataPacket data) {
-		nbEnemiesKilled = data.nbEnemiesKilled;
-		nbMeatsEaten = data.nbMeatsEaten;
-		playerState.sethealth(data.health);
-		playerMorphology.addAllOrgans(data.playerSerialOrgans);
+		progressionData.updateProgressionData(data.progressionDataSerial);
+        PlayerState playerState = player.GetComponent<PlayerState>();
+		playerState.updatePlayerState(data.progressionDataSerial.playerStateSerial);
+        Morphology morphology = player.GetComponent<Morphology>();
+		morphology.updateMorphology(data.morphologySerial);
 		upgradeManager.renderFigure();
-
-		player.transform.position = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
-		player.transform.rotation = Quaternion.Slerp(
-			player.transform.rotation,
-			new Quaternion(data.playerRotW, data.playerRotX, data.playerRotY, data.playerRotZ),
-			Time.deltaTime);
 	}
 
 	private void applyReset() {
-		nbEnemiesKilled = 0;
-		nbMeatsEaten = 0;
-		playerState.sethealth(playerState.maxHealth);
-		playerMorphology.removeAllOrgans();
-		playerMorphology.transform.position = Vector3.zero;
-		playerMorphology.transform.rotation = Quaternion.identity;
+		progressionData.resetProgressionData();
+		PlayerState playerState = player.GetComponent<PlayerState>();
+		playerState.resetPlayerState();
+		Morphology morphology = player.GetComponent<Morphology>();
+		morphology.resetMorphology();
+		upgradeManager.renderFigure();
 	}
 }

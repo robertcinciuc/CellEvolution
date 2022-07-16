@@ -50,4 +50,16 @@ public class PlayerState : MonoBehaviour
         health = amount;
         healthBar.setHealth(amount);
     }
+
+    public void updatePlayerState(PlayerStateSerial playerStateSerial) {
+        isActive = playerStateSerial.isActive;
+        health = playerStateSerial.health;
+        maxHealth = playerStateSerial.maxHealth;
+    }
+
+    public void resetPlayerState() {
+        isActive = true;
+        health = 100;
+        maxHealth = 100;
+    }
 }

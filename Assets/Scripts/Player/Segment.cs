@@ -38,4 +38,31 @@ public class Segment : MonoBehaviour
     public Dictionary<System.Guid, GameObject> getOrgans() {
         return organs;
     }
+
+    public void updateSegment(SegmentSerial segmentSerial) {
+        //Add classic components
+        foreach(System.Type componentType in segmentSerial.classicComponents) {
+            gameObject.AddComponent(componentType);
+        }
+        gameObject.AddComponent<PlayerCollision>();
+
+        //Add player movement if head
+        if (segmentSerial.playerMovementSerial != null) {
+            PlayerMovement playerMovement = gameObject.AddComponent<PlayerMovement>();
+            playerMovement.playerSpeed = segmentSerial.playerMovementSerial.playerSpeed;
+        }
+
+        //Add organs
+        foreach (KeyValuePair<System.Guid, OrganSerial> entry in segmentSerial.organsSerial) {
+            Vector3 organPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
+            Quaternion organRot = new Quaternion(entry.Value.rotW, entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ);
+            GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), organPos, organRot);
+
+            //Temporary workaround
+            Organ oldOrganComponent = organ.AddComponent<Organ>();
+            oldOrganComponent.organName = entry.Value.organName;
+
+            gameObject.transform.parent.GetComponent<Morphology>().addOrganOnSegmentWithPos(gameObject, entry.Value.organType, organ, entry.Value.id);
+        }
+    }
 }

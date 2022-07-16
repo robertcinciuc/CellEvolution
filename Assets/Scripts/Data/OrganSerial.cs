@@ -17,16 +17,16 @@ public class OrganSerial
     public string organName;
     public System.Guid id;
 
-    public OrganSerial(GameObject parentOrgan) {
-        localPosX = parentOrgan.transform.localPosition.x;
-        localPosY = parentOrgan.transform.localPosition.y;
-        localPosZ = parentOrgan.transform.localPosition.z;
-        localRotW = parentOrgan.transform.localRotation.w;
-        localRotX = parentOrgan.transform.localRotation.x;
-        localRotY = parentOrgan.transform.localRotation.y;
-        localRotZ = parentOrgan.transform.localRotation.z;
-        organType = parentOrgan.GetComponent<Organ>().organType;
-        organName = parentOrgan.GetComponent<Organ>().organName;
-        id = parentOrgan.GetComponent<Organ>().id;
+    public OrganSerial(GameObject organ) {
+        localPosX = organ.transform.localPosition.x;
+        localPosY = organ.transform.localPosition.y;
+        localPosZ = organ.transform.localPosition.z;
+        localRotW = organ.transform.localRotation.w;
+        localRotX = organ.transform.localRotation.x;
+        localRotY = organ.transform.localRotation.y;
+        localRotZ = organ.transform.localRotation.z;
+        organType = organ.GetComponent<Organ>().organType;
+        organName = organ.GetComponent<Organ>().organName;
+        id = organ.GetComponent<Organ>().id;
     }
 }

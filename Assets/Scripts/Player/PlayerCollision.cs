@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
-    private Collider thisCollider;
     private PlayerState playerState;
 
     void Start(){
-        thisCollider = GetComponent<Collider>();
         playerState = transform.parent.GetComponent<PlayerState>();
     }
 

@@ -6,15 +6,16 @@ using System;
 [Serializable]
 public class MorphologySerial {
 
-    //TODO: figure out how to represent head with all the scripts
     public int nbSegments;
-    public Dictionary<System.Guid, GameObject> playerSegments;
+    public Dictionary<System.Guid, SegmentSerial> segmentsSerial;
 
-    void Start(){
-        
-    }
+    public MorphologySerial(Morphology morphology) {
+        segmentsSerial = new Dictionary<System.Guid, SegmentSerial>();
 
-    void Update(){
-        
+        nbSegments = morphology.nbSegments;
+
+        foreach (KeyValuePair<System.Guid, GameObject> entry in morphology.getSegments()) {
+            segmentsSerial.Add(entry.Key, new SegmentSerial(entry.Value));
+        }
     }
 }

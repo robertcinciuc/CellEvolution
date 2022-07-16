@@ -5,15 +5,11 @@ using System;
 
 [Serializable]
 public class DataPacket {
-    public int nbEnemiesKilled;
-    public int nbMeatsEaten;
-    public float health;
-    public Dictionary<System.Guid, OrganSerial> playerSerialOrgans;
-    public float playerPosX;
-    public float playerPosY;
-    public float playerPosZ;
-    public float playerRotW;
-    public float playerRotX;
-    public float playerRotY;
-    public float playerRotZ;
+    public ProgressionDataSerial progressionDataSerial;
+    public MorphologySerial morphologySerial;
+    
+    public DataPacket(ProgressionData progressionData, GameObject player) {
+        progressionDataSerial = new ProgressionDataSerial(progressionData, player);
+        morphologySerial = new MorphologySerial(player.GetComponent<Morphology>());
+    }
 }

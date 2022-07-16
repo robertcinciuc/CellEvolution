@@ -16,9 +16,13 @@ public class SegmentSerial{
     public System.Guid segmentId;
     public string segmentName;
     public Dictionary<System.Guid, OrganSerial> organs;
+    public List<System.Type> classicComponents;
+    public PlayerMovementSerial playerMovementSerial;
+    public PlayerCollisionSerial playerCollisionSerial;
 
     public SegmentSerial(GameObject parentSegment) {
         organs = new Dictionary<System.Guid, OrganSerial>();
+        classicComponents = new List<System.Type>();
         Segment segmentComponent = parentSegment.GetComponent<Segment>();
 
         posX = parentSegment.transform.localPosition.x;
@@ -30,10 +34,19 @@ public class SegmentSerial{
         rotZ = parentSegment.transform.localRotation.z;
         segmentName = segmentComponent.segmentName;
         segmentId = segmentComponent.segmentId;
+        playerCollisionSerial = new PlayerCollisionSerial(parentSegment.GetComponent<PlayerCollision>());
 
         foreach(KeyValuePair<System.Guid, GameObject> entry in segmentComponent.getOrgans()) {
             OrganSerial organSerial = new OrganSerial(entry.Value);
             organs.Add(entry.Key, organSerial);
         }
+
+        //Player movement component if head segment
+        if(parentSegment.GetComponent<PlayerMovement>() != null) {
+            playerMovementSerial = new PlayerMovementSerial(parentSegment.GetComponent<PlayerMovement>());
+        }
+
+        //Add classic components
+        classicComponents.Add(parentSegment.GetComponent<Rigidbody>().GetType());
     }
 }

@@ -7,14 +7,15 @@ using System.IO;
 
 public class DataSerializer : MonoBehaviour
 {
+	public GameObject player;
 	public ProgressionData progressionData;
 	public TerrainRenderer terrainRenderer;
 
 	public void SaveGame() {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/MySaveData.dat");
-        DataPacket data = progressionData.buildDatapacketForStoring();
-        bf.Serialize(file, data);
+        DataPacket data = new DataPacket(progressionData, player);
+		bf.Serialize(file, data);
         file.Close();
 
         Debug.Log("Game data saved!");
@@ -27,9 +28,10 @@ public class DataSerializer : MonoBehaviour
 			DataPacket data = (DataPacket)bf.Deserialize(file);
 			file.Close();
 
-			Vector3 playerPos = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
+			ProgressionDataSerial progressionDataSerial = data.progressionDataSerial;
+			Vector3 playerPos = new Vector3(progressionDataSerial.playerPosX, progressionDataSerial.playerPosY, progressionDataSerial.playerPosZ);
 			terrainRenderer.renderCurrentPlane(playerPos);
-			progressionData.loadFromDataPacket(data);
+			loadFromDataPacket(data);
 
 			Debug.Log("Game data loaded!");
 		} else {
@@ -40,10 +42,33 @@ public class DataSerializer : MonoBehaviour
 	public void ResetData() {
 		if (File.Exists(Application.persistentDataPath + "/MySaveData.dat")) {
 			File.Delete(Application.persistentDataPath + "/MySaveData.dat");
-			progressionData.applyReset();
+			applyReset();
 			Debug.Log("Data reset complete!");
 		} else {
 			Debug.LogError("No save data to delete.");
 		}
+	}
+
+	private void loadFromDataPacket(DataPacket data) {
+		nbEnemiesKilled = data.nbEnemiesKilled;
+		nbMeatsEaten = data.nbMeatsEaten;
+		playerState.sethealth(data.health);
+		playerMorphology.addAllOrgans(data.playerSerialOrgans);
+		upgradeManager.renderFigure();
+
+		player.transform.position = new Vector3(data.playerPosX, data.playerPosY, data.playerPosZ);
+		player.transform.rotation = Quaternion.Slerp(
+			player.transform.rotation,
+			new Quaternion(data.playerRotW, data.playerRotX, data.playerRotY, data.playerRotZ),
+			Time.deltaTime);
+	}
+
+	private void applyReset() {
+		nbEnemiesKilled = 0;
+		nbMeatsEaten = 0;
+		playerState.sethealth(playerState.maxHealth);
+		playerMorphology.removeAllOrgans();
+		playerMorphology.transform.position = Vector3.zero;
+		playerMorphology.transform.rotation = Quaternion.identity;
 	}
 }

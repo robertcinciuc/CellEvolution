@@ -63,6 +63,8 @@ public class Segment : MonoBehaviour
             oldOrganComponent.organName = entry.Value.organName;
 
             gameObject.transform.parent.GetComponent<Morphology>().addOrganOnSegmentWithPos(gameObject, entry.Value.organType, organ, entry.Value.id);
+            
+            DestroyImmediate(organ);
         }
     }
 }

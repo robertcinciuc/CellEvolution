@@ -163,6 +163,8 @@ public class Morphology : MonoBehaviour
 
             GameObject newSegment = addSegmentWithPos(segment, entry.Value.segmentId, segmentPos);
             newSegment.GetComponent<Segment>().updateSegment(entry.Value);
+
+            DestroyImmediate(segment);
         }
     }
 

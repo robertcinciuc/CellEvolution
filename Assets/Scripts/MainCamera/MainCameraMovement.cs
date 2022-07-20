@@ -19,4 +19,8 @@ public class MainCameraMovement : MonoBehaviour
             transform.position = cameraPosition;
         }
     }
+
+    public void updateHead(GameObject playerHead) {
+        this.playerHead = playerHead;
+    }
 }

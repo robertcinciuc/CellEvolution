@@ -1989,6 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13594700f65e604c8b9628d2cb6cb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCameraMovement: {fileID: 963194229}
   playerHead: {fileID: 1782061228}
   nbSegments: 4
 --- !u!1 &1984966087

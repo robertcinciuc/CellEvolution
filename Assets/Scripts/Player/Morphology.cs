@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Morphology : MonoBehaviour
 {
+    public MainCameraMovement mainCameraMovement;
     public GameObject playerHead;
     public int nbSegments = 4;
 
@@ -163,6 +164,11 @@ public class Morphology : MonoBehaviour
 
             GameObject newSegment = addSegmentWithPos(segment, entry.Value.segmentId, segmentPos);
             newSegment.GetComponent<Segment>().updateSegment(entry.Value);
+            
+            if (newSegment.GetComponent<Segment>().GetComponent<PlayerMovement>() != null) {
+                playerHead = newSegment;
+                mainCameraMovement.updateHead(newSegment);
+            }
 
             DestroyImmediate(segment);
         }

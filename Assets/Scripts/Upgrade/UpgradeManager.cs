@@ -34,7 +34,7 @@ public class UpgradeManager : MonoBehaviour {
 
     public void renderFigure() {
         if (figure != null && figure.GetComponent<Morphology>() != null) {
-            figure.GetComponent<Morphology>().removeAllOrgans();
+            //figure.GetComponent<Morphology>().removeAllOrgans();
             Destroy(figure);
         }
 

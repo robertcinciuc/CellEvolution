@@ -8,11 +8,9 @@ public class Morphology : MonoBehaviour
     public GameObject playerHead;
     public int nbSegments = 4;
 
-    private Dictionary<System.Guid, GameObject> playerOrgans;
     private Dictionary<System.Guid, GameObject> playerSegments;
 
     void Awake(){
-        playerOrgans = new Dictionary<System.Guid, GameObject>();
         playerSegments = new Dictionary<System.Guid, GameObject>();
     }
 
@@ -34,39 +32,6 @@ public class Morphology : MonoBehaviour
         }
     }
 
-    public GameObject addOrganWithPos(System.Type organType, GameObject organ, System.Guid organId) {
-        GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
-        newOrgan.transform.SetParent(this.gameObject.transform);
-        newOrgan.transform.localPosition = organ.transform.localPosition;
-        newOrgan.transform.localRotation = organ.transform.localRotation;
-
-        //Update organ component
-        Organ organComponent = newOrgan.GetComponent<Organ>();
-        organComponent.organType = organType;
-        organComponent.id = organId;
-        organComponent.organName = organ.GetComponent<Organ>().organName;
-
-        //Add serial organ to organ component
-        OrganSerial serialOrgan = new OrganSerial(newOrgan);
-        organComponent.serialOrgan = serialOrgan;
-
-        if (organ.GetComponent<Organ>() != null) {
-            newOrgan.name = organ.GetComponent<Organ>().organName;
-        } else if (organ.GetComponent<OrganSerial>() != null) {
-            newOrgan.name = organ.GetComponent<OrganSerial>().organName;
-        }
-
-        //Remove clickable organ behaviour
-        if (newOrgan.GetComponent<ClickableOrgan>() != null) {
-            Destroy(newOrgan.GetComponent<ClickableOrgan>());
-        }
-
-        playerOrgans.Add(newOrgan.GetComponent<Organ>().id, newOrgan);
-
-
-        return newOrgan;
-    }
-    
     public GameObject addOrganOnSegmentWithPos(GameObject segment, System.Type organType, GameObject organ, System.Guid organId) {
         GameObject newOrgan = Instantiate(organ, transform.position, transform.rotation);
         newOrgan.transform.SetParent(segment.transform);
@@ -136,21 +101,9 @@ public class Morphology : MonoBehaviour
         return organ;
     }
     
-    public Dictionary<System.Guid, OrganSerial> getPlayerSerialOrgans() {
-        Dictionary<System.Guid, OrganSerial> serialOrgans = new Dictionary<System.Guid, OrganSerial>();
-        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
-            serialOrgans.Add(entry.Key, entry.Value.GetComponent<Organ>().getSerialOrgan());
-        }
-
-        return serialOrgans;
-    }
-
     public void updateMorphology(MorphologySerial morphologySerial) {
         //Removing the old segments
-        foreach (KeyValuePair<System.Guid, GameObject> entry in playerSegments) {
-            DestroyImmediate(entry.Value);
-        }
-        playerSegments.Clear();
+        removeAllOrgans();
 
         nbSegments = morphologySerial.nbSegments;
         foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
@@ -178,34 +131,11 @@ public class Morphology : MonoBehaviour
 
     }
 
-    public void addAllOrgans(Dictionary<System.Guid, OrganSerial> organs) {
-        removeAllOrgans();
-
-        foreach (KeyValuePair<System.Guid, OrganSerial> entry in organs) {
-            GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), Vector3.zero, Quaternion.identity);
-
-            //Add organ component
-            Organ organComponent = organ.gameObject.AddComponent<Organ>();
-            organComponent.organType = entry.Value.organType;
-            organComponent.id = entry.Key;
-            organComponent.organName = entry.Value.organName;
-
-            //Add serial organ to organ component
-            OrganSerial serialOrgan = new OrganSerial(organ);
-            organComponent.serialOrgan = serialOrgan;
-
-            organ.transform.localPosition = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
-            organ.transform.localRotation = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
-            addOrganWithPos(entry.Value.organType, organ, entry.Key);
-            Destroy(organ);
-        }
-    }
-
     public void removeAllOrgans() {
-        foreach (KeyValuePair<System.Guid, GameObject> entry in playerOrgans) {
+        foreach (KeyValuePair<System.Guid, GameObject> entry in playerSegments) {
             DestroyImmediate(entry.Value);
         }
-        playerOrgans.Clear();
+        playerSegments.Clear();
     }
 
     public void initPlayerStructure() {
@@ -259,7 +189,6 @@ public class Morphology : MonoBehaviour
         OrganSerial serialOrgan = new OrganSerial(organ);
         organComponent.serialOrgan = serialOrgan;
 
-        playerOrgans.Add(organComponent.id, organ);
         parent.GetComponent<Segment>().addOrganToMapping(organComponent.id, organ);
 
         return organ;

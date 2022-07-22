@@ -103,7 +103,7 @@ public class Morphology : MonoBehaviour
     
     public void updateMorphology(MorphologySerial morphologySerial) {
         //Removing the old segments
-        removeAllOrgans();
+        removeAllSegments();
 
         nbSegments = morphologySerial.nbSegments;
         foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
@@ -131,7 +131,7 @@ public class Morphology : MonoBehaviour
 
     }
 
-    public void removeAllOrgans() {
+    public void removeAllSegments() {
         foreach (KeyValuePair<System.Guid, GameObject> entry in playerSegments) {
             DestroyImmediate(entry.Value);
         }

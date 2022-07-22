@@ -34,7 +34,7 @@ public class UpgradeManager : MonoBehaviour {
 
     public void renderFigure() {
         if (figure != null && figure.GetComponent<Morphology>() != null) {
-            //figure.GetComponent<Morphology>().removeAllOrgans();
+            figure.GetComponent<Morphology>().removeAllSegments();
             Destroy(figure);
         }
 
@@ -94,6 +94,9 @@ public class UpgradeManager : MonoBehaviour {
     }
 
     public void destroyMenuBodyParts() {
+        foreach (KeyValuePair<System.Guid, GameObject> entry in organsOnDisplay) {
+            DestroyImmediate(entry.Value);
+        }
         organsOnDisplay.Clear();
     }
 

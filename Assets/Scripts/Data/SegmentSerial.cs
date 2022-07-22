@@ -9,10 +9,10 @@ public class SegmentSerial{
     public float posX;
     public float posY;
     public float posZ;
-    public float rotW;
     public float rotX;
     public float rotY;
     public float rotZ;
+    public float rotW;
     public System.Guid segmentId;
     public string segmentName;
     public Dictionary<System.Guid, OrganSerial> organsSerial;
@@ -28,10 +28,10 @@ public class SegmentSerial{
         posX = parentSegment.transform.localPosition.x;
         posY = parentSegment.transform.localPosition.y;
         posZ = parentSegment.transform.localPosition.z;
-        rotW = parentSegment.transform.localRotation.w;
         rotX = parentSegment.transform.localRotation.x;
         rotY = parentSegment.transform.localRotation.y;
         rotZ = parentSegment.transform.localRotation.z;
+        rotW = parentSegment.transform.localRotation.w;
         segmentName = segmentComponent.segmentName;
         segmentId = segmentComponent.segmentId;
         playerCollisionSerial = new PlayerCollisionSerial(parentSegment.GetComponent<PlayerCollision>());

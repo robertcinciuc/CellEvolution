@@ -64,11 +64,11 @@ public class Morphology : MonoBehaviour
         return newOrgan;
     }
     
-    public GameObject addSegmentWithPos(GameObject segment, System.Guid segmentId, Vector3 segmentPos) {
+    public GameObject addSegmentWithPosRot(GameObject segment, System.Guid segmentId, Vector3 segmentPos, Quaternion segmentRot) {
         string segmentName = segment.GetComponent<Segment>().segmentName;
         GameObject newSegment = Instantiate((GameObject)Resources.Load("Prefabs/" + segmentName, typeof(GameObject)), segmentPos, Quaternion.identity);
         newSegment.transform.SetParent(this.gameObject.transform);
-        newSegment.transform.position = segmentPos;
+        newSegment.transform.localRotation = segmentRot;
 
         //Add segment component
         Segment segmentComponent = newSegment.AddComponent<Segment>();
@@ -108,14 +108,14 @@ public class Morphology : MonoBehaviour
         nbSegments = morphologySerial.nbSegments;
         foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
             Vector3 segmentPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
-            Quaternion segmentRot = new Quaternion(entry.Value.rotW, entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ);
-            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.segmentName, typeof(GameObject)), segmentPos, segmentRot);
+            Quaternion segmentRot = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
+            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.segmentName, typeof(GameObject)), segmentPos, Quaternion.identity);
 
             //Temporary workaround
             Segment oldSegmentComponent = segment.AddComponent<Segment>();
             oldSegmentComponent.segmentName = entry.Value.segmentName;
 
-            GameObject newSegment = addSegmentWithPos(segment, entry.Value.segmentId, segmentPos);
+            GameObject newSegment = addSegmentWithPosRot(segment, entry.Value.segmentId, segmentPos, segmentRot);
             newSegment.GetComponent<Segment>().updateSegment(entry.Value);
             
             if (newSegment.GetComponent<Segment>().GetComponent<PlayerMovement>() != null) {

@@ -48,7 +48,7 @@ public class UpgradeManager : MonoBehaviour {
         foreach (KeyValuePair<System.Guid, GameObject> segmentEntry in playerMorphology.getSegments()) {
             System.Guid segmentId = segmentEntry.Value.GetComponent<Segment>().segmentId;
             Vector3 segmentPos = figure.transform.position + new Vector3(0, 0, -i * 2);
-            GameObject newSegment = figureMorphology.addSegmentWithPos(segmentEntry.Value, segmentId, segmentPos);
+            GameObject newSegment = figureMorphology.addSegmentWithPosRot(segmentEntry.Value, segmentId, segmentPos, Quaternion.identity);
 
             //Render organs
             foreach (Transform organ in segmentEntry.Value.transform) {

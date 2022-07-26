@@ -106,6 +106,7 @@ public class Morphology : MonoBehaviour
         removeAllSegments();
 
         nbSegments = morphologySerial.nbSegments;
+        GameObject prevSegment = null;
         foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
             Vector3 segmentPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
             Quaternion segmentRot = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
@@ -117,11 +118,14 @@ public class Morphology : MonoBehaviour
 
             GameObject newSegment = addSegmentWithPosRot(segment, entry.Value.segmentId, segmentPos, segmentRot);
             newSegment.GetComponent<Segment>().updateSegment(entry.Value);
-            
+
             if (newSegment.GetComponent<Segment>().GetComponent<PlayerMovement>() != null) {
                 playerHead = newSegment;
                 mainCameraMovement.updateHead(newSegment);
             }
+
+            addJointSimple(newSegment, prevSegment);
+            prevSegment = newSegment;
 
             DestroyImmediate(segment);
         }
@@ -239,5 +243,23 @@ public class Morphology : MonoBehaviour
         limits.min = -20;
 
         hingeJoint.limits = limits;
+    }
+    
+    private void addJointSimple(GameObject segment, GameObject prevSegment) {
+        if (prevSegment != null) {
+            HingeJoint hingeJoint = segment.AddComponent<HingeJoint>();
+
+            hingeJoint.connectedBody = prevSegment.GetComponent<Rigidbody>();
+
+            hingeJoint.axis = Vector3.up;
+            hingeJoint.anchor = new Vector3(0, 0, 2);
+
+            hingeJoint.useLimits = true;
+            JointLimits limits = hingeJoint.limits;
+            limits.max = 20;
+            limits.min = -20;
+
+            hingeJoint.limits = limits;
+        }
     }
 }

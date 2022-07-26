@@ -124,7 +124,7 @@ public class Morphology : MonoBehaviour
                 mainCameraMovement.updateHead(newSegment);
             }
 
-            addJointSimple(newSegment, prevSegment);
+            addJoint(newSegment, prevSegment);
             prevSegment = newSegment;
 
             DestroyImmediate(segment);
@@ -201,6 +201,7 @@ public class Morphology : MonoBehaviour
     private void initSegmentedBody() {
         List<GameObject> segments = new List<GameObject>();
 
+        GameObject prevSegment = playerHead;
         for (int i = 0; i < nbSegments; i++) {
             Vector3 segmentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * 2);
             GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/PlayerBody", typeof(GameObject)), segmentPos, transform.rotation);
@@ -211,7 +212,8 @@ public class Morphology : MonoBehaviour
             rigidbody.drag = 10;
             rigidbody.mass = 0;
 
-            addJoint(segment, segments, i);
+            addJoint(segment, prevSegment);
+            prevSegment = segment;
 
             //Add segment component
             Segment segmentComponent = segment.AddComponent<Segment>();
@@ -226,29 +228,9 @@ public class Morphology : MonoBehaviour
         }
     }
 
-    private void addJoint(GameObject segment, List<GameObject> segments, int index) {
-        HingeJoint hingeJoint = segment.AddComponent<HingeJoint>();
-        if (index == 0) {
-            hingeJoint.connectedBody = playerHead.GetComponent<Rigidbody>();
-        } else {
-            hingeJoint.connectedBody = segments[index - 1].GetComponent<Rigidbody>();
-
-        }
-        hingeJoint.axis = Vector3.up;
-        hingeJoint.anchor = new Vector3(0, 0, 2);
-
-        hingeJoint.useLimits = true;
-        JointLimits limits = hingeJoint.limits;
-        limits.max = 20;
-        limits.min = -20;
-
-        hingeJoint.limits = limits;
-    }
-    
-    private void addJointSimple(GameObject segment, GameObject prevSegment) {
+    private void addJoint(GameObject segment, GameObject prevSegment) {
         if (prevSegment != null) {
             HingeJoint hingeJoint = segment.AddComponent<HingeJoint>();
-
             hingeJoint.connectedBody = prevSegment.GetComponent<Rigidbody>();
 
             hingeJoint.axis = Vector3.up;

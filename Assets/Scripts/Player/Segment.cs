@@ -40,11 +40,13 @@ public class Segment : MonoBehaviour
     }
 
     public void updateSegment(SegmentSerial segmentSerial) {
-        //Add classic components
-        foreach(System.Type componentType in segmentSerial.classicComponents) {
-            gameObject.AddComponent(componentType);
-        }
+        //Add player collision
         gameObject.AddComponent<PlayerCollision>();
+
+        //Add rigidbody
+        Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
+        rigidbody.mass = segmentSerial.segmentRigidbodySerial.mass;
+        rigidbody.drag = segmentSerial.segmentRigidbodySerial.drag;
 
         //Add player movement if head
         if (segmentSerial.playerMovementSerial != null) {

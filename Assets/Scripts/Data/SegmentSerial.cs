@@ -16,25 +16,25 @@ public class SegmentSerial{
     public System.Guid segmentId;
     public string segmentName;
     public Dictionary<System.Guid, OrganSerial> organsSerial;
-    public List<System.Type> classicComponents;
     public PlayerMovementSerial playerMovementSerial;
     public PlayerCollisionSerial playerCollisionSerial;
+    public SegmentRigidbodySerial segmentRigidbodySerial;
 
-    public SegmentSerial(GameObject parentSegment) {
+    public SegmentSerial(GameObject segment) {
         organsSerial = new Dictionary<System.Guid, OrganSerial>();
-        classicComponents = new List<System.Type>();
-        Segment segmentComponent = parentSegment.GetComponent<Segment>();
+        Segment segmentComponent = segment.GetComponent<Segment>();
 
-        posX = parentSegment.transform.localPosition.x;
-        posY = parentSegment.transform.localPosition.y;
-        posZ = parentSegment.transform.localPosition.z;
-        rotX = parentSegment.transform.localRotation.x;
-        rotY = parentSegment.transform.localRotation.y;
-        rotZ = parentSegment.transform.localRotation.z;
-        rotW = parentSegment.transform.localRotation.w;
+        posX = segment.transform.localPosition.x;
+        posY = segment.transform.localPosition.y;
+        posZ = segment.transform.localPosition.z;
+        rotX = segment.transform.localRotation.x;
+        rotY = segment.transform.localRotation.y;
+        rotZ = segment.transform.localRotation.z;
+        rotW = segment.transform.localRotation.w;
         segmentName = segmentComponent.segmentName;
         segmentId = segmentComponent.segmentId;
-        playerCollisionSerial = new PlayerCollisionSerial(parentSegment.GetComponent<PlayerCollision>());
+        playerCollisionSerial = new PlayerCollisionSerial(segment.GetComponent<PlayerCollision>());
+        segmentRigidbodySerial = new SegmentRigidbodySerial(segment.GetComponent<Rigidbody>());
 
         foreach(KeyValuePair<System.Guid, GameObject> entry in segmentComponent.getOrgans()) {
             OrganSerial organSerial = new OrganSerial(entry.Value);
@@ -42,11 +42,8 @@ public class SegmentSerial{
         }
 
         //Player movement component if head segment
-        if(parentSegment.GetComponent<PlayerMovement>() != null) {
-            playerMovementSerial = new PlayerMovementSerial(parentSegment.GetComponent<PlayerMovement>());
+        if(segment.GetComponent<PlayerMovement>() != null) {
+            playerMovementSerial = new PlayerMovementSerial(segment.GetComponent<PlayerMovement>());
         }
-
-        //Add classic components
-        classicComponents.Add(parentSegment.GetComponent<Rigidbody>().GetType());
     }
 }

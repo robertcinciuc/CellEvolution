@@ -108,9 +108,16 @@ public class Morphology : MonoBehaviour
 
         nbSegments = morphologySerial.nbSegments;
         GameObject prevSegment = null;
+        int segmentIndex = 0;
         foreach(KeyValuePair<System.Guid, SegmentSerial> entry in morphologySerial.segmentsSerial) {
+            //Spawn character in default pos & rot
             Vector3 segmentPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
             Quaternion segmentRot = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
+            if(segmentIndex > 0) {
+                segmentPos = playerHead.transform.position + playerHead.transform.rotation * Vector3.forward * -1 * segmentDistance * segmentIndex;
+                segmentRot = playerHead.transform.rotation;
+            }
+
             GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.segmentName, typeof(GameObject)), segmentPos, Quaternion.identity);
 
             //Temporary workaround
@@ -129,6 +136,7 @@ public class Morphology : MonoBehaviour
             prevSegment = newSegment;
 
             DestroyImmediate(segment);
+            segmentIndex += 1;
         }
     }
 
@@ -235,7 +243,7 @@ public class Morphology : MonoBehaviour
             hingeJoint.connectedBody = prevSegment.GetComponent<Rigidbody>();
 
             hingeJoint.axis = Vector3.up;
-            hingeJoint.anchor = new Vector3(0, 0, 2);
+            hingeJoint.anchor = new Vector3(0, 0, segmentDistance);
 
             hingeJoint.useLimits = true;
             JointLimits limits = hingeJoint.limits;

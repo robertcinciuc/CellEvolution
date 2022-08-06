@@ -345,7 +345,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17816
+  m_Name: pb_Mesh17818
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1992,6 +1992,7 @@ MonoBehaviour:
   mainCameraMovement: {fileID: 963194229}
   playerHead: {fileID: 1782061228}
   nbSegments: 4
+  segmentDistance: 1
 --- !u!1 &1984966087
 GameObject:
   m_ObjectHideFlags: 0

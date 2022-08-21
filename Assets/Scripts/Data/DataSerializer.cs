@@ -29,12 +29,13 @@ public class DataSerializer : MonoBehaviour
 			DataPacket data = (DataPacket)bf.Deserialize(file);
 			file.Close();
 
-			ProgressionDataSerial progressionDataSerial = data.progressionDataSerial;
-			Vector3 playerPos = new Vector3(progressionDataSerial.playerPosX, progressionDataSerial.playerPosY, progressionDataSerial.playerPosZ);
-			terrainRenderer.renderCurrentPlane(playerPos);
+			SegmentSerial playerHeadSerial = new List<SegmentSerial>(data.morphologySerial.segmentsSerial.Values)[0];
+			Vector3 playerHeadPos = new Vector3(playerHeadSerial.posX, playerHeadSerial.posY, playerHeadSerial.posZ);
+			terrainRenderer.renderCurrentPlane(playerHeadPos);
 			loadFromDataPacket(data);
+			terrainRenderer.playerHead = player.GetComponent<Morphology>().playerHead;
 
-			Debug.Log("Game data loaded!");
+            Debug.Log("Game data loaded!");
 		} else {
 			Debug.LogError("There is no save data!");
 		}

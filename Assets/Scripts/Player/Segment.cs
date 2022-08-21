@@ -57,7 +57,7 @@ public class Segment : MonoBehaviour
         //Add organs
         foreach (KeyValuePair<System.Guid, OrganSerial> entry in segmentSerial.organsSerial) {
             Vector3 organPos = new Vector3(entry.Value.posX, entry.Value.posY, entry.Value.posZ);
-            Quaternion organRot = new Quaternion(entry.Value.rotW, entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ);
+            Quaternion organRot = new Quaternion(entry.Value.rotX, entry.Value.rotY, entry.Value.rotZ, entry.Value.rotW);
             GameObject organ = Instantiate((GameObject)Resources.Load("Prefabs/" + entry.Value.organName, typeof(GameObject)), organPos, organRot);
 
             //Temporary workaround

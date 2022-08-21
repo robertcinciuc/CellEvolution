@@ -3,7 +3,7 @@
 public class PlayerMovement : MonoBehaviour
 {   
 
-    public float playerSpeed = 5.0f;
+    public float playerSpeed = 8.0f;
 
     private Rigidbody rigidBody;
 
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         translatePlayerToMouse();
-        rotatePlayer();
+        rotateOnForwardMovement();
     }
 
     private void translatePlayerToMouse() {
@@ -31,9 +31,6 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveVector = this.transform.TransformDirection(movement) * playerSpeed;
         rigidBody.velocity = new Vector3(moveVector.x, rigidBody.velocity.y, moveVector.z);
-
-        //rb.MovePosition(this.transform.position + movement * Time.deltaTime * 10);
-
     }
 
     private void rotatePlayer() {
@@ -43,6 +40,12 @@ public class PlayerMovement : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
 
         rigidBody.rotation = Quaternion.Slerp(rigidBody.transform.rotation, rotation, 7 * Time.deltaTime);
+    }
+
+    private void rotateOnForwardMovement(){
+        if (Input.GetKey(KeyCode.W)) {
+            rotatePlayer();
+        }
     }
 
     private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {

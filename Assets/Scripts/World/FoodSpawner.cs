@@ -2,18 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodSpawner : MonoBehaviour
-{
+public class FoodSpawner : MonoBehaviour {
+
     public GameObject foodPrefab;
     public int nbFoodItemsPerPlane = 50;
 
-    //private WorldPlaneRenderer worldPlaneRenderer;
     private Dictionary<LocalPlanes, bool> planeFedStatus;
     private Dictionary<LocalPlanes, List<GameObject>> planeFood;
 
     void Start(){
-        //worldPlaneRenderer = gameObject.GetComponent<WorldPlaneRenderer>();
-        initializeDictionaries();
     }
 
     void Update(){
@@ -60,7 +57,7 @@ public class FoodSpawner : MonoBehaviour
         planeFood[plane2] = tempFood;
     }
 
-    private void initializeDictionaries() {
+    public void initializeFoodSpawner() {
         planeFedStatus = new Dictionary<LocalPlanes, bool>();
         planeFedStatus.Add(LocalPlanes.CURRENT_PLANE, false);
         planeFedStatus.Add(LocalPlanes.X_PLANE, false);
@@ -72,5 +69,12 @@ public class FoodSpawner : MonoBehaviour
         planeFood.Add(LocalPlanes.X_PLANE, new List<GameObject>());
         planeFood.Add(LocalPlanes.Z_PLANE, new List<GameObject>());
         planeFood.Add(LocalPlanes.XZ_PLANE, new List<GameObject>());
+    }
+
+    public void resetFedStatus() {
+        planeFedStatus[LocalPlanes.CURRENT_PLANE] = false;
+        planeFedStatus[LocalPlanes.X_PLANE] = false;
+        planeFedStatus[LocalPlanes.Z_PLANE] = false;
+        planeFedStatus[LocalPlanes.XZ_PLANE] = false;
     }
 }

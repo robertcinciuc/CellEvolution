@@ -6,7 +6,8 @@ public class Organ : MonoBehaviour
 {
     public System.Type organType;
     public System.Guid id;
-    public SerialOrgan serialOrgan;
+    public OrganSerial serialOrgan;
+    public string organName;
 
     void Start(){
         
@@ -16,7 +17,7 @@ public class Organ : MonoBehaviour
         
     }
 
-    public SerialOrgan getSerialOrgan() {
-        return new SerialOrgan(transform.parent.gameObject);
+    public OrganSerial getSerialOrgan() {
+        return new OrganSerial(gameObject);
     }
 }

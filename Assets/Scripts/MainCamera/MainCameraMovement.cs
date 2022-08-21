@@ -2,19 +2,25 @@
 
 public class MainCameraMovement : MonoBehaviour
 {
-    private GameObject player;
+    public GameObject player;
+
+    private GameObject playerHead;
     private Vector3 cameraPosition;
     public int cameraYOffset;
 
     void Start(){
-        player = GameObject.Find("Player");
+        playerHead = player.GetComponent<Morphology>().getHead();
     }
 
     void Update(){
-        if (player != null) {
-            cameraPosition = player.transform.position;
+        if (playerHead != null) {
+            cameraPosition = playerHead.transform.position;
             cameraPosition.y += cameraYOffset;
             transform.position = cameraPosition;
         }
+    }
+
+    public void updateHead(GameObject playerHead) {
+        this.playerHead = playerHead;
     }
 }

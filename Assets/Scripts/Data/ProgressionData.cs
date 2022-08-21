@@ -6,32 +6,21 @@ public class ProgressionData : MonoBehaviour
 {
     public static int nbEnemiesKilled = 0;
 	public static int nbMeatsEaten = 0;
-	public PlayerBodyStructure playerBodyStructure;
 	public PlayerState playerState;
+	public GameObject player;
+	public UpgradeManager upgradeManager;
 
-	public DataPacket buildDatapacketForStoring() {
-		DataPacket data = new DataPacket();
-		data.nbEnemiesKilled = nbEnemiesKilled;
-		data.nbMeatsEaten= nbMeatsEaten;
-		data.health = playerState.health;
-		data.playerSerialOrgans = playerBodyStructure.getPlayerSerialOrgans();
+    private void Start() {
+    }
 
-        return data;
-	}
+	public void updateProgressionData(ProgressionDataSerial progressionDataSerial) {
+		nbEnemiesKilled = progressionDataSerial.nbEnemiesKilled;
+		nbMeatsEaten = progressionDataSerial.nbMeatsEaten;
+    }
 
-	public void loadFromDataPacket(DataPacket data) {
-        nbEnemiesKilled = data.nbEnemiesKilled;
-		nbMeatsEaten = data.nbMeatsEaten;
-		playerState.sethealth(data.health);
-		playerBodyStructure.addAllOrgans(data.playerSerialOrgans);
-		UpgradeMenuLogic.playerFigureInstantiated = false;
-	}
-
-    public void applyReset() {
+	public void resetProgressionData() {
 		nbEnemiesKilled = 0;
-		nbMeatsEaten = 0;
-		playerState.sethealth(playerState.maxHealth);
-		playerBodyStructure.removeAllOrgans();
-	}
-
+		nbMeatsEaten= 0;
+    }
+	
 }

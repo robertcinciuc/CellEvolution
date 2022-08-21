@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class LoadUpgradeMenu : MonoBehaviour
 {
+    public UpgradeManager upgradeManager;
+    public UpgradeCameraState upgradeMenuCameraState;
+
     private Button upgradeButton;
 
     void Start(){
@@ -13,7 +16,7 @@ public class LoadUpgradeMenu : MonoBehaviour
         upgradeButton.onClick.AddListener(switchContext);
 
         MainCameraState.setActive();
-        UpgradeMenuCameraState.setInactive();
+        upgradeMenuCameraState.setInactive();
     }
 
     void Update(){
@@ -23,18 +26,19 @@ public class LoadUpgradeMenu : MonoBehaviour
     private void switchContext() {
         if (PlayerState.isActive) {
             PlayerState.setInactive();
-            UpgradeMenuCameraState.setActive();
+            upgradeMenuCameraState.setActive();
             MainCameraState.setInactive();
-            UpgradeMenuLogic.protectPlayer();
-            UpgradeMenuLogic.renderPlayerFigure();
-            UpgradeMenuLogic.instMenuOrgans();
+            //upgradeManager.protectPlayer();
+            upgradeManager.instMenuOrgans();
 
         } else {
             PlayerState.setActive();
             MainCameraState.setActive();
-            UpgradeMenuCameraState.setInactive();
-            UpgradeMenuLogic.uprotectPlayer();
-            UpgradeMenuLogic.destroyMenuBodyParts();
+            upgradeMenuCameraState.setInactive();
+            //upgradeManager.uprotectPlayer();
+            upgradeManager.applyUpgrade();
+            upgradeManager.destroyMenuBodyParts();
+            upgradeManager.resetMovedAndAddedOrgans();
         }
     }
 }

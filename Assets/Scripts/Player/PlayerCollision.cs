@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
-    private Collider thisCollider;
     private PlayerState playerState;
 
     void Start(){
-        thisCollider = GetComponent<Collider>();
-        playerState = GetComponent<PlayerState>();
+        playerState = transform.parent.GetComponent<PlayerState>();
     }
 
     void Update(){
@@ -24,7 +22,8 @@ public class PlayerCollision : MonoBehaviour
             playerState.heal(10);
             ProgressionData.nbMeatsEaten++;
 
-        }else if (enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) &&  enumContainsElem(typeof(Enemies), collision.gameObject.name)) {
+        }else if (enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) && enumContainsElem(typeof(Enemies), collision.gameObject.name) &&
+            !enumContainsElem(typeof(AttackOrgans), firstOtherCollider.name)) {
             collision.gameObject.GetComponent<EnemyState>().takeDamage(30, Characters.Player);
 
         }else if (enumContainsElem(typeof(AttackOrgans), firstOtherCollider.name) && !enumContainsElem(typeof(AttackOrgans), firstThisCollider.name) ) {
@@ -33,11 +32,11 @@ public class PlayerCollision : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other) {
-        other.transform.parent.transform.parent.gameObject.GetComponent<EnemyMovement>().startFollowing(this.transform.position);
+        other.transform.parent.gameObject.GetComponent<EnemyMovement>().startFollowing(this.transform.position);
     }
 
     private void OnTriggerExit(Collider other) {
-        other.transform.parent.transform.parent.gameObject.GetComponent<EnemyMovement>().stopFollowing();
+        other.transform.parent.gameObject.GetComponent<EnemyMovement>().stopFollowing();
     }
 
     private bool enumContainsElem(System.Type enumType, string word){

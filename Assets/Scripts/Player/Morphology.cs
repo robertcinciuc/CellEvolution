@@ -213,6 +213,8 @@ public class Morphology : MonoBehaviour
         GameObject prevSegment = playerHead;
         for (int i = 0; i < nbSegments; i++) {
             Vector3 segmentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * segmentDistance);
+            // TODO: Change transform.rotation into appropriate slice rotation
+            // TODO: Change the initial rotation of the head slice (of the object in unity)
             GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/Slice", typeof(GameObject)), segmentPos, transform.rotation);
             segment.transform.parent = transform;
 

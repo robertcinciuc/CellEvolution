@@ -255,4 +255,12 @@ public class Morphology : MonoBehaviour
             hingeJoint.limits = limits;
         }
     }
+
+    private void getMeshOnPoints(GameObject segment1, GameObject segment2){
+        Vector3[] vertices1 = segment1.GetComponent<MeshFilter>().mesh.vertices;
+        Vector3[] vertices2 = segment2.GetComponent<MeshFilter>().mesh.vertices;
+        
+        MeshGenerator meshGenerator = gameObject.transform.parent.GetComponent<MeshGenerator>();
+        meshGenerator.drawCylinder(vertices1, vertices2);
+    }
 }

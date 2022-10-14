@@ -41,11 +41,21 @@ public class MeshGenerator : MonoBehaviour {
         
         // Connect vertices into triangles
         int[] triangleIndices = new int[(2 * vertices1.Length - 2) * 3];
+        int verticeIndex = 0;
         for(int i = 0; i < vertices1.Length; i+=3){
-            triangleIndices[i] = concatVertices[i];
-            triangleIndices[i+1] = concatVertices[i + vertices1.Length - 1];
-            // triangleIndices[i+2]
+            triangleIndices[i] = vertices1[k];
+            triangleIndices[i+1] = vertices2[k]
+            triangleIndices[i+2] = vertices1[k+1]
+            k++;
         }
-        // mesh.triangles = new int[] {0, 1, 2};
+        
+        k = 0;
+        for(int i = vertices1.Length; i < vertices1.Length + vertices2.Length; i+=3){
+            triangleIndices[i] = vertices2[k];
+            triangleIndices[i+1] = vertices1[k]
+            triangleIndices[i+2] = vertices2[k+1]
+            k++;
+        }
+        mesh.triangles = triangleIndices;
     }
 }

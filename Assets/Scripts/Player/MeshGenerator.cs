@@ -37,10 +37,19 @@ public class MeshGenerator : MonoBehaviour {
         mesh.vertices = concatVertices.toArray();
         
         // Calculate normals for UVs
-        // mesh.uv = new Vector2[] {new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1)};
-        
-        // Connect vertices into triangles
-        int[] triangleIndices = new int[(2 * vertices1.Length - 2) * 3];
+        int nbPoints = (2 * vertices1.Length - 2) * 3;
+        Vector2[] uv = new Vector2[nbPoints];
+        float increment = 1f / Mathf.sqrt(nbPoints) + 1;
+        int k = 0;
+        for(float i = 0; i < Mathf.sqrt(nbPointsnbPoints) + 1; i += increment){
+            for(float j = 0; j < Mathf.sqrt(nbPointsnbPoints) + 1; j += increment){
+                uv[k] = new Vector2(i, j);
+            }
+        }
+        mesh.uv = uv;
+
+       // Connect vertices into triangles
+        int[] triangleIndices = new int[nbPoints];
         int verticeIndex = 0;
         for(int i = 0; i < vertices1.Length; i+=3){
             triangleIndices[i] = vertices1[k];

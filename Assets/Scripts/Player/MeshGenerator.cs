@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -31,39 +32,40 @@ public class MeshGenerator : MonoBehaviour {
         if(vertices1.Length != vertices2.Length){
             Debug.LogError("Slice vertices are of different sizes " + vertices1.Length + " " + vertices2.Length);    
         }
-        List<int> concatVertices = new List<int>();
+        
+        List<Vector3> concatVertices = new List<Vector3>();
         concatVertices.AddRange(vertices1);
         concatVertices.AddRange(vertices2);
-        mesh.vertices = concatVertices.toArray();
+        mesh.vertices = concatVertices.ToArray();
         
         // Calculate normals for UVs
         int nbPoints = (2 * vertices1.Length - 2) * 3;
         Vector2[] uv = new Vector2[nbPoints];
-        float increment = 1f / Mathf.sqrt(nbPoints) + 1;
-        int k = 0;
-        for(float i = 0; i < Mathf.sqrt(nbPointsnbPoints) + 1; i += increment){
-            for(float j = 0; j < Mathf.sqrt(nbPointsnbPoints) + 1; j += increment){
-                uv[k] = new Vector2(i, j);
+        float increment = 1f / Mathf.Sqrt(nbPoints) + 1;
+        int verticeIndex = 0;
+        for (float i = 0; i < Mathf.Sqrt(nbPoints) + 1; i += increment){
+            for(float j = 0; j < Mathf.Sqrt(nbPoints) + 1; j += increment){
+                uv[verticeIndex] = new Vector2(i, j);
             }
         }
         mesh.uv = uv;
 
-       // Connect vertices into triangles
+        // Connect vertices into triangles
+        verticeIndex = 0;
         int[] triangleIndices = new int[nbPoints];
-        int verticeIndex = 0;
         for(int i = 0; i < vertices1.Length; i+=3){
-            triangleIndices[i] = vertices1[k];
-            triangleIndices[i+1] = vertices2[k]
-            triangleIndices[i+2] = vertices1[k+1]
-            k++;
+            triangleIndices[i] = verticeIndex;
+            triangleIndices[i + 1] = vertices1.Length + verticeIndex;
+            triangleIndices[i + 2] = verticeIndex;
+            verticeIndex++;
         }
-        
-        k = 0;
+
+        verticeIndex = 0;
         for(int i = vertices1.Length; i < vertices1.Length + vertices2.Length; i+=3){
-            triangleIndices[i] = vertices2[k];
-            triangleIndices[i+1] = vertices1[k]
-            triangleIndices[i+2] = vertices2[k+1]
-            k++;
+            triangleIndices[i] = vertices1.Length + verticeIndex;
+            triangleIndices[i + 1] = verticeIndex;
+            triangleIndices[i + 2] = vertices1.Length + verticeIndex;
+            verticeIndex++;
         }
         mesh.triangles = triangleIndices;
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Morphology : MonoBehaviour
@@ -9,6 +10,8 @@ public class Morphology : MonoBehaviour
     public int nbSegments = 4;
     public float segmentDistance = 2;
 
+    private bool initiatedBody = false;
+
     private Dictionary<System.Guid, GameObject> playerSegments;
 
     void Awake(){
@@ -16,6 +19,10 @@ public class Morphology : MonoBehaviour
     }
 
     void Update(){
+        if (initiatedBody) {
+            List<GameObject> gameObjects = playerSegments.Values.ToList();
+            getMeshOnPoints(gameObjects[1], gameObjects[2]);
+        }
     }
 
     void FixedUpdate() {
@@ -166,7 +173,7 @@ public class Morphology : MonoBehaviour
         initSegmentedBody();
 
         initPlayerOrgan(Mouths.Mouth.ToString(), "Prefabs/Mouth", new Vector3(0, 0, 0), Quaternion.identity, new Vector3(0, 0, 1), Quaternion.identity, typeof(Mouths), playerHead);
-
+        initiatedBody = true;
     }
 
     public GameObject getHead() {
@@ -215,7 +222,7 @@ public class Morphology : MonoBehaviour
             Vector3 segmentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - (i + 1) * segmentDistance);
             // TODO: Change transform.rotation into appropriate slice rotation
             // TODO: Change the initial rotation of the head slice (of the object in unity)
-            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/Slice", typeof(GameObject)), segmentPos, transform.rotation);
+            GameObject segment = Instantiate((GameObject)Resources.Load("Prefabs/Slice", typeof(GameObject)), segmentPos, new Quaternion(0, 1, 1, 0));
             segment.transform.parent = transform;
 
             //Add light rigidbody
@@ -260,7 +267,7 @@ public class Morphology : MonoBehaviour
         Vector3[] vertices1 = segment1.GetComponent<MeshFilter>().mesh.vertices;
         Vector3[] vertices2 = segment2.GetComponent<MeshFilter>().mesh.vertices;
         
-        MeshGenerator meshGenerator = gameObject.transform.parent.GetComponent<MeshGenerator>();
+        MeshGenerator meshGenerator = GetComponent<MeshGenerator>();
         meshGenerator.drawCylinder(vertices1, vertices2);
     }
 }

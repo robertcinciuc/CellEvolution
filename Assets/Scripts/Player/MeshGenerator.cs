@@ -29,9 +29,9 @@ public class MeshGenerator : MonoBehaviour {
         // concatVertices.AddRange(vertices1);
         // concatVertices.AddRange(vertices2);
         // mesh.vertices = concatVertices.ToArray();
-        concatVertices.add(vertices1[0]);
-        concatVertices.add(vertices2[0]);
-        concatVertices.add(vertices1[1]);
+
+        //TODO: get the pos of the vertices after the rotation of the slice
+        mesh.vertices = new Vector3[] { vertices1[5], vertices2[6], vertices1[7] };
 
         // // Calculate normals for UVs
         // int nbPoints = vertices1.Length + vertices2.Length;
@@ -64,7 +64,6 @@ public class MeshGenerator : MonoBehaviour {
         //     vertexIndex++;
         // }
         // mesh.triangles = triangleIndices;
-        
-        mesh.triangles = new int[3] {0, 1,2};
+        mesh.triangles = new int[] {0, 1, 2};
     }
 }

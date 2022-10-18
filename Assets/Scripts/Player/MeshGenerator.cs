@@ -16,7 +16,10 @@ public class MeshGenerator : MonoBehaviour {
     void Update() {
     }
     
-    public void drawCylinder(Vector3[] vertices1, Vector3[] vertices2){
+    public void drawCylinder(GameObject segment1, GameObject segment2){
+        Vector3[] vertices1 = segment1.GetComponent<MeshFilter>().mesh.vertices;
+        Vector3[] vertices2 = segment2.GetComponent<MeshFilter>().mesh.vertices;
+        
         mesh = GetComponent<MeshFilter>().mesh;
         mesh.Clear();
         
@@ -31,8 +34,13 @@ public class MeshGenerator : MonoBehaviour {
         // mesh.vertices = concatVertices.ToArray();
 
         //TODO: get the pos of the vertices after the rotation of the slice
-        mesh.vertices = new Vector3[] { vertices1[5], vertices2[6], vertices1[7] };
-
+        
+        Vector3[] usedVertices = new Vector3[3];
+        usedVertices[0] = segment1.transform.TransformPoint(vertices1[0]);
+        usedVertices[1] = segment2.transform.TransformPoint(vertices2[0]);
+        usedVertices[2] = segment1.transform.TransformPoint(vertices1[1]);
+        
+        
         // // Calculate normals for UVs
         // int nbPoints = vertices1.Length + vertices2.Length;
         // Vector2[] uv = new Vector2[nbPoints];

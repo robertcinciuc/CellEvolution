@@ -610,7 +610,7 @@ MonoBehaviour:
   xPlane: {fileID: 0}
   xzPlane: {fileID: 0}
   planeSize: {x: 0, y: 0, z: 0}
-  playerHead: {fileID: 0}
+  playerHead: {fileID: 1453951126}
 --- !u!4 &356840619
 Transform:
   m_ObjectHideFlags: 0

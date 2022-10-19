@@ -23,24 +23,24 @@ public class MeshGenerator : MonoBehaviour {
         mesh = GetComponent<MeshFilter>().mesh;
         mesh.Clear();
         
-        // Add vertices 1 from segm1, then 1 from segm2
         if(vertices1.Length != vertices2.Length){
             Debug.LogError("Slice vertices are of different sizes " + vertices1.Length + " " + vertices2.Length);    
         }
         
         List<Vector3> concatVertices = new List<Vector3>();
-        // concatVertices.AddRange(vertices1);
-        // concatVertices.AddRange(vertices2);
-        // mesh.vertices = concatVertices.ToArray();
+        concatVertices.AddRange(vertices1);
+        concatVertices.AddRange(vertices2);
 
-        //TODO: get the pos of the vertices after the rotation of the slice
-        
-        Vector3[] usedVertices = new Vector3[3];
-        usedVertices[0] = segment1.transform.TransformPoint(vertices1[0]);
-        usedVertices[1] = segment2.transform.TransformPoint(vertices2[0]);
-        usedVertices[2] = segment1.transform.TransformPoint(vertices1[1]);
-        
-        
+        //Rotate vertices according to their slices
+        for (int i = 0; i < concatVertices.Count; i++) {
+            if (i < vertices1.Length) {
+                concatVertices[i] = segment1.transform.TransformPoint(concatVertices[i]);
+            } else {
+                concatVertices[i] = segment2.transform.TransformPoint(concatVertices[i]);
+            }
+        }
+         mesh.vertices = concatVertices.ToArray();
+
         // // Calculate normals for UVs
         // int nbPoints = vertices1.Length + vertices2.Length;
         // Vector2[] uv = new Vector2[nbPoints];
@@ -54,24 +54,23 @@ public class MeshGenerator : MonoBehaviour {
         // }
         // mesh.uv = uv;
 
-        // // Connect vertices into triangles
-        // vertexIndex = 0;
-        // int[] triangleIndices = new int[(2 * vertices1.Length - 2) * 3];
-        // for (int i = 0; i < vertices1.Length; i+=3){
-        //     triangleIndices[i] = vertexIndex;
-        //     triangleIndices[i + 1] = vertices1.Length + vertexIndex;
-        //     triangleIndices[i + 2] = vertexIndex;
-        //     vertexIndex++;
-        // }
+        // Connect vertices into triangles
+        int vertexIndex = 0;
+        int[] triangleIndices = new int[(2 * vertices1.Length - 2) * 3];
+        for (int i = 0; i < vertices1.Length; i += 3) {
+            triangleIndices[i] = vertexIndex;
+            triangleIndices[i + 1] = vertices1.Length + vertexIndex;
+            triangleIndices[i + 2] = vertexIndex + 1;
+            vertexIndex++;
+        }
 
-        // vertexIndex = 0;
-        // for(int i = vertices1.Length; i < vertices1.Length + vertices2.Length; i+=3){
-        //     triangleIndices[i] = vertices1.Length + vertexIndex;
-        //     triangleIndices[i + 1] = vertexIndex;
-        //     triangleIndices[i + 2] = vertices1.Length + vertexIndex;
-        //     vertexIndex++;
-        // }
-        // mesh.triangles = triangleIndices;
-        mesh.triangles = new int[] {0, 1, 2};
+        vertexIndex = 0;
+        for (int i = vertices1.Length; i < vertices1.Length + vertices2.Length; i += 3) {
+            triangleIndices[i] = vertices1.Length + vertexIndex;
+            triangleIndices[i + 1] = vertexIndex;
+            triangleIndices[i + 2] = vertices1.Length + vertexIndex + 1;
+            vertexIndex++;
+        }
+        mesh.triangles = triangleIndices;
     }
 }

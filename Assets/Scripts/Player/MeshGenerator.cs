@@ -3,13 +3,22 @@ using UnityEngine;
 
 
 public class MeshGenerator : MonoBehaviour {
-  
+    
+    public Texture mainTexture;
+    
     private Mesh mesh;
+    private MeshRenderer meshRenderer;
 
     void Start(){
         gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
+        meshRenderer = gameObject.AddComponent<MeshRenderer>();
         mesh = GetComponent<MeshFilter>().mesh;
+        
+        meshRenderer.material.EnableKeyword ("_NORMALMAP");
+        meshRenderer.material.EnableKeyword ("_METALLICGLOSSMAP");
+        // TODO: verify whether texture needs to be applied on each update
+        meshRenderer.material.SetTexture("_MainTex", mainTexture);
+        
         mesh.Clear();
     }
 

@@ -1559,7 +1559,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-30630
+  m_Name: pb_Mesh17816
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1987,6 +1987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 603877d3a5da5624997038a695c181e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainTexture: {fileID: 2800000, guid: f00a29da733780e439179586fb22dd94, type: 3}
 --- !u!114 &1887967015
 MonoBehaviour:
   m_ObjectHideFlags: 0

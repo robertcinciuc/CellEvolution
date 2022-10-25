@@ -94,6 +94,11 @@ public class MeshGenerator : MonoBehaviour {
         AngleIntervalList<Vector3> inOrderVertices = new AngleIntervalList<Vector3>(vertices.Length);
         for (int i = 0; i < vertices.Length; ++i) {
             float angle = Vector3.Angle(Vector3.right, vertices[i]);
+            Vector3 cross = Vector3.Cross(Vector3.right, vertices[i])
+            if(cross.y < 0){
+                angle = 360 - angle;
+            }
+            
             inOrderVertices.add(vertices[i], angle);
         }
 
